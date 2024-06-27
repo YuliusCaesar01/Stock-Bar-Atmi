@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Light theme styles */
+
+
+/* Dark theme styles */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: #fff;
+         color: #333;
+    }
+    
+    /* ... other dark theme styles for buttons */
+}
