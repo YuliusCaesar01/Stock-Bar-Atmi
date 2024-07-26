@@ -21,14 +21,15 @@ class SqliteSchemaState extends SchemaState
             //
         ]));
 
-        $migrations = collect(preg_split("/\r\n|\n|\r/", $process->getOutput()))->filter(function ($line) {
-            return stripos($line, 'sqlite_sequence') === false &&
-                   strlen($line) > 0;
+        $migrations = collect(preg_split("/\r\n|\n|\r/", $process->getOutput()))->reject(function ($line) {
+            return str_starts_with($line, 'CREATE TABLE sqlite_');
         })->all();
 
         $this->files->put($path, implode(PHP_EOL, $migrations).PHP_EOL);
 
-        $this->appendMigrationData($path);
+        if ($this->hasMigrationTable()) {
+            $this->appendMigrationData($path);
+        }
     }
 
     /**
@@ -40,7 +41,7 @@ class SqliteSchemaState extends SchemaState
     protected function appendMigrationData(string $path)
     {
         with($process = $this->makeProcess(
-            $this->baseCommand().' ".dump \''.$this->migrationTable.'\'"'
+            $this->baseCommand().' ".dump \''.$this->getMigrationTable().'\'"'
         ))->mustRun(null, array_merge($this->baseVariables($this->connection->getConfig()), [
             //
         ]));
