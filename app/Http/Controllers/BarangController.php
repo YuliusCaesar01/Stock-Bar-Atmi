@@ -213,5 +213,33 @@ class BarangController extends Controller
 
         return redirect()->back()->with('success', 'Quantity exited successfully');
     }
+    public function view(Request $request)
+    {
+        $search = $request->input('search');
+
+        $barangs = Barang::query()
+            ->where('no_barcode', 'like', "%{$search}%")
+            ->orWhere('no_item', 'like', "%{$search}%")
+            ->orWhere('nama_barang', 'like', "%{$search}%")
+            ->orWhere('kode_log', 'like', "%{$search}%")
+            ->orWhere('jumlah', 'like', "%{$search}%")
+            ->orWhere('satuan', 'like', "%{$search}%")
+            ->orWhere('harga', 'like', "%{$search}%")
+            ->orWhere('rak', 'like', "%{$search}%")
+            ->orWhere('total', 'like', "%{$search}%")
+            ->orWhere('tanggal', 'like', "%{$search}%")
+            ->orWhere('jumlah_minimal', 'like', "%{$search}%")
+            ->orWhere('no_katalog', 'like', "%{$search}%")
+            ->orWhere('merk', 'like', "%{$search}%")
+            ->orWhere('no_akun', 'like', "%{$search}%")
+            ->get();
+
+    foreach ($barangs as $barang) {
+        $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
+    }
+
+        return view('barangs.view', compact('barangs'));
+    }
 }
+
 

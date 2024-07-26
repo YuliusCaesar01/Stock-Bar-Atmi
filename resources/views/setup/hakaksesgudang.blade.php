@@ -1,152 +1,129 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-dark-100 leading-tight ">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-dark-100 leading-tight">
             {{ __('Hak Akses Gudang') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white :bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
-                <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="barangTable"
-                        class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-gray-700">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">QR Code</th>
-                                <th scope="col" class="px-6 py-3">Activity</th>
-                                <th scope="col" class="px-6 py-3">No Item</th>
-                                <th scope="col" class="px-6 py-3">Nama Barang</th>
-                                <th scope="col" class="px-6 py-3">Kode Log</th>
-                                <th scope="col" class="px-6 py-3">Jumlah</th>
-                                <th scope="col" class="px-6 py-3">Satuan</th>
-                                <th scope="col" class="px-6 py-3">Harga</th>
-                                <th scope="col" class="px-6 py-3">Rak</th>
-                                <th scope="col" class="px-6 py-3">Total</th>
-                                <th scope="col" class="px-6 py-3">Tanggal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
-                                <th scope="col" class="px-6 py-3">No Katalog</th>
-                                <th scope="col" class="px-6 py-3">Merk</th>
-                                <th scope="col" class="px-6 py-3">No Akun</th>
-                                <th scope="col" class="px-6 py-3">QR(manual)</th>
-                            </tr>
-                        </thead>
-                        
-                    </table>
-                </div>
-                <div class="flex items-center mb-4 border-b pb-4 mt-4">
-                    <a href="{{ route('barangs.create') }}"
-                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add
-                        Barang</a>
-                    <!-- Button to trigger modal -->
-                    <button data-modal-target="qr-modal" data-modal-toggle="qr-modal"
-                        class="ms-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">QR Scan</button>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="flex">
+                    <!-- Left Panel -->
+                    <div class="w-1/3 pr-4">
+                        <div>
+                            <label for="kode_log" class="block text-sm font-medium text-gray-700">Kode Log</label>
+                            <input type="text" id="kode_log" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="name_petugas" class="block text-sm font-medium text-gray-700">Nama Petugas (WH)</label>
+                            <input type="text" id="name_petugas" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
+                            <input type="text" id="keterangan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="tempat" class="block text-sm font-medium text-gray-700">Tempat</label>
+                            <select id="tempat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <!-- Add options here -->
+                            </select>
+                        </div>
+                        <div class="mt-4">
+                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <input type="text" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="kode_user" class="block text-sm font-medium text-gray-700">Kode User</label>
+                            <input type="text" id="kode_user" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="petugas_pembelian" class="block text-sm font-medium text-gray-700">Petugas Pembelian</label>
+                            <input type="text" id="petugas_pembelian" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div class="mt-4">
+                            <label for="plant" class="block text-sm font-medium text-gray-700">Plant</label>
+                            <input type="text" id="plant" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                    </div>
+
+                    <!-- Center Panel -->
+                    <div class="w-1/3 pr-4">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Log</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plant</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- Add table rows here -->
+                                <!-- Example row: -->
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">C</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Electrical Std. Parts MDC</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Right Panel -->
+                    <div class="w-1/3">
+                        <div>
+                            <label for="pilih_nama" class="block text-sm font-medium text-gray-700">Pilih Nama</label>
+                            <select id="pilih_nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <!-- Add options here -->
+                            </select>
+                        </div>
+                        <div class="mt-4 flex space-x-4">
+                            <button class="px-4 py-2 bg-green-500 text-white rounded-md">Masuk</button>
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-md">Lepas</button>
+                        </div>
+                        <div class="mt-4">
+                            <label for="user_name" class="block text-sm font-medium text-gray-700">User Name</label>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- Add table rows here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="w-1/3 pr-4">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Log</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plant</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- Add table rows here -->
+                                <!-- Example row: -->
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">C</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Electrical Std. Parts MDC</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="crud-modal" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        <span id="modal-title">Enter Quantity</span>
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="crud-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <form id="quantity-form" method="POST" class="p-4 md:p-5">
-                    @csrf
-                    <div class="grid gap-4 mb-4">
-                        <div class="col-span-2">
-                            <label for="quantity"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                            <input type="number" name="quantity" id="quantity" min="1"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button"
-                            class="text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
-                            data-modal-toggle="crud-modal">Cancel</button>
-                        <button type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- QR Code and Quantity Modal -->
-    <div id="qr-modal" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Search & Exit Quantity
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="qr-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <form id="search-form" method="POST" action="{{ route('barangs.search') }}" class="p-4 md:p-5">
-                    @csrf
-                    <div class="grid gap-4 mb-4">
-                        <div class="col-span-2">
-                            <label for="qr_code"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QR Code</label>
-                            <input type="text" name="qr_code" id="qr_code"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="quantity"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                            <input type="number" name="quantity" id="quantity" min="1"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button"
-                            class="text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
-                            data-modal-toggle="qr-modal">Cancel</button>
-                        <button type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
         <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-          <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id" class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.
-        </span>
-        @include('clock')
+            <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id" class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.</span>
+            @include('clock')
         </div>
     </footer>
-   
 </x-app-layout>

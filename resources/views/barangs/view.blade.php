@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-dark-100 leading-tight ">
-            {{ __('Tambah Barang Baru') }}
+            {{ __('Daftar Barang') }}
         </h2>
     </x-slot>
 
@@ -72,9 +72,7 @@
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
-                    <a href="{{ route('barangs.create') }}"
-                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Tambah Barang</a>
-                    <!-- Button to trigger modal -->
+                     <!-- Button to trigger modal -->
                     <button data-modal-target="qr-modal" data-modal-toggle="qr-modal"
                         class="ms-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">QR Scan</button>
                 </div>

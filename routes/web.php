@@ -30,6 +30,18 @@ Route::get('/setuptahun', function () {
     return view('setup.setuptahun');
 })->middleware(['auth'])->name('setuptahun');
 
+Route::get('/form', function () {
+    return view('form.index');
+})->middleware(['auth'])->name('form.index');
+
+Route::get('/form/create', function () {
+    return view('form.create');
+})->middleware(['auth'])->name('form.create');
+
+
+
+Route::get('/barangs/view', [BarangController::class, 'view'])->name('barangs.view');
+
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('barangs', BarangController::class);
@@ -41,6 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/barangs/search', [BarangController::class, 'searchAndExit'])->name('barangs.search');
 });
 
-Route::get('/clock', [ClockController::class, 'showClock']);    
+Route::get('/clock', [ClockController::class, 'showClock']);
 
 require __DIR__.'/auth.php';
