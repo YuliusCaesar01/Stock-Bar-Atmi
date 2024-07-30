@@ -8,9 +8,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-dark-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="flex">
+                <div class="flex overflow-x-auto">
                     <!-- Left Panel -->
-                    <div class="w-1/3 pr-4">
+                    <div class="w-1/3 pr-4 flex-shrink-0">
                         <div>
                             <label for="kode_log" class="block text-sm font-medium text-gray-700">Kode Log</label>
                             <input type="text" id="kode_log" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
@@ -48,7 +48,7 @@
                     </div>
 
                     <!-- Center Panel -->
-                    <div class="w-1/3 pr-4">
+                    <div class="w-1/3 pr-4 flex-shrink-0">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr>
@@ -70,7 +70,7 @@
                     </div>
 
                     <!-- Right Panel -->
-                    <div class="w-1/3">
+                    <div class="w-1/3 flex-shrink-0">
                         <div>
                             <label for="pilih_nama" class="block text-sm font-medium text-gray-700">Pilih Nama</label>
                             <select id="pilih_nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
@@ -95,7 +95,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="w-1/3 pr-4">
+                    <div class="w-1/3 pr-4 flex-shrink-0">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr>
