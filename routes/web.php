@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClockController;
+use App\Http\Controllers\BarangLogController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -14,9 +15,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/logs', function () {
-    return view('logs');
-})->middleware(['auth'])->name('logs');
+Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
 
 Route::get('/saldobulanan', function () {
     return view('report.saldobulanan');
