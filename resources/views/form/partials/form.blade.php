@@ -38,7 +38,7 @@
                 <input type="text" id="total" name="total" value="{{ old('total', $barang->total ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="-" readonly />
             </div>
             <div class="col-span-2">
-                <label for="total" class="block mb-2 text-sm font-medium text-gray-900">No.Order</label>
+                <label for="total" class="block mb-2 text-sm font-medium text-gray-900">No.Order WP</label>
                 <input type="text" id="total" name="total" value="{{ old('total', $barang->total ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="-" readonly />
             </div>
             <div class="col-span-2">
