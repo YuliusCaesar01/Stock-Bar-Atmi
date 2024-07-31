@@ -61,9 +61,9 @@
                                 <!-- Add table rows here -->
                                 <!-- Example row: -->
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">C</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">MDC</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Electrical Std. Parts MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">C</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">Electrical Std. Parts MDC</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -108,9 +108,9 @@
                                 <!-- Add table rows here -->
                                 <!-- Example row: -->
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">C</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">MDC</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Electrical Std. Parts MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">C</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">MDC</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">Electrical Std. Parts MDC</td>
                                 </tr>
                             </tbody>
                         </table>
