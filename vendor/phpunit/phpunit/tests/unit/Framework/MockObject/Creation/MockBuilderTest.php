@@ -137,7 +137,6 @@ final class MockBuilderTest extends TestCase
         $this->assertTrue($double->concreteMethod());
     }
 
-    #[IgnorePhpunitDeprecations]
     #[TestDox('onlyMethods() can be used to configure which methods should be doubled')]
     public function testCreatesPartialMockObjectForExtendableClass(): void
     {
@@ -164,7 +163,22 @@ final class MockBuilderTest extends TestCase
 
         $this->assertInstanceOf($type, $double);
         $this->assertInstanceOf(MockObject::class, $double);
+    }
 
+    #[IgnorePhpunitDeprecations]
+    public function testDefaultBehaviourCanBeConfiguredExplicitly(): void
+    {
+        $double = $this->getMockBuilder(ExtendableClass::class)
+            ->enableOriginalConstructor()
+            ->enableOriginalClone()
+            ->enableAutoload()
+            ->enableArgumentCloning()
+            ->disableProxyingToOriginalMethods()
+            ->allowMockingUnknownTypes()
+            ->enableAutoReturnValueGeneration()
+            ->getMock();
+
+        $this->assertTrue($double->constructorCalled);
     }
 
     #[TestDox('Mocked methods can be called from the original constructor of a partially mocked class')]
