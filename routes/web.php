@@ -37,7 +37,9 @@ Route::get('/form/create', function () {
     return view('form.create');
 })->middleware(['auth'])->name('form.create');
 
-
+Route::get('/barangs/tambahbarangbaru', function () {
+    return view('barangs.tambahbarangbaru');
+})->middleware(['auth'])->name('barangs.tambahbarangbaru');
 
 Route::get('/barangs/view', [BarangController::class, 'view'])->name('barangs.view');
 
