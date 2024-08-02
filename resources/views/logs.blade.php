@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-dark-100 leading-tight ">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-dark-100 leading-tight">
             {{ __('Report') }}
         </h2>
     </x-slot>
@@ -27,16 +27,21 @@
                 </form>
             </div>
 
-            <div class="bg-white ">
+            <div class="bg-white">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="tahunTable"
-                        class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
+                    <table id="tahunTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Log Id</th>
                                 <th scope="col" class="px-6 py-3">QR Code Barang</th>
                                 <th scope="col" class="px-6 py-3">ID Barang</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
+                                <th scope="col" class="px-6 py-3">Order Number</th>
+                                <th scope="col" class="px-6 py-3">Item Number</th>
+                                <th scope="col" class="px-6 py-3">Operator</th>
+                                <th scope="col" class="px-6 py-3">Satuan</th>
+                                <th scope="col" class="px-6 py-3">Nomor PO</th>
+                                <th scope="col" class="px-6 py-3">Harga</th>
                                 <th scope="col" class="px-6 py-3">Status</th>
                                 <th scope="col" class="px-6 py-3">Quantity</th>
                                 <th scope="col" class="px-6 py-3">Timestamp</th>
@@ -45,32 +50,26 @@
                         <tbody>
                             @php
                                 $logs = \App\Models\BarangLog::get();
-                                $barang = \App\Models\Barang::get();
                             @endphp
-                            @foreach ($logs as $l)
+                            @foreach ($logs as $log)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-6 py-4 justify-center items-center">{{ $l->id }}</td>
-                                    <td class="px-6 py-4 flex justify-center items-center">
-                                        {!! QrCode::size(50)->generate($l->barang->no_barcode) !!}
+                                    <td class="px-6 py-4">{{ $log->id }}</td>
+                                    <td class="px-6 py-4">
+                                        {!! QrCode::size(50)->generate($log->barang->no_barcode) !!}
                                     </td>
-                                    <td class="px-6 py-4 justify-center items-center">{{ $l->barang_id }}</td>
-                                    <td class="px-6 py-4 justify-center items-center">{{ $l->barang->nama_barang }}</td>
-                                    <?php
-                                    // Enhanced logic for determining action:
-                                    $action = '';
-                                    if ($l->action === 'entry') {
-                                        $action = 'Barang Masuk'; // Consistent capitalization
-                                    } else if ($l->action === 'exit') {
-                                        $action = 'Barang Keluar'; // Consistent capitalization
-                                    } else {
-                                        // Handle unexpected action values gracefully
-                                        $action = 'Unknown Action: ' . $l->action;
-                                    }
-                                    ?>
-                                    <td class="px-6 py-4 justify-center items-center">{{ $action }}</td>
-                                    <td class="px-6 py-4 justify-center items-center">{{ $l->quantity }}</td>
-                                    <td class="px-6 py-4 justify-center items-center">{{ $l->updated_at }}</td>
-
+                                    <td class="px-6 py-4">{{ $log->barang_id }}</td>
+                                    <td class="px-6 py-4">{{ $log->barang->nama_barang }}</td>
+                                    <td class="px-6 py-4">{{ $log->order_number }}</td>
+                                    <td class="px-6 py-4">{{ $log->no_item }}</td>
+                                    <td class="px-6 py-4">{{ $log->operator }}</td>
+                                    <td class="px-6 py-4">{{ $log->satuan }}</td>
+                                    <td class="px-6 py-4">{{ $log->no_po }}</td>
+                                    <td class="px-6 py-4">{{ $log->harga }}</td>
+                                    <td class="px-6 py-4">
+                                        {{ $log->action === 'entry' ? 'Barang Masuk' : ($log->action === 'exit' ? 'Barang Keluar' : 'Unknown Action: ' . $log->action) }}
+                                    </td>
+                                    <td class="px-6 py-4">{{ $log->quantity }}</td>
+                                    <td class="px-6 py-4">{{ $log->updated_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -80,9 +79,8 @@
         </div>
         <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
             <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-              <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id" class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.
-            </span>
-            @include('clock')
+              <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id" class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.</span>
+              @include('clock')
             </div>
         </footer>
     </div>
