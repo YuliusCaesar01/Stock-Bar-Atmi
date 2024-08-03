@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BarangLog extends Model
+class WPLink extends Model
 {
     use HasFactory;
 
@@ -14,24 +14,24 @@ class BarangLog extends Model
      *
      * @var array<int, string>
      */
+
+    protected $table = 'WPLink';
     protected $fillable = [
-        'action',
-        'quantity',
-        'created_at',
-        'order_number',
+        'order_number', // Add this line
         'no_item',
+        'qr_id',
+        'material',
+        'jumlah',
         'satuan',
-        'operator',
         'harga',
-        'no_po',
+        'total',
+        'barcode_id',
         'jenis',
-        // Add other fields if needed
     ];
 
-    public function barang()
-    {
-        return $this->belongsTo(Barang::class, 'barang_id');
-    }
 
-    // Define relationships and other model methods here
+    public function logs()
+    {
+        return $this->hasMany(BarangLog::class);
+    }
 }

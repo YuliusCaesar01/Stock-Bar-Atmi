@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -34,7 +33,7 @@
       }
     }
 
-    
+
   </style>
 
 <body class="font-sans antialiased">
@@ -55,10 +54,10 @@
                 <main>
                     {{ $slot }}
                 </main>
-                
+
             </div>
         </div>
-        
+
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -75,6 +74,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
         <script>
         $(document).ready(function() {
             // Initialize DataTable with scrollX
@@ -114,7 +114,7 @@
                         }
                     }
                 ]
-                
+
             });
 
             var table = $('#tahunTable').DataTable({
@@ -154,7 +154,7 @@
                     }
                 ]
             });
-            
+
 
             // Append buttons container to the DataTable wrapper
             table.buttons().container().appendTo('#barangTable_wrapper .col-md-6:eq(0)');
@@ -237,6 +237,6 @@
 </body>
 
 
-  
+
 
 </html>
