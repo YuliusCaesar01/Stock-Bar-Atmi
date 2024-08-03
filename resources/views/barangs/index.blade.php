@@ -313,6 +313,16 @@
                                     required>
                             </div>
                             <div class="form-group">
+                                <label for="jenis"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Barang</label>
+                                <select name="jenis" id="jenis"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                                    <option value="parts">Standart Parts</option>
+                                    <option value="material">Material</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="jumlah_keluar"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah
                                     Ambil</label>

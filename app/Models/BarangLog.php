@@ -24,6 +24,7 @@ class BarangLog extends Model
         'operator',
         'harga',
         'no_po',
+        'jenis',
         // Add other fields if needed
     ];
 

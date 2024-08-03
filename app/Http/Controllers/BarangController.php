@@ -7,6 +7,7 @@ use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
 use app\Models\BarangLog;
+use App\Models\namabarang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -53,7 +54,8 @@ class BarangController extends Controller
     public function create()
     {
         $randomBarcode = 'SB-' . Str::random(8); // Example of a structured barcode
-        return view('barangs.create', compact('randomBarcode'));
+        $namabarangs = namabarang::all();
+        return view('barangs.create', compact('randomBarcode','namabarangs'));
     }
 
     /**
@@ -223,6 +225,7 @@ class BarangController extends Controller
             'jumlah_keluar' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'operator' => 'required|string|max:255',
+            'jenis' => 'required|string|max:255',
         ]);
 
         // Log the validated data
@@ -268,6 +271,7 @@ class BarangController extends Controller
                 'quantity' => $validatedData['jumlah_keluar'],
                 'satuan' => $validatedData['satuan'],
                 'operator' => $validatedData['operator'],
+                'jenis' => $validatedData['jenis'],
                 'created_at' => now(),
             ]
         ]);
@@ -279,6 +283,7 @@ class BarangController extends Controller
             'quantity' => $validatedData['jumlah_keluar'],
             'satuan' => $validatedData['satuan'],
             'operator' => $validatedData['operator'],
+            'jenis' => $validatedData['jenis'],
             'created_at' => now(),
         ]);
 
@@ -307,6 +312,7 @@ class BarangController extends Controller
                 'jumlah' => $validatedData['jumlah_keluar'],
                 'harga' => $barang->harga, // Ensure WPLink table has 'harga' column
                 'satuan' => $validatedData['satuan'],
+                'jenis' => $validatedData['jenis'],
             ]
         ]);
 
@@ -319,6 +325,7 @@ class BarangController extends Controller
             'jumlah' => $validatedData['jumlah_keluar'],
             'harga' => $barang->harga, // Ensure WPLink table has 'harga' column
             'satuan' => $validatedData['satuan'],
+            'jenis' => $validatedData['jenis'],
         ]);
 
         // Log the WPLink creation
@@ -332,6 +339,7 @@ class BarangController extends Controller
                 'jumlah' => $validatedData['jumlah_keluar'],
                 'harga' => $barang->harga,
                 'satuan' => $validatedData['satuan'],
+                'jenis' => $validatedData['jenis'],
             ]
         ]);
 

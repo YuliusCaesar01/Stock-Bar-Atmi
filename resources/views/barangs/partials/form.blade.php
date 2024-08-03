@@ -7,19 +7,26 @@
     <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
             <label for="no_barcode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Barcode ID</label>
-            <input type="text" id="no_barcode" name="no_barcode" value="{{ old('no_barcode', $barang->no_barcode ?? $randomBarcode ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
+            <input type="text" id="no_barcode" name="no_barcode" value="{{ old('no_barcode', $barang->no_barcode ?? $randomBarcode ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required readonly />
         </div>
         <div>
             <label for="no_item" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor Item</label>
-            <input type="text" id="no_item" name="no_item" value="{{ old('no_item', $barang->no_item ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-900 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
+            <input type="text" id="no_item" name="no_item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
         </div>
         <div>
             <label for="nama_barang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama Barang</label>
-            <input type="text" id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $barang->nama_barang ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
-        </div>    
+            <select id="nama_barang" name="nama_barang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                <option value="">Pilih Nama Barang</option>
+                @foreach($namabarangs as $namabarang)
+                    <option value="{{ $namabarang->id }}" data-no-item="{{ $namabarang->no_item }}" data-kode-log="{{ $namabarang->kode_log }}" data-satuan="{{ $namabarang->satuan }}">
+                        {{ $namabarang->nama_barang }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <div>
             <label for="kode_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Log</label>
-            <input type="text" id="kode_log" name="kode_log" value="{{ old('kode_log', $barang->kode_log ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
+            <input type="text" id="kode_log" name="kode_log" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
         </div>
         <div>
             <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah</label>
@@ -62,7 +69,7 @@
             <input type="text" id="no_akun" name="no_akun" value="{{ old('no_akun', $barang->no_akun ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
         </div>
     </div>
-    
+
     <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
         {{ $buttonText }}
     </button>
@@ -88,3 +95,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
     calculateTotal();
 });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const namaBarangSelect = document.getElementById('nama_barang');
+        const noItemInput = document.getElementById('no_item');
+        const kodeLogInput = document.getElementById('kode_log');
+        const satuanInput = document.getElementById('satuan');
+
+        namaBarangSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            noItemInput.value = selectedOption.getAttribute('data-no-item');
+            kodeLogInput.value = selectedOption.getAttribute('data-kode-log');
+            satuanInput.value = selectedOption.getAttribute('data-satuan');
+        });
+
+        const jumlahInput = document.getElementById('jumlah');
+        const hargaInput = document.getElementById('harga');
+        const totalInput = document.getElementById('total');
+
+        function calculateTotal() {
+            const jumlah = parseFloat(jumlahInput.value) || 0;
+            const harga = parseFloat(hargaInput.value) || 0;
+            totalInput.value = jumlah * harga;
+        }
+
+        jumlahInput.addEventListener('input', calculateTotal);
+        hargaInput.addEventListener('input', calculateTotal);
+
+        // Initial calculation in case there are pre-existing values
+        calculateTotal();
+    });
+    </script>

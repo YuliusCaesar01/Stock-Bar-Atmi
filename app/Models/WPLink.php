@@ -26,6 +26,7 @@ class WPLink extends Model
         'harga',
         'total',
         'barcode_id',
+        'jenis',
     ];
 
 
