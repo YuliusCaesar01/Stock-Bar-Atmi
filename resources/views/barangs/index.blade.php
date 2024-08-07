@@ -92,10 +92,10 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-5xl max-h-full">
             <!-- Modal content Entry Exit -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-dark">
                         <span id="modal-title">Form Penambahan Barang</span>
                     </h3>
                     <button type="button"
@@ -118,82 +118,82 @@
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
                                 <label for="nama_barangentry"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama
                                     Barang</label>
                                 <input type="text" name="nama_barang" id="nama_barangentry"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="no_barcodeentry"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QR ID</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">QR ID</label>
                                 <input type="text" name="no_barcode" id="no_barcodeentry"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="jumlah"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                     Stok</label>
                                 <input type="number" name="jumlah" id="jumlahentry"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="hargalama"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga
                                     Terkini</label>
                                 <input type="number" name="hargalama" id="hargalama"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="kode_logentry"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode
                                     Gudang</label>
                                 <input type="text" name="kode_log" id="kode_logentry"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required readonly>
                             </div>
                         </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
                                 <label for="no_po"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor PO
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor PO
                                 </label>
                                 <input type="text" name="no_po" id="no_po"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
                             </div>
                             <div class="form-group">
                                 <label for="harga_beli"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga Beli
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga Beli
                                     Barang</label>
                                 <input type="text" name="harga" id="harga_beli"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
                             </div>
                             <div class="form-group">
                                 <label for="jumlah_beli"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                 </label>
                                 <input type="text" name="jumlah_beli" id="jumlah_beli"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
                             </div>
                             <div class="form-group">
                                 <label for="operator"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Operator
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Operator
                                 </label>
                                 <input type="text" name="operator" id="operator"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
                             </div>
                         </div>
                     </div>
                     <div class="flex justify-end">
                         <button type="button"
-                            class="mb-3 text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
+                            class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="crud-modal">Cancel</button>
                         <button type="submit"
                             class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
@@ -207,10 +207,10 @@
     <div id="exit-modal" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-5xl max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-dark">
                         <span id="modal-title">Form Pengambilan Barang</span>
                     </h3>
                     <button type="button"
@@ -232,49 +232,49 @@
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
                                 <label for="nama_barang"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama
                                     Barang</label>
                                 <input type="text" name="nama_barang" id="nama_barang"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="no_barcode"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QR ID</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">QR ID</label>
                                 <input type="text" name="no_barcode" id="no_barcode"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="jumlah"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                     Stok</label>
                                 <input type="number" name="jumlah_sekarang" id="jumlah"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="kode_log"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode
                                     Gudang</label>
                                 <input type="text" name="kode_log" id="kode_log"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required readonly>
                             </div>
                             <div class="col-span-2">
                                 <div class="form-group">
                                     <label for="no_bom"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor
                                         BOM</label>
                                     <input type="text" name="no_bom" id="no_bom"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="institusi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Institusi</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Institusi</label>
                                     <input type="text" name="institusi" id="institusi"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
                                 </div>
                             </div>
@@ -282,10 +282,10 @@
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
                                 <label for="order_number"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor
                                     Order</label>
                                 <select name="order_number" id="order_number"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                                     <option value="">Select Order Number</option>
                                     @foreach ($orders as $order)
@@ -296,10 +296,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="no_item"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No
                                     Item</label>
                                 <select name="no_item" id="no_item"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                                     <option value="">Select No Item</option>
                                     <!-- Options will be populated dynamically -->
@@ -307,16 +307,16 @@
                             </div>
                             <div class="form-group">
                                 <label for="tanggal"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Tanggal</label>
                                 <input type="date" name="tanggal" id="tanggal"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                             </div>
                             <div class="form-group">
                                 <label for="jenis"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Barang</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jenis Barang</label>
                                 <select name="jenis" id="jenis"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                                     <option value="parts">Standart Parts</option>
                                     <option value="material">Material</option>
@@ -324,31 +324,31 @@
                             </div>
                             <div class="form-group">
                                 <label for="jumlah_keluar"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                     Ambil</label>
                                 <input type="number" name="jumlah_keluar" id="jumlah_keluar"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                             </div>
                             <div class="form-group">
                                 <label for="satuan"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Satuan</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Satuan</label>
                                 <input type="text" name="satuan" id="satuan"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     readonly required>
                             </div>
                             <div class="form-group">
                                 <label for="operator"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Operator</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Operator</label>
                                 <input type="text" name="operator" id="operator"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
                             </div>
                         </div>
                     </div>
                     <div class="flex justify-end">
                         <button type="button"
-                            class="mb-3 text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
+                            class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="exit-modal">Cancel</button>
                         <button type="submit"
                             class="me-3 mb-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>

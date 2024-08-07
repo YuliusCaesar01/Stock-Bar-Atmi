@@ -116,9 +116,8 @@
                 ]
 
             });
-
             var table = $('#tahunTable').DataTable({
-                scrollX: false,
+                scrollX: true,
                 responsive: false,
                 dom: 'Bfrtip', // Include buttons in the DOM
                 buttons: [
