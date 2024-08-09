@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClockController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BarangLogController;
 use App\Http\Controllers\NamaBarangController;
@@ -23,11 +24,20 @@ Route::post('/setupbarang', [NamaBarangController::class, 'store'])->name('nama-
 // Route to display the form to edit an existing item
 Route::get('/nama-barang/{id}/edit', [NamaBarangController::class, 'edit'])->name('nama-barang.edit');
 
+Route::get('nama-barang/create', [NamaBarangController::class, 'create'])->name('nama-barang.create');
+
 // Route to update an existing item
 Route::put('/nama-barang/{id}', [NamaBarangController::class, 'update'])->name('nama-barang.update');
 
 // Route to delete an item
 Route::delete('/nama-barang/{id}', [NamaBarangController::class, 'destroy'])->name('nama-barang.destroy');
+
+Route::get('setup/setupsatuan', [SatuanController::class, 'index'])->name('setupsatuan');
+Route::post('/setupsatuan', [SatuanController::class, 'store'])->name('setupsatuan.store');
+Route::get('/setupsatuan/{id}/edit', [SatuanController::class, 'edit'])->name('setupsatuan.edit');
+Route::put('/setupsatuan/{id}', [SatuanController::class, 'update'])->name('setupsatuan.update');
+Route::delete('/setupsatuan/{id}', [SatuanController::class, 'destroy'])->name('setupsatuan.destroy');
+
 
 
 Route::get('/saldobulanan', function () {

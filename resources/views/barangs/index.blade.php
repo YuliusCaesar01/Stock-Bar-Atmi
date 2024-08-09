@@ -60,7 +60,7 @@
                                     <td class="px-6 py-4">{{ $barang->kode_log }}</td>
                                     <td class="px-6 py-4">{{ $barang->jumlah }}</td>
                                     <td class="px-6 py-4">{{ $barang->satuan }}</td>
-                                    <td class="px-6 py-4">{{ $barang->harga }}</td>
+                                    <td>{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->rak }}</td>
                                     <td class="px-6 py-4">{{ $barang->total }}</td>
                                     <td class="px-6 py-4">{{ $barang->tanggal }}</td>

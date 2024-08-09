@@ -64,7 +64,7 @@
                                 Hak Akses Gudang
                             </span>
                         </a>
-                        {{-- <a href="{{ route('setuptahun') }}"
+                        <a href="{{ route('setupsatuan') }}"
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-dark dark:hover:bg-gray-200">
                             <svg class="w-6 h-6 text-gray-800 dark:text-dark" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -74,9 +74,9 @@
                                     d="m11.5 11.5 2.071 1.994M4 10h5m11 0h-1.5M12 7V4M7 7V4m10 3V4m-7 13H8v-2l5.227-5.292a1.46 1.46 0 0 1 2.065 2.065L10 17Zm-5 3h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
                             </svg>
                             <span class="ms-3">
-                                Setup Tahun
+                                Setup Satuan
                             </span>
-                        </a> --}}
+                        </a>
                         <a href="{{ route('setupbarang') }}"
                         class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-dark dark:hover:bg-gray-200">
                         <svg class="w-6 h-6 text-gray-800 dark:text-dark" aria-hidden="true"

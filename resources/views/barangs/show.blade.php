@@ -70,7 +70,7 @@
                                         Harga
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ $barang->harga }}
+                                        {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
@@ -86,7 +86,7 @@
                                         Total
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ $barang->total }}
+                                        {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">

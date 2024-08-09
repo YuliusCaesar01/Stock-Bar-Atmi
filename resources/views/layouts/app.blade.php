@@ -119,6 +119,13 @@
             var table = $('#tahunTable').DataTable({
                 scrollX: true,
                 responsive: false,
+                columnDefs: [
+                { width: '10%', targets: 0 }, // Nomor Item
+                { width: '30%', targets: 1 }, // Nama Barang
+                { width: '15%', targets: 2 }, // Kode Log
+                { width: '15%', targets: 3 }, // Satuan
+                { width: '30%', targets: 4 }, // Actions
+            ],
                 dom: 'Bfrtip', // Include buttons in the DOM
                 buttons: [
                     {
@@ -153,8 +160,49 @@
                     }
                 ]
             });
+            var table = $('#satuanTable').DataTable({
+                scrollX: false,
+                responsive: false,
+                columnDefs: [
+                { width: '10%', targets: 0 }, // Id
+                { width: '30%', targets: 1 }, // Kode Satuan
+                { width: '15%', targets: 2 }, // Nama Satuan
+                { width: '15%', targets: 3 }, // Action
+            ],
+                dom: 'Bfrtip', // Include buttons in the DOM
+                buttons: [
+                    {
+                        extend: 'csv',
+                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                        customize: function(win) {
+                            $(win.document.body)
+                                .css('font-size', '10pt')
+                                .prepend(
+                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                                    '<img src="logopt1.png" style="width: 200px;">' +
+                                    '</div>'
+                                );
 
-
+                            $(win.document.body).find('table')
+                                .addClass('display')
+                                .css('width', '100%')
+                                .css('font-size', 'inherit');
+                        }
+                    }
+                ]
+            });
             // Append buttons container to the DataTable wrapper
             table.buttons().container().appendTo('#barangTable_wrapper .col-md-6:eq(0)');
         });

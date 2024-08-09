@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\NamaBarang;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 
 class NamaBarangController extends Controller
@@ -14,8 +15,8 @@ class NamaBarangController extends Controller
     public function index()
     {
         $nama=NamaBarang::all();
-
-        return view('setup.setupbarang',compact('nama'));
+        $satuan = Satuan::all();
+        return view('setup.setupbarang',compact('nama','satuan'));
     }
 
     /**
