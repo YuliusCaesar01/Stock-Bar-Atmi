@@ -88,7 +88,11 @@
                         @csrf
                         <div>
                             <label for="no_item" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor Item</label>
-                            <input type="text" name="no_item" id="no_item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                            <input type="text" name="no_item" id="no_item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" readonly>
+                        </div>
+                        <div>
+                            <label for="no" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No</label>
+                            <input type="text" name="no" id="no" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" readonly>
                         </div>
                         <div>
                             <label for="kode_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Log/Gudang</label>
@@ -105,10 +109,6 @@
                                     <option value="{{ $s->kd_akun }}">{{ $s->kd_akun }} - {{ $s->nama_akun }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        <div>
-                            <label for="no" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No</label>
-                            <input type="text" name="no" id="no" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" readonly>
                         </div>
                         <div>
                             <label for="nama_barang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama Barang</label>

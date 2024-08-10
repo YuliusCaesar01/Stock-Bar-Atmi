@@ -39,7 +39,6 @@ public function store(Request $request)
 {
     // Validate the incoming request data
     $request->validate([
-        'no_item' => 'required|string|max:255',
         'nama_barang' => 'required|string|max:255',
         'kode_log' => 'required|string|max:255',
         'kd_akun' => 'required|string|max:255',
@@ -57,9 +56,12 @@ public function store(Request $request)
     $lastItem = NamaBarang::orderBy('no', 'desc')->first();
     $newNo = $lastItem ? $lastItem->no + 1 : 1001;
 
-    // Create a new NamaBarang record with the automatic 'no' value
+    // Generate the 'no_item' in the format kd_akun-kode_log-no
+    $no_item = $request->kd_akun . '-' . $request->kode_log . '-' . $newNo;
+
+    // Create a new NamaBarang record with the generated 'no_item' and 'no' value
     NamaBarang::create([
-        'no_item' => $request->no_item,
+        'no_item' => $no_item,
         'nama_barang' => $request->nama_barang,
         'kode_log' => $request->kode_log,
         'satuan' => $request->satuan,
@@ -71,11 +73,12 @@ public function store(Request $request)
         'merk' => $request->merk,
         'no_reff' => $request->no_reff,
         'kd_akun' => $request->kd_akun,
-        'no' => $newNo, // Use the automatically generated 'no'
+        'no' => $newNo,
     ]);
 
     return redirect()->route('setupbarang')->with('success', 'Nama Barang added successfully.');
 }
+
 
     /**
      * Display the specified resource.
