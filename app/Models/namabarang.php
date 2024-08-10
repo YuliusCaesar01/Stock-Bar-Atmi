@@ -18,7 +18,16 @@ class NamaBarang extends Model
         'no_item',
         'nama_barang',
         'kode_log',
+        'kd_akun',
+        'no',
         'satuan',
+        'harga',
+        'jumlah_minimal',
+        'jumlah_maksimal',
+        'rak',
+        'no_katalog',
+        'merk',
+        'no_reff',
     ];
 
 

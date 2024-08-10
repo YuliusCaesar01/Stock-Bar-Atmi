@@ -6,7 +6,10 @@ use App\Http\Controllers\ClockController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\BarangLogController;
+use App\Http\Controllers\LogGudangController;
+use App\Http\Controllers\MasterAkunController;
 use App\Http\Controllers\NamaBarangController;
 
 Route::get('/', function () {
@@ -32,11 +35,33 @@ Route::put('/nama-barang/{id}', [NamaBarangController::class, 'update'])->name('
 // Route to delete an item
 Route::delete('/nama-barang/{id}', [NamaBarangController::class, 'destroy'])->name('nama-barang.destroy');
 
+// Setup Satuan
 Route::get('setup/setupsatuan', [SatuanController::class, 'index'])->name('setupsatuan');
 Route::post('/setupsatuan', [SatuanController::class, 'store'])->name('setupsatuan.store');
 Route::get('/setupsatuan/{id}/edit', [SatuanController::class, 'edit'])->name('setupsatuan.edit');
 Route::put('/setupsatuan/{id}', [SatuanController::class, 'update'])->name('setupsatuan.update');
 Route::delete('/setupsatuan/{id}', [SatuanController::class, 'destroy'])->name('setupsatuan.destroy');
+
+// Setup Log Gudang
+Route::get('setup/setuploggudang', [LogGudangController::class, 'index'])->name('setuploggudang');
+Route::post('/setuploggudang', [LogGudangController::class, 'store'])->name('setuploggudang.store');
+Route::get('/setuploggudang/{id}/edit', [LogGudangController::class, 'edit'])->name('setuploggudang.edit');
+Route::put('/setuploggudang/{id}', [LogGudangController::class, 'update'])->name('setuploggudang.update');
+Route::delete('/setuploggudang/{id}', [LogGudangController::class, 'destroy'])->name('setuploggudang.destroy');
+
+// Setup Log Produksi
+Route::get('setup/setupproduksi', [ProduksiController::class, 'index'])->name('setupproduksi');
+Route::post('/setupproduksi', [ProduksiController::class, 'store'])->name('setupproduksi.store');
+Route::get('/setupproduksi/{id}/edit', [ProduksiController::class, 'edit'])->name('setupproduksi.edit');
+Route::put('/setupproduksi/{id}', [ProduksiController::class, 'update'])->name('setupproduksi.update');
+Route::delete('/setupproduksi/{id}', [ProduksiController::class, 'destroy'])->name('setupproduksi.destroy');
+
+// Setup Master Akun
+Route::get('setup/setupmasterakun', [MasterAkunController::class, 'index'])->name('setupmasterakun');
+Route::post('/setupmasterakun', [MasterAkunController::class, 'store'])->name('setupmasterakun.store');
+Route::get('/setupmasterakun/{id}/edit', [MasterAkunController::class, 'edit'])->name('setupmasterakun.edit');
+Route::put('/setupmasterakun/{id}', [MasterAkunController::class, 'update'])->name('setupmasterakun.update');
+Route::delete('/setupmasterakun/{id}', [MasterAkunController::class, 'destroy'])->name('setupmasterakun.destroy');
 
 
 

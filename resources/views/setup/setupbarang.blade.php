@@ -9,13 +9,22 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="tahunTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
+                    <table id="barangTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Nomor Item</th>
-                                <th scope="col" class="px-6 py-3">Nama Barang</th>
                                 <th scope="col" class="px-6 py-3">Kode Log</th>
+                                <th scope="col" class="px-6 py-3">Kode Akun</th>
+                                <th scope="col" class="px-6 py-3">No</th>
+                                <th scope="col" class="px-6 py-3">Nama Barang</th>
+                                <th scope="col" class="px-6 py-3">Harga</th>
                                 <th scope="col" class="px-6 py-3">Satuan</th>
+                                <th scope="col" class="px-6 py-3">Stock Minimal</th>
+                                <th scope="col" class="px-6 py-3">Stock Maksimal</th>
+                                <th scope="col" class="px-6 py-3">Rak</th>
+                                <th scope="col" class="px-6 py-3">No Katalog</th>
+                                <th scope="col" class="px-6 py-3">Merk/Vendor</th>
+                                <th scope="col" class="px-6 py-3">No Refferensi</th>
                                 <th scope="col" class="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
@@ -23,9 +32,18 @@
                             @foreach ($nama as $barang)
                                 <tr>
                                     <td class="px-6 py-4">{{ $barang->no_item }}</td>
-                                    <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
                                     <td class="px-6 py-4">{{ $barang->kode_log }}</td>
+                                    <td class="px-6 py-4">{{ $barang->kd_akun }}</td>
+                                    <td class="px-6 py-4">{{ $barang->no }}</td>
+                                    <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
+                                    <td>{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->satuan }}</td>
+                                    <td class="px-6 py-4">{{ $barang->jumlah_minimal }}</td>
+                                    <td class="px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
+                                    <td class="px-6 py-4">{{ $barang->rak }}</td>
+                                    <td class="px-6 py-4">{{ $barang->no_katalog }}</td>
+                                    <td class="px-6 py-4">{{ $barang->merk }}</td>
+                                    <td class="px-6 py-4">{{ $barang->no_reff }}</td>
                                     <td class="px-6 py-4">
                                         <!-- Edit Button -->
                                         <button type="button" class="text-blue-600 hover:text-blue-900" data-modal-target="#editBarangModal-{{ $barang->id }}">
@@ -73,20 +91,64 @@
                             <input type="text" name="no_item" id="no_item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                         </div>
                         <div>
+                            <label for="kode_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Log/Gudang</label>
+                            <select name="kode_log" id="kode_log" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                                @foreach($logs as $s)
+                                    <option value="{{ $s->kd_log }}">{{ $s->kd_log }}- {{ $s->nama_log }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="kd_akun" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Akun</label>
+                            <select name="kd_akun" id="kd_akun" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                                @foreach($masterakuns as $s)
+                                    <option value="{{ $s->kd_akun }}">{{ $s->kd_akun }} - {{ $s->nama_akun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="no" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No</label>
+                            <input type="text" name="no" id="no" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" readonly>
+                        </div>
+                        <div>
                             <label for="nama_barang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama Barang</label>
                             <input type="text" name="nama_barang" id="nama_barang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                         </div>
                         <div>
-                            <label for="kode_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Log</label>
-                            <input type="text" name="kode_log" id="kode_log" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                            <label for="harga" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga</label>
+                            <input type="text" name="harga" id="harga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                         </div>
                         <div>
                             <label for="satuan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Satuan</label>
                             <select name="satuan" id="satuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                                 @foreach($satuan as $s)
-                                    <option value="{{ $s->kd_satuan }}">{{ $s->kd_satuan }}</option>
+                                    <option value="{{ $s->kd_satuan }}">{{ $s->kd_satuan }}- {{ $s->nama_satuan }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div>
+                            <label for="jumlah_minimal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Stock Minimal</label>
+                            <input type="text" name="jumlah_minimal" id="jumlah_minimal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                        </div>
+                        <div>
+                            <label for="jumlah_maksimal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Stock Maksimal</label>
+                            <input type="text" name="jumlah_maksimal" id="jumlah_maksimal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                        </div>
+                        <div>
+                            <label for="rak" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Rak</label>
+                            <input type="text" name="rak" id="rak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                        </div>
+                        <div>
+                            <label for="no_katalog" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No Katalog</label>
+                            <input type="text" name="no_katalog" id="no_katalog" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                        </div>
+                        <div>
+                            <label for="merk" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Merk/Vendor</label>
+                            <input type="text" name="merk" id="merk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                        </div>
+                        <div>
+                            <label for="no_reff" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No Refferensi</label>
+                            <input type="text" name="no_reff" id="no_reff" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                         </div>
                         <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                     </form>

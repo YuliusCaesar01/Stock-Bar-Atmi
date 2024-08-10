@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\NamaBarang;
 use App\Models\Satuan;
+use App\Models\LogGudang;
+use App\Models\MasterAkun;
+use App\Models\NamaBarang;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class NamaBarangController extends Controller
 {
@@ -16,7 +18,9 @@ class NamaBarangController extends Controller
     {
         $nama=NamaBarang::all();
         $satuan = Satuan::all();
-        return view('setup.setupbarang',compact('nama','satuan'));
+        $logs = LogGudang::all();
+        $masterakuns = MasterAkun::all();
+        return view('setup.setupbarang',compact('nama','satuan','logs','masterakuns'));
     }
 
     /**
@@ -33,18 +37,41 @@ class NamaBarangController extends Controller
 // Store method to save a new NamaBarang
 public function store(Request $request)
 {
+    // Validate the incoming request data
     $request->validate([
         'no_item' => 'required|string|max:255',
         'nama_barang' => 'required|string|max:255',
         'kode_log' => 'required|string|max:255',
+        'kd_akun' => 'required|string|max:255',
         'satuan' => 'required|string|max:255',
+        'harga' => 'required|integer',
+        'jumlah_minimal' => 'required|integer',
+        'jumlah_maksimal' => 'required|integer',
+        'rak' => 'required|string|max:255',
+        'no_katalog' => 'required|string|max:255',
+        'merk' => 'required|string|max:255',
+        'no_reff' => 'required|string|max:255',
     ]);
 
+    // Automatically generate the 'no' value
+    $lastItem = NamaBarang::orderBy('no', 'desc')->first();
+    $newNo = $lastItem ? $lastItem->no + 1 : 1001;
+
+    // Create a new NamaBarang record with the automatic 'no' value
     NamaBarang::create([
         'no_item' => $request->no_item,
         'nama_barang' => $request->nama_barang,
         'kode_log' => $request->kode_log,
         'satuan' => $request->satuan,
+        'harga' => $request->harga,
+        'jumlah_minimal' => $request->jumlah_minimal,
+        'jumlah_maksimal' => $request->jumlah_maksimal,
+        'rak' => $request->rak,
+        'no_katalog' => $request->no_katalog,
+        'merk' => $request->merk,
+        'no_reff' => $request->no_reff,
+        'kd_akun' => $request->kd_akun,
+        'no' => $newNo, // Use the automatically generated 'no'
     ]);
 
     return redirect()->route('setupbarang')->with('success', 'Nama Barang added successfully.');
