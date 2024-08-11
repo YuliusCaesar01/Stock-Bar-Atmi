@@ -18,6 +18,7 @@ class Barang extends Model
         'no_barcode', // Add this line
         'no_item',
         'nama_barang',
+        'kd_akun',
         'kode_log',
         'jumlah',
         'satuan',
@@ -26,9 +27,11 @@ class Barang extends Model
         'total',
         'tanggal',
         'jumlah_minimal',
+        'jumlah_maksimal',
         'no_katalog',
         'merk',
         'no_akun',
+        'no_reff',
     ];
 
 

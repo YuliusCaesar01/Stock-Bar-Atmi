@@ -30,13 +30,13 @@
                                             Edit
                                         </button>
                                         <!-- Delete Button -->
-                                        <form action="{{ route('setupsatuan.destroy', $s->id) }}" method="POST" class="inline-block">
+                                        <form id="delete-form-{{ $s->id }}" action="{{ route('setupsatuan.destroy', $s->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $s->id }})">
                                                 Delete
                                             </button>
-                                        </form>
+                                        </form>                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -112,6 +112,24 @@
         </div>
     @endforeach
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(satuanId) {
+            Swal.fire({
+                title: 'Hapus Satuan Ini?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + satuanId).submit();
+                }
+            })
+        }
+    </script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {

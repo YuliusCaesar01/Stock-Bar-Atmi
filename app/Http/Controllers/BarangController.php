@@ -29,6 +29,7 @@ class BarangController extends Controller
             ->orWhere('no_item', 'like', "%{$search}%")
             ->orWhere('nama_barang', 'like', "%{$search}%")
             ->orWhere('kode_log', 'like', "%{$search}%")
+            ->orWhere('kd_akun', 'like', "%{$search}%")
             ->orWhere('jumlah', 'like', "%{$search}%")
             ->orWhere('satuan', 'like', "%{$search}%")
             ->orWhere('harga', 'like', "%{$search}%")
@@ -36,9 +37,11 @@ class BarangController extends Controller
             ->orWhere('total', 'like', "%{$search}%")
             ->orWhere('tanggal', 'like', "%{$search}%")
             ->orWhere('jumlah_minimal', 'like', "%{$search}%")
+            ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
             ->orWhere('no_katalog', 'like', "%{$search}%")
             ->orWhere('merk', 'like', "%{$search}%")
             ->orWhere('no_akun', 'like', "%{$search}%")
+            ->orWhere('no_reff', 'like', "%{$search}%")
             ->get();
 
         foreach ($barangs as $barang) {
@@ -68,6 +71,7 @@ class BarangController extends Controller
             'no_item' => 'required|string|max:255',
             'nama_barang' => 'required|string|max:255',
             'kode_log' => 'required|string|max:255',
+            'kd_akun' => 'required|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'harga' => 'required|integer',
@@ -75,9 +79,11 @@ class BarangController extends Controller
             'total' => 'required|integer',
             'tanggal' => 'required|date',
             'jumlah_minimal' => 'required|integer',
+            'jumlah_maksimal' => 'required|integer',
             'no_katalog' => 'required|string|max:255',
             'merk' => 'required|string|max:255',
             'no_akun' => 'required|string|max:255',
+            'no_reff' => 'required|string|max:255',
         ]);
 
         Barang::create($validated);
@@ -107,6 +113,7 @@ class BarangController extends Controller
         if (is_null($barang->no_barcode)) {
             $barang->no_barcode = 'SB-' . Str::random(8); // Example of a structured barcode
         }
+        
         return view('barangs.edit', compact('barang'));
     }
 
@@ -120,6 +127,7 @@ class BarangController extends Controller
             'no_item' => 'required|string|max:255',
             'nama_barang' => 'required|string|max:255',
             'kode_log' => 'required|string|max:255',
+            'kd_akun' => 'required|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'harga' => 'required|integer',
@@ -127,9 +135,11 @@ class BarangController extends Controller
             'total' => 'required|integer',
             'tanggal' => 'required|date',
             'jumlah_minimal' => 'required|integer',
+            'jumlah_maksimal' => 'required|integer',
             'no_katalog' => 'required|string|max:255',
             'merk' => 'required|string|max:255',
             'no_akun' => 'required|string|max:255',
+            'no_reff' => 'required|string|max:255',
         ]);
 
         $barang->update($validated);
@@ -217,6 +227,7 @@ class BarangController extends Controller
             'no_barcode' => 'required|string|max:255',
             'jumlah_sekarang' => 'required|integer',
             'kode_log' => 'required|string|max:255',
+            'kd_akun' => 'required|string|max:255',
             'no_bom' => 'required|string|max:255',
             'institusi' => 'required|string|max:255',
             'order_number' => 'required|string|max:255',
@@ -390,6 +401,7 @@ class BarangController extends Controller
             ->orWhere('no_item', 'like', "%{$search}%")
             ->orWhere('nama_barang', 'like', "%{$search}%")
             ->orWhere('kode_log', 'like', "%{$search}%")
+            ->orWhere('kd_akun', 'like', "%{$search}%")
             ->orWhere('jumlah', 'like', "%{$search}%")
             ->orWhere('satuan', 'like', "%{$search}%")
             ->orWhere('harga', 'like', "%{$search}%")
@@ -397,9 +409,11 @@ class BarangController extends Controller
             ->orWhere('total', 'like', "%{$search}%")
             ->orWhere('tanggal', 'like', "%{$search}%")
             ->orWhere('jumlah_minimal', 'like', "%{$search}%")
+            ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
             ->orWhere('no_katalog', 'like', "%{$search}%")
             ->orWhere('merk', 'like', "%{$search}%")
             ->orWhere('no_akun', 'like', "%{$search}%")
+            ->orWhere('no_reff', 'like', "%{$search}%")
             ->get();
 
         foreach ($barangs as $barang) {

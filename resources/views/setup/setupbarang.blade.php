@@ -50,13 +50,13 @@
                                             Edit
                                         </button>
                                         <!-- Delete Button -->
-                                        <form action="{{ route('nama-barang.destroy', $barang->id) }}" method="POST" class="inline-block">
+                                        <form id="delete-form-{{ $barang->id }}" action="{{ route('nama-barang.destroy', $barang->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $barang->id }})">
                                                 Delete
                                             </button>
-                                        </form>
+                                        </form>                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -286,16 +286,34 @@
                             </div>
                         </div>
                         <!-- Modal footer -->
-                        <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <div class="modal-footer flex justify-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                             <button data-modal-hide class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
-                        </div>
+                        </div>                                               
                     </form>
                 </div>
             </div>
         </div>
         
     @endforeach
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(barangId) {
+            Swal.fire({
+                title: 'Hapus Barang Ini?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + barangId).submit();
+                }
+            })
+        }
+    </script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {

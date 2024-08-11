@@ -106,6 +106,22 @@
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        Jumlah Maksimal
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ $barang->jumlah_maksimal }}
+                                    </td>
+                                </tr>
+                                <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        Merk
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ $barang->merk }}
+                                    </td>
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Katalog
                                     </th>
                                     <td class="px-6 py-4">
@@ -115,10 +131,17 @@
                                 <tr class="bg-white :bg-gray-800">
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
-                                        Merk
+                                        No Akun
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ $barang->merk }}
+                                        {{ $barang->no_akun }}
+                                    </td>
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        No Refferensi
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ $barang->no_reff }}
                                     </td>
                                 </tr>
                             </tbody>

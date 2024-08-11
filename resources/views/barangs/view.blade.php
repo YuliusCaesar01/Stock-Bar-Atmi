@@ -17,6 +17,7 @@
                                 <th scope="col" class="px-6 py-3">Activity</th>
                                 <th scope="col" class="px-6 py-3">No Item</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
+                                <th scope="col" class="px-6 py-3">Kode Akun</th>
                                 <th scope="col" class="px-6 py-3">Kode Log</th>
                                 <th scope="col" class="px-6 py-3">Jumlah</th>
                                 <th scope="col" class="px-6 py-3">Satuan</th>
@@ -25,9 +26,11 @@
                                 <th scope="col" class="px-6 py-3">Total</th>
                                 <th scope="col" class="px-6 py-3">Tanggal</th>
                                 <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
+                                <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
                                 <th scope="col" class="px-6 py-3">No Katalog</th>
                                 <th scope="col" class="px-6 py-3">Merk</th>
                                 <th scope="col" class="px-6 py-3">No Akun</th>
+                                <th scope="col" class="px-6 py-3">No Refferensi</th>
                                 <th scope="col" class="px-6 py-3">QR(manual)</th>
                             </tr>
                         </thead>
@@ -49,17 +52,20 @@
                                     </td>
                                     <td class="px-6 py-4">{{ $barang->no_item }}</td>
                                     <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
+                                    <td class="px-6 py-4">{{ $barang->kd_akun }}</td>
                                     <td class="px-6 py-4">{{ $barang->kode_log }}</td>
                                     <td class="px-6 py-4">{{ $barang->jumlah }}</td>
                                     <td class="px-6 py-4">{{ $barang->satuan }}</td>
-                                    <td class="px-6 py-4">{{ $barang->harga }}</td>
+                                    <td>{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->rak }}</td>
-                                    <td class="px-6 py-4">{{ $barang->total }}</td>
+                                    <td>{{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->tanggal }}</td>
                                     <td class="px-6 py-4">{{ $barang->jumlah_minimal }}</td>
+                                    <td class="px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_katalog }}</td>
                                     <td class="px-6 py-4">{{ $barang->merk }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_akun }}</td>
+                                    <td class="px-6 py-4">{{ $barang->no_reff }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_barcode }}</td>
                                 </tr>
                             @endforeach
