@@ -62,7 +62,7 @@
                                     <td class="px-6 py-4">{{ $barang->satuan }}</td>
                                     <td>{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->rak }}</td>
-                                    <td class="px-6 py-4">{{ $barang->total }}</td>
+                                    <td>{{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->tanggal }}</td>
                                     <td class="px-6 py-4">{{ $barang->jumlah_minimal }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_katalog }}</td>

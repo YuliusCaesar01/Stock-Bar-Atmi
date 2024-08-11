@@ -99,34 +99,34 @@
 
     @foreach ($logs as $s)
         <!-- Edit Modal -->
-        <div id="editLogModal-{{ $s->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+        <div id="editLogModal-{{ $s->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center h-screen">
             <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-400 border-4 border-gray-800">
                     <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                     </button>
                     <div class="py-6 px-6 lg:px-8">
-                        <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Nama Log</h3>
+                        <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-dark">Edit Nama Log</h3>
                         <form class="space-y-6" action="{{ route('setuploggudang.update', $s->id) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div>
-                                <label for="kd_prod" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode Satuan</label>
-                                <input type="text" name="kd_prod" id="kd_prod" value="{{ $s->kd_prod }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                <label for="kd_prod" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Satuan</label>
+                                <input type="text" name="kd_prod" id="kd_prod" value="{{ $s->kd_prod }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                             <div>
-                                <label for="kd_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode Log/Gudang</label>
-                                <input type="text" name="kd_log" id="kd_log" value="{{ $s->kd_log }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                <label for="kd_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Log/Gudang</label>
+                                <input type="text" name="kd_log" id="kd_log" value="{{ $s->kd_log }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                             <div>
-                                <label for="nama_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Log/Gudang</label>
-                                <input type="text" name="nama_log" id="nama_log" value="{{ $s->nama_log }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                <label for="nama_log" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama Log/Gudang</label>
+                                <input type="text" name="nama_log" id="nama_log" value="{{ $s->nama_log }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                             <div>
-                                <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan</label>
-                                <input type="text" name="keterangan" id="keterangan" value="{{ $s->keterangan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Keterangan</label>
+                                <input type="text" name="keterangan" id="keterangan" value="{{ $s->keterangan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                             <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                         </form>
