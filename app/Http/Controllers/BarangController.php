@@ -22,7 +22,7 @@ class BarangController extends Controller
     {
         $search = $request->input('search');
 
-        $orders= Orders::all();
+        $orders = Orders::where('order_status', '!=', 'Finished')->get();
 
         $barangs = Barang::query()
             ->where('no_barcode', 'like', "%{$search}%")

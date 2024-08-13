@@ -10,7 +10,7 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href='logopt1.png' rel="shorcut icon">
+        <link rel="icon" href="{{ asset('logopt.png') }}" type="image/x-icon">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
