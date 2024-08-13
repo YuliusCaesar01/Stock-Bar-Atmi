@@ -7,9 +7,11 @@ use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
 use app\Models\BarangLog;
+use App\Models\UnitKerja;
 use App\Models\namabarang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\KodeInstitusi;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,7 +23,8 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
+        $institusi = KodeInstitusi::all();
+        $unitkerja = UnitKerja::all();
         $orders = Orders::where('order_status', '!=', 'Finished')->get();
 
         $barangs = Barang::query()
@@ -29,6 +32,7 @@ class BarangController extends Controller
             ->orWhere('no_item', 'like', "%{$search}%")
             ->orWhere('nama_barang', 'like', "%{$search}%")
             ->orWhere('kode_log', 'like', "%{$search}%")
+            ->orWhere('kd_unit', 'like', "%{$search}%")
             ->orWhere('kd_akun', 'like', "%{$search}%")
             ->orWhere('jumlah', 'like', "%{$search}%")
             ->orWhere('satuan', 'like', "%{$search}%")
@@ -48,7 +52,7 @@ class BarangController extends Controller
             $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
         }
 
-        return view('barangs.index', compact('barangs','orders'));
+        return view('barangs.index', compact('barangs','orders','institusi','unitkerja'));
     }
 
     /**
@@ -71,6 +75,7 @@ class BarangController extends Controller
             'no_item' => 'required|string|max:255',
             'nama_barang' => 'required|string|max:255',
             'kode_log' => 'required|string|max:255',
+            'kd_unit' => 'required|string|max:255',
             'kd_akun' => 'required|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
@@ -128,6 +133,7 @@ class BarangController extends Controller
             'nama_barang' => 'required|string|max:255',
             'kode_log' => 'required|string|max:255',
             'kd_akun' => 'required|string|max:255',
+            'kd_ins' => 'required|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'harga' => 'required|integer',

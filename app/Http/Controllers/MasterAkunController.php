@@ -33,6 +33,7 @@ class MasterAkunController extends Controller
             'kd_akun' => 'required|string|max:255',
             'nama_akun' => 'required|string|max:255',
             'kelompok' => 'nullable|string',
+            'jenis_kelompok' => 'nullable|string',
         ]);
 
         MasterAkun::create($request->all());

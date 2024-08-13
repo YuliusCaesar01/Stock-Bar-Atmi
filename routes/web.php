@@ -9,8 +9,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\BarangLogController;
 use App\Http\Controllers\LogGudangController;
+use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\MasterAkunController;
 use App\Http\Controllers\NamaBarangController;
+use App\Http\Controllers\KodeInstitusiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -63,6 +65,19 @@ Route::get('/setupmasterakun/{id}/edit', [MasterAkunController::class, 'edit'])-
 Route::put('/setupmasterakun/{id}', [MasterAkunController::class, 'update'])->name('setupmasterakun.update');
 Route::delete('/setupmasterakun/{id}', [MasterAkunController::class, 'destroy'])->name('setupmasterakun.destroy');
 
+// Setup Unit Kerja
+Route::get('setup/setupunitkerja', [UnitKerjaController::class, 'index'])->name('setupunitkerja');
+Route::post('/setupunitkerja', [UnitKerjaController::class, 'store'])->name('setupunitkerja.store');
+Route::get('/setupunitkerja/{id}/edit', [UnitKerjaController::class, 'edit'])->name('setupunitkerja.edit');
+Route::put('/setupunitkerja/{id}', [UnitKerjaController::class, 'update'])->name('setupunitkerja.update');
+Route::delete('/setupunitkerja/{id}', [UnitKerjaController::class, 'destroy'])->name('setupunitkerja.destroy');
+
+// Setup Institusi
+Route::get('setup/setupinstitusi', [KodeInstitusiController::class, 'index'])->name('setupinstitusi');
+Route::post('/setupinstitusi', [KodeInstitusiController::class, 'store'])->name('setupinstitusi.store');
+Route::get('/setupinstitusi/{id}/edit', [KodeInstitusiController::class, 'edit'])->name('setupinstitusi.edit');
+Route::put('/setupinstitusi/{id}', [KodeInstitusiController::class, 'update'])->name('setupinstitusi.update');
+Route::delete('/setupinstitusi/{id}', [KodeInstitusiController::class, 'destroy'])->name('setupinstitusi.destroy');
 
 
 Route::get('/saldobulanan', function () {

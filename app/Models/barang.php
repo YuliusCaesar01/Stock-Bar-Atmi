@@ -20,6 +20,7 @@ class Barang extends Model
         'nama_barang',
         'kd_akun',
         'kode_log',
+        'kd_unit',
         'jumlah',
         'satuan',
         'harga',
