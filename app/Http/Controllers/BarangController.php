@@ -8,6 +8,7 @@ use App\Models\WPLink;
 use App\Models\ItemAdd;
 use app\Models\BarangLog;
 use App\Models\UnitKerja;
+use App\Models\MasterAkun;
 use App\Models\namabarang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -44,6 +45,26 @@ class BarangController extends Controller
     {
         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
+
+    public function getJenisBarang($kd_akun)
+    {
+        // Log the incoming kd_akun
+        Log::debug('Fetching jenis_barang for kd_akun:', ['kd_akun' => $kd_akun]);
+
+        // Attempt to retrieve the jenis_barang
+        $jenis_barang = MasterAkun::where('kd_akun', $kd_akun)->pluck('jenis_barang')->first();
+
+        if ($jenis_barang) {
+            Log::info('jenis_barang found:', ['kd_akun' => $kd_akun, 'jenis_barang' => $jenis_barang]);
+            return response()->json(['success' => true, 'jenis_barang' => $jenis_barang]);
+        } else {
+            Log::warning('jenis_barang not found for kd_akun:', ['kd_akun' => $kd_akun]);
+            return response()->json(['success' => false]);
+        }
+    }
+
+
+
     /**
      * Display a listing of the resource.
      */
@@ -128,31 +149,64 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'no_barcode' => 'required|string|max:255',
-            'no_item' => 'required|string|max:255',
-            'nama_barang' => 'required|string|max:255',
-            'kode_log' => 'required|string|max:255',
-            'kd_unit' => 'required|string|max:255',
-            'kd_akun' => 'required|string|max:255',
-            'jumlah' => 'required|integer',
-            'satuan' => 'required|string|max:255',
-            'harga' => 'required|integer',
-            'rak' => 'required|string|max:255',
-            'total' => 'required|integer',
-            'tanggal' => 'required|date',
-            'jumlah_minimal' => 'required|integer',
-            'jumlah_maksimal' => 'required|integer',
-            'no_katalog' => 'required|string|max:255',
-            'merk' => 'required|string|max:255',
-            'no_akun' => 'required|string|max:255',
-            'no_reff' => 'required|string|max:255',
+        // Log the incoming request data
+        Log::debug('Received store request with data:', [
+            'request_data' => $request->all(),
+            'user_id' => auth()->user()->id
         ]);
 
-        Barang::create($validated);
+        // Validate the request data
+        try {
+            $validated = $request->validate([
+                'no_barcode' => 'required|string|max:255',
+                'no_item' => 'required|string|max:255',
+                'nama_barang' => 'required|string|max:255',
+                'kode_log' => 'required|string|max:255',
+                'kd_akun' => 'required|string|max:255',
+                'jumlah' => 'required|integer',
+                'satuan' => 'required|string|max:255',
+                'harga' => 'required|integer',
+                'rak' => 'required|string|max:255',
+                'total' => 'required|integer',
+                'tanggal' => 'required|date',
+                'jumlah_minimal' => 'required|integer',
+                'jumlah_maksimal' => 'required|integer',
+                'no_katalog' => 'required|string|max:255',
+                'merk' => 'required|string|max:255',
+                'no_reff' => 'required|string|max:255',
+            ]);
+
+            Log::debug('Validation passed.', ['validated_data' => $validated]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed.', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all(),
+                'user_id' => auth()->user()->id
+            ]);
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        }
+
+        // Attempt to create the Barang record
+        try {
+            $barang = Barang::create($validated);
+
+            Log::info('Barang created successfully.', [
+                'user_id' => auth()->user()->id,
+                'barang_id' => $barang->id,
+                'barang_data' => $validated
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to create Barang.', [
+                'exception_message' => $e->getMessage(),
+                'request_data' => $validated,
+                'user_id' => auth()->user()->id
+            ]);
+            return redirect()->back()->with('error', 'Failed to create Barang.')->withInput();
+        }
 
         return redirect()->route('barangs.index')->with('success', 'Barang created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -401,7 +455,7 @@ class BarangController extends Controller
                 'jumlah' => $validatedData['jumlah_keluar'],
                 'harga' => $barang->harga,
                 'satuan' => $validatedData['satuan'],
-                'jenis' => $validatedData['jenis'],
+                'jenis' => $validatedData['jenis'] === 'STANDART PART' ? 'parts' : ($validatedData['jenis'] === 'MATERIAL' ? 'materials' : $validatedData['jenis']),
             ]);
 
             // Log the WPLink creation

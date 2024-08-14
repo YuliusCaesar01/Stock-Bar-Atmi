@@ -56,7 +56,7 @@
                                             <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $barang->id }})">
                                                 Delete
                                             </button>
-                                        </form>                                        
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -151,17 +151,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="rak" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Rak</label>
-                                <input type="text" name="rak" id="rak" value="-" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
-                            </div>                            
+                                <input type="text" name="rak" id="rak" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                            </div>
                             <div class="form-group">
                                 <label for="no_reff" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No Refferensi</label>
-                                <input type="text" name="no_reff" id="no_reff" value="-" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                                <input type="text" name="no_reff" id="no_reff" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                         </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
                                 <label for="no_katalog" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No Katalog</label>
-                                <input type="text" name="no_katalog" id="no_katalog" value="-" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
+                                <input type="text" name="no_katalog" id="no_katalog" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
                             </div>
                             <div class="form-group">
                                 <label for="merk" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Merk</label>
@@ -178,8 +178,8 @@
             </div>
         </div>
     </div>
-    
-    
+
+
 
     @foreach ($nama as $barang)
         <!-- Edit Modal -->
@@ -234,7 +234,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>                                
+                                </div>
                                 <div class="form-group">
                                     <label for="kd_akun" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Akun</label>
                                     <select name="kd_akun" id="kd_akun" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
@@ -244,7 +244,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>                                
+                                </div>
                                 <div class="form-group">
                                     <label for="satuan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Satuan</label>
                                     <select name="satuan" id="satuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark" required>
@@ -289,12 +289,12 @@
                         <div class="modal-footer flex justify-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                             <button data-modal-hide class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
-                        </div>                                               
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-        
+
     @endforeach
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

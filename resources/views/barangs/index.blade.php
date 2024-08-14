@@ -51,7 +51,7 @@
                                                     onclick="setMaterialentryDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->harga }}')"
                                                     class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
                                                 <button data-modal-target="exit-modal" data-modal-toggle="exit-modal"
-                                                    onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->harga }}')"
+                                                    onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}')"
                                                     class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
                                                     Ambil
                                                 </button>
@@ -78,6 +78,30 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Total:</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col" id="totalJumlah"></th>
+                                <th scope="col"></th>
+                                <th scope="col" id="totalHarga"></th>
+                                <th scope="col" id="totalTotal"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </tfoot>
+
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -109,8 +133,8 @@
                         data-modal-toggle="entry-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -127,39 +151,39 @@
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nama
                                     Barang</label>
                                 <input type="text" name="nama_barang" id="nama_barangentry"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required readonly>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="no_barcodeentry"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">QR ID</label>
                                 <input type="text" name="no_barcode" id="no_barcodeentry"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required readonly>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="jumlah"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                     Stok</label>
                                 <input type="number" name="jumlah" id="jumlahentry"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required readonly>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="hargalama"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga
                                     Terkini</label>
                                 <input type="number" name="hargalama" id="hargalama"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required readonly>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="kode_logentry"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode
                                     Gudang</label>
                                 <input type="text" name="kode_log" id="kode_logentry"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required readonly>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
                             </div>
                         </div>
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
@@ -168,31 +192,32 @@
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor PO
                                 </label>
                                 <input type="text" name="no_po" id="no_po"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="harga_beli"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga Beli
                                     Barang</label>
                                 <input type="text" name="harga" id="harga_beli"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="jumlah_beli"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jumlah
                                 </label>
                                 <input type="text" name="jumlah_beli" id="jumlah_beli"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="operator"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Operator</label>
                                 <input type="text" name="operator" id="operator"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly placeholder={{Auth::user()->name}} value={{Auth::user()->name}}>
+                                    required readonly placeholder={{ Auth::user()->name }}
+                                    value={{ Auth::user()->name }}>
                             </div>
                         </div>
                     </div>
@@ -233,6 +258,7 @@
                 <form action="{{ route('barangs.exit') }}" method="POST">
                     @csrf
                     <input type="hidden" id="barang-id-exit" name="barang_id" value="">
+                    <input type="hidden" id="kd_akun" name="kd_akun" value="">
                     <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2 m-4 p-3">
                         <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-2">
                             <div class="form-group">
@@ -290,9 +316,10 @@
                                     <select name="institusi" id="institusi"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                        @foreach($institusi as $s)
-                                        <option value="{{ $s->kd_ins }}">{{ $s->kd_ins }} - {{ $s->nama_ins }}</option>
-                                    @endforeach
+                                        @foreach ($institusi as $s)
+                                            <option value="{{ $s->kd_ins }}">{{ $s->kd_ins }} -
+                                                {{ $s->nama_ins }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group mt-3">
@@ -301,9 +328,10 @@
                                     <select name="kd_unit" id="kd_unit"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                        @foreach($unitkerja as $s)
-                                        <option value="{{ $s->kd_unit }}">{{ $s->kd_unit }} - {{ $s->nama_unit }}</option>
-                                    @endforeach
+                                        @foreach ($unitkerja as $s)
+                                            <option value="{{ $s->kd_unit }}">{{ $s->kd_unit }} -
+                                                {{ $s->nama_unit }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -334,7 +362,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="jenis"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jenis Barang</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Jenis
+                                    Barang</label>
                                 <select name="jenis" id="jenis"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
@@ -362,7 +391,8 @@
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Operator</label>
                                 <input type="text" name="operator" id="operator"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required readonly placeholder={{Auth::user()->name}} value={{Auth::user()->name}}>
+                                    required readonly placeholder={{ Auth::user()->name }}
+                                    value={{ Auth::user()->name }}>
                             </div>
                         </div>
                     </div>
@@ -461,7 +491,7 @@
     </script>
 
     <script>
-        function setMaterialDetails(id, nama_barang, no_barcode, jumlah, kode_log,satuan) {
+        function setMaterialDetails(id, nama_barang, no_barcode, jumlah, kode_log, satuan, kd_akun) {
             // Set the form fields with the passed data
             document.getElementById('barang-id-exit').value = id;
             document.getElementById('nama_barang').value = nama_barang;
@@ -469,13 +499,43 @@
             document.getElementById('jumlah').value = jumlah;
             document.getElementById('kode_log').value = kode_log;
             document.getElementById('satuan').value = satuan;
-
+            document.getElementById('kd_akun').value = kd_akun;
 
             // Open the modal
             console.log('ID:', id);
             const modal = document.getElementById('exit-modal');
             modal.classList.remove('hidden');
             modal.classList.add('block');
+            populateJenisBarang(kd_akun);
+        }
+    </script>
+
+    <script>
+        function populateJenisBarang(kd_akun) {
+            const jenisSelect = document.getElementById('jenis');
+
+            // Clear previous options
+            jenisSelect.innerHTML = '<option value="">Select Jenis Barang</option>';
+            console.log('kode_akun:', kd_akun);
+
+            // Make an AJAX request to get the matching jenis_barang based on kd_akun
+            fetch(`/getJenisBarang/${kd_akun}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Populate the jenis_barang dropdown
+                        const option = document.createElement('option');
+                        option.value = data.jenis_barang;
+                        option.text = data.jenis_barang;
+                        option.selected = true;
+                        jenisSelect.appendChild(option);
+                    } else {
+                        alert('Jenis Barang not found for the selected Kode Akun.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching jenis_barang:', error);
+                });
         }
     </script>
 
@@ -501,8 +561,4 @@
             });
         });
     </script>
-
-
-
-
 </x-app-layout>

@@ -78,10 +78,6 @@
             <label for="no_reff" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">No Refferensi</label>
             <input type="text" id="no_reff" name="no_reff" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required readonly/>
         </div>
-        <div>
-            <label for="no_akun" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor Akun</label>
-            <input type="text" id="no_akun" name="no_akun" value="{{ old('no_akun', $barang->no_akun ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="-" required />
-        </div>
     </div>
 
     <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -124,7 +120,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const jumlahmaksimalInput = document.getElementById('jumlah_maksimal');
         const nokatalogInput = document.getElementById('no_katalog');
         const noreffInput = document.getElementById('no_reff');
-       
+
 
         namaBarangSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];

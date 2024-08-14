@@ -23,18 +23,18 @@
 </head>
 <style>
     @media (max-width: 768px) {
-      /* Adjust styles for smaller screens */
-      .dataTables_wrapper {
-        display: block;
-      }
-      .dataTables_length,
-      .dataTables_filter {
-        margin-top: 10px;
-      }
+
+        /* Adjust styles for smaller screens */
+        .dataTables_wrapper {
+            display: block;
+        }
+
+        .dataTables_length,
+        .dataTables_filter {
+            margin-top: 10px;
+        }
     }
-
-
-  </style>
+</style>
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 ">
@@ -73,17 +73,16 @@
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.flash.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
-        <script>
+    <script>
         $(document).ready(function() {
             // Initialize DataTable with scrollX
             var table = $('#barangTable').DataTable({
                 scrollX: true,
                 responsive: false,
                 dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [
-                    {
+                buttons: [{
                         extend: 'csv',
                         className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
                     },
@@ -113,22 +112,100 @@
                                 .css('font-size', 'inherit');
                         }
                     }
-                ]
+                ],
+                "footerCallback": function(row, data, start, end, display) {
+                    var api = this.api();
 
+                    // Helper function to format numbers
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+
+                    // Calculate totals for each column
+                    var totalJumlah = api
+                        .column(6)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var pageTotalJumlah = api
+                        .column(6, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var totalHarga = api
+                        .column(8)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var pageTotalHarga = api
+                        .column(8, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var totalTotal = api
+                        .column(9)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var pageTotalTotal = api
+                        .column(9, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer cells
+                    $(api.column(6).footer()).html(pageTotalJumlah);
+                    $(api.column(8).footer()).html('Rp. ' + pageTotalHarga.toLocaleString());
+                    $(api.column(9).footer()).html('Rp. ' + pageTotalTotal.toLocaleString());
+                }
             });
+
             var table = $('#tahunTable').DataTable({
                 scrollX: true,
                 responsive: false,
-                columnDefs: [
-                { width: '10%', targets: 0 }, // Nomor Item
-                { width: '30%', targets: 1 }, // Nama Barang
-                { width: '15%', targets: 2 }, // Kode Log
-                { width: '15%', targets: 3 }, // Satuan
-                { width: '30%', targets: 4 }, // Actions
-            ],
-                dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    }, // Nomor Item
                     {
+                        width: '30%',
+                        targets: 1
+                    }, // Nama Barang
+                    {
+                        width: '15%',
+                        targets: 2
+                    }, // Kode Log
+                    {
+                        width: '15%',
+                        targets: 3
+                    }, // Satuan
+                    {
+                        width: '30%',
+                        targets: 4
+                    }, // Actions
+                ],
+                dom: 'Bfrtip', // Include buttons in the DOM
+                buttons: [{
                         extend: 'csv',
                         className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
                     },
@@ -163,15 +240,25 @@
             var table = $('#satuanTable').DataTable({
                 scrollX: false,
                 responsive: false,
-                columnDefs: [
-                { width: '10%', targets: 0 }, // Id
-                { width: '30%', targets: 1 }, // Kode Satuan
-                { width: '15%', targets: 2 }, // Nama Satuan
-                { width: '15%', targets: 3 }, // Action
-            ],
-                dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    }, // Id
                     {
+                        width: '30%',
+                        targets: 1
+                    }, // Kode Satuan
+                    {
+                        width: '15%',
+                        targets: 2
+                    }, // Nama Satuan
+                    {
+                        width: '15%',
+                        targets: 3
+                    }, // Action
+                ],
+                dom: 'Bfrtip', // Include buttons in the DOM
+                buttons: [{
                         extend: 'csv',
                         className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
                     },
