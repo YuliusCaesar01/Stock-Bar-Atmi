@@ -19,17 +19,17 @@
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
-                                        Nama Barang
+                                        Nama Barang 
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->nama_barang }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->nama_barang }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Item
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->no_item }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->no_item }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -37,15 +37,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Akun
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->no_akun }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->no_akun }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Kode Log
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->kode_log }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->kode_log }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -53,15 +53,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Jumlah
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->jumlah }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->jumlah }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Satuan
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->satuan }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->satuan }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -69,15 +69,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Harga
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Rak
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->rak }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->rak }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -85,15 +85,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Total
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Tanggal
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->tanggal }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->tanggal }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -101,15 +101,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Jumlah Minimal
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->jumlah_minimal }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->jumlah_minimal }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Jumlah Maksimal
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->jumlah_maksimal }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->jumlah_maksimal }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
@@ -117,15 +117,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         Merk
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->merk }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->merk }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Katalog
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->no_katalog }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->no_katalog }}
                                     </td>
                                 </tr>
                                 <tr class="bg-white :bg-gray-800">
@@ -133,15 +133,15 @@
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Akun
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->no_akun }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->no_akun }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
                                         No Refferensi
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $barang->no_reff }}
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
+                                        : {{ $barang->no_reff }}
                                     </td>
                                 </tr>
                             </tbody>
