@@ -13,6 +13,7 @@ use App\Models\namabarang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KodeInstitusi;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,30 +22,69 @@ class BarangController extends Controller
 
     public function dashboard()
     {
-        // Join Barang and LogGudang, group by LogGudang.kd_prod and LogGudang.kd_log, and sum the jumlah
-        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, SUM(barangs.jumlah) as total')
+        // Get data and group by kd_prod and date
+        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, DATE(barangs.created_at) as date, SUM(barangs.jumlah) as total')
             ->join('log_gudangs_tables', 'barangs.kode_log', '=', 'log_gudangs_tables.kd_log')
-            ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log')
+            ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log', 'date')
+            ->orderBy('date')
             ->get();
 
+        // Generate a unique color for each kd_prod
+        $colors = [
+            '#3357FF','#33FFA6', '#A633FF',
+            '#FFA633', '#33A6FF', '#A6FF33', '#5733FF', '#FF5733', '#FF33FF'
+        ];
+
+        $colorIndex = 0;
+
+        // Determine the start date from the first record and the end date as the current date or latest update
+        $startDate = $barangs->min('date') ? Carbon::parse($barangs->min('date')) : now();
+        $endDate = now();
+        $labels = [];
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            $labels[] = $date->format('d M');
+        }
+
         // Prepare data for chart
-        $chartData = $barangs->groupBy('kd_prod')->map(function ($group) {
+        $chartData = $barangs->groupBy('kd_prod')->map(function ($group) use (&$colorIndex, $colors, $labels) {
+            $cumulativeTotal = 0;
+            $data = array_fill(0, count($labels), null); // Fill with null values
+
+            foreach ($labels as $index => $label) {
+                // Find the item for the current date label
+                $item = $group->firstWhere('date', Carbon::createFromFormat('d M', $label)->toDateString());
+
+                if ($item) {
+                    // If there's data for this date, update the cumulative total
+                    $cumulativeTotal += $item->total;
+                }
+
+                // Assign the cumulative total to the data array
+                $data[$index] = $cumulativeTotal;
+            }
+
+            // Determine the name based on kd_prod
+            $kdProd = $group->first()->kd_prod;
+            $name = (strpos($kdProd, 'W') === 0) ? 'WF' : ((strpos($kdProd, 'M') === 0) ? 'MDC' : $kdProd);
+
+            // Assign a unique color to each series
+            $color = $colors[$colorIndex % count($colors)];
+            $colorIndex++;
+
             return [
-                'name' => "Plant " . $group->first()->kd_prod,
-                'data' => $group->pluck('total')->toArray(),
-                'color' => '#1A56DB', // Customize the color as needed
+                'name' => $name,
+                'data' => $data,
+                'color' => $color,
             ];
         })->values()->toArray();
 
-        // Extract labels for the chart (unique kode_log)
-        $labels = $barangs->pluck('kode_prod')->unique()->toArray();
-
         return view('dashboard', compact('chartData', 'labels'));
     }
-    private function getRandomColor()
-    {
-        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-    }
+
+
+
+
+
 
     public function getJenisBarang($kd_akun)
     {
