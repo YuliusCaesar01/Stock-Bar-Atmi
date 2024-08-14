@@ -35,10 +35,10 @@
                                 <tr class="bg-white border-b :bg-gray-800 dark:border-gray-700">
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
-                                        No Akun
+                                        Kode Akun
                                     </th>
                                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
-                                        : {{ $barang->no_akun }}
+                                        : {{ $barang->kd_akun }}
                                     </td>
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-dark">
