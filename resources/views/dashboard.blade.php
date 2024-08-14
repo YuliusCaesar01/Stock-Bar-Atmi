@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    {{-- <div class="py-12">
+     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
                 <div class="flex justify-between">
@@ -16,7 +16,7 @@
                 <div id="data-series-chart"></div>
             </div>
         </div>
-    </div> --}}
+    </div> 
 
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
         <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
