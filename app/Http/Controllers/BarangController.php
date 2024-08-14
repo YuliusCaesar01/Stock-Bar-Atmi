@@ -245,7 +245,6 @@ class BarangController extends Controller
             'nama_barang' => 'required|string|max:255',
             'kode_log' => 'required|string|max:255',
             'kd_akun' => 'required|string|max:255',
-            'kd_ins' => 'required|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'harga' => 'required|integer',
@@ -256,7 +255,6 @@ class BarangController extends Controller
             'jumlah_maksimal' => 'required|integer',
             'no_katalog' => 'required|string|max:255',
             'merk' => 'required|string|max:255',
-            'no_akun' => 'required|string|max:255',
             'no_reff' => 'required|string|max:255',
         ]);
 
