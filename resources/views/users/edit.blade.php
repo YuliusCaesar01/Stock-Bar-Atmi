@@ -11,16 +11,16 @@
                 <form method="POST" action="{{ route('users.update', $user->id) }}" class="p-4">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="mb-6">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Name</label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-                    </div> 
-                    
+                    </div>
+
                     <div class="mb-6">
                         <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Email address</label>
                         <input type="email" id="email" name="email" value="{{ old('email') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-                    </div> 
+                    </div>
 
                     <div class="mb-6">
                         <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Role</label>
@@ -29,18 +29,27 @@
                                 <option value="{{ $role }}" {{ old('role') == $role ? 'selected' : '' }}>{{ $role }}</option>
                             @endforeach
                         </select>
-                    </div> 
-                    
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="kd_prod" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Kode Produksi</label>
+                        <select id="kd_prod" name="kd_prod" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            @foreach($logGudang as $lg)
+                                <option value="{{ $lg->kd_prod }}" {{ old('kd_prod') == $lg->kd_prod ? 'selected' : '' }}>{{ $lg->kd_prod }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-6">
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Password</label>
                         <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-                    </div> 
-                    
+                    </div>
+
                     <div class="mb-6">
                         <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Confirm password</label>
                         <input type="password" id="password_confirmation" name="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-7100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-                    </div> 
-                    
+                    </div>
+
                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Edit User</button>
                 </form>
             </div>

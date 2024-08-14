@@ -40,4 +40,9 @@ class Barang extends Model
     {
         return $this->hasMany(BarangLog::class);
     }
+
+    public function logGudang()
+    {
+        return $this->belongsTo(LogGudang::class, 'kode_log', 'kd_log');
+    }
 }

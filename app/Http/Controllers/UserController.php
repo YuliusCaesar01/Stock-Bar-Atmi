@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogGudang;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +23,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = ['superadmin', 'admin', 'user'];
-        return view('users.create', compact('roles'));
+        $roles = ['superadmin', 'admin', 'user','viewer'];
+        $logGudang = LogGudang::select('kd_prod')->distinct()->get();
+        return view('users.create', compact('roles','logGudang'));
     }
 
     /**
@@ -35,7 +37,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:superadmin,admin,user'
+            'role' => 'required|string|in:superadmin,admin,user,viewer',
+            'kd_prod' => 'required|string|in:W,M',
         ]);
 
         $user = new User();
@@ -43,6 +46,7 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->password = Hash::make($validated['password']);
         $user->role = $validated['role'];
+        $user->plant = $validated['kd_prod'];
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
@@ -54,7 +58,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        return view('users.show', compact('user'));
+        return view('users.show', compact('user',));
     }
 
     /**
@@ -63,8 +67,9 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        $roles = ['superadmin', 'admin','user'];
-        return view('users.edit', compact('user', 'roles'));
+        $logGudang = LogGudang::select('kd_prod')->distinct()->get();
+        $roles = ['superadmin', 'admin','user','viewer'];
+        return view('users.edit', compact('user', 'roles','logGudang'));
     }
 
     /**
@@ -78,7 +83,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|string|in:superadmin,admin,user'
+            'role' => 'required|string|in:superadmin,admin,user',
+            'kd_prod' => 'required|string|in:W,M',
         ]);
 
         $user->name = $validated['name'];
@@ -87,6 +93,7 @@ class UserController extends Controller
             $user->password = Hash::make($validated['password']);
         }
         $user->role = $validated['role'];
+        $user->plant = $validated['kd_prod'];
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');

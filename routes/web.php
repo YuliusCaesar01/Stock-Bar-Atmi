@@ -22,6 +22,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/dashboard', [BarangController::class, 'dashboard'])->name('dashboard');
 Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
 Route::get('setup/setupbarang', [NamaBarangController::class, 'index'])->name('setupbarang');
 Route::post('/setupbarang', [NamaBarangController::class, 'store'])->name('nama-barang.store');

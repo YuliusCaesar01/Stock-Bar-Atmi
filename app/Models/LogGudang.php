@@ -17,4 +17,9 @@ class LogGudang extends Model
         'nama_log',
         'keterangan',
     ];
+
+    public function barangs()
+    {
+        return $this->hasMany(Barang::class, 'kode_log', 'kd_log');
+    }
 }

@@ -52,8 +52,10 @@ public function store(Request $request)
         'no_reff' => 'required|string|max:255',
     ]);
 
-    // Automatically generate the 'no' value
-    $lastItem = NamaBarang::orderBy('no', 'desc')->first();
+    // Automatically generate the 'no' value based on kode_log
+    $lastItem = NamaBarang::where('kode_log', $request->kode_log)
+                          ->orderBy('no', 'desc')
+                          ->first();
     $newNo = $lastItem ? $lastItem->no + 1 : 1001;
 
     // Generate the 'no_item' in the format kd_akun-kode_log-no
@@ -78,6 +80,7 @@ public function store(Request $request)
 
     return redirect()->route('setupbarang')->with('success', 'Nama Barang added successfully.');
 }
+
 
 
     /**

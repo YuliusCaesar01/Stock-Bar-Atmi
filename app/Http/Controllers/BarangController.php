@@ -17,43 +17,101 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BarangController extends Controller
 {
+
+    public function dashboard()
+    {
+        // Join Barang and LogGudang, group by LogGudang.kd_prod and LogGudang.kd_log, and sum the jumlah
+        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, SUM(barangs.jumlah) as total')
+            ->join('log_gudangs_tables', 'barangs.kode_log', '=', 'log_gudangs_tables.kd_log')
+            ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log')
+            ->get();
+
+        // Prepare data for chart
+        $chartData = $barangs->groupBy('kd_prod')->map(function ($group) {
+            return [
+                'name' => "Plant " . $group->first()->kd_prod,
+                'data' => $group->pluck('total')->toArray(),
+                'color' => '#1A56DB', // Customize the color as needed
+            ];
+        })->values()->toArray();
+
+        // Extract labels for the chart (unique kode_log)
+        $labels = $barangs->pluck('kode_prod')->unique()->toArray();
+
+        return view('dashboard', compact('chartData', 'labels'));
+    }
+    private function getRandomColor()
+    {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        Log::info('Index method started.');
+
         $search = $request->input('search');
+        Log::info('Search term:', ['search' => $search]);
+
         $institusi = KodeInstitusi::all();
         $unitkerja = UnitKerja::all();
         $orders = Orders::where('order_status', '!=', 'Finished')->get();
 
+        Log::info('Supporting data retrieved', [
+            'institusi_count' => $institusi->count(),
+            'unitkerja_count' => $unitkerja->count(),
+            'orders_count' => $orders->count(),
+        ]);
+
+        // Get the authenticated user's kd_prod
+        $userPlant = auth()->user()->plant;
+        Log::info('Authenticated user plant:', ['plant' => $userPlant]);
+
+        // Filter barangs based on matching kode_log and kd_prod
         $barangs = Barang::query()
-            ->where('no_barcode', 'like', "%{$search}%")
-            ->orWhere('no_item', 'like', "%{$search}%")
-            ->orWhere('nama_barang', 'like', "%{$search}%")
-            ->orWhere('kode_log', 'like', "%{$search}%")
-            ->orWhere('kd_unit', 'like', "%{$search}%")
-            ->orWhere('kd_akun', 'like', "%{$search}%")
-            ->orWhere('jumlah', 'like', "%{$search}%")
-            ->orWhere('satuan', 'like', "%{$search}%")
-            ->orWhere('harga', 'like', "%{$search}%")
-            ->orWhere('rak', 'like', "%{$search}%")
-            ->orWhere('total', 'like', "%{$search}%")
-            ->orWhere('tanggal', 'like', "%{$search}%")
-            ->orWhere('jumlah_minimal', 'like', "%{$search}%")
-            ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
-            ->orWhere('no_katalog', 'like', "%{$search}%")
-            ->orWhere('merk', 'like', "%{$search}%")
-            ->orWhere('no_akun', 'like', "%{$search}%")
-            ->orWhere('no_reff', 'like', "%{$search}%")
+            ->whereHas('logGudang', function ($query) use ($userPlant) {
+                $query->where('kd_prod', $userPlant)
+                    ->whereColumn('kd_log', 'barangs.kode_log'); // Ensure matching kode_log
+            })
+            ->where(function ($query) use ($search) {
+                $query->where('no_barcode', 'like', "%{$search}%")
+                    ->orWhere('no_item', 'like', "%{$search}%")
+                    ->orWhere('nama_barang', 'like', "%{$search}%")
+                    ->orWhere('kode_log', 'like', "%{$search}%")
+                    ->orWhere('kd_unit', 'like', "%{$search}%")
+                    ->orWhere('kd_akun', 'like', "%{$search}%")
+                    ->orWhere('jumlah', 'like', "%{$search}%")
+                    ->orWhere('satuan', 'like', "%{$search}%")
+                    ->orWhere('harga', 'like', "%{$search}%")
+                    ->orWhere('rak', 'like', "%{$search}%")
+                    ->orWhere('total', 'like', "%{$search}%")
+                    ->orWhere('tanggal', 'like', "%{$search}%")
+                    ->orWhere('jumlah_minimal', 'like', "%{$search}%")
+                    ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
+                    ->orWhere('no_katalog', 'like', "%{$search}%")
+                    ->orWhere('merk', 'like', "%{$search}%")
+                    ->orWhere('no_akun', 'like', "%{$search}%")
+                    ->orWhere('no_reff', 'like', "%{$search}%");
+            })
             ->get();
+
+        Log::info('Filtered barangs retrieved', ['barangs_count' => $barangs->count()]);
 
         foreach ($barangs as $barang) {
             $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
+            Log::info('QR code generated for barang', ['barang_id' => $barang->id]);
         }
 
-        return view('barangs.index', compact('barangs','orders','institusi','unitkerja'));
+        Log::info('Index method finished.');
+
+        return view('barangs.index', compact('barangs', 'orders', 'institusi', 'unitkerja'));
     }
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -62,7 +120,7 @@ class BarangController extends Controller
     {
         $randomBarcode = 'SB-' . Str::random(8); // Example of a structured barcode
         $namabarangs = namabarang::all();
-        return view('barangs.create', compact('randomBarcode','namabarangs'));
+        return view('barangs.create', compact('randomBarcode', 'namabarangs'));
     }
 
     /**
@@ -118,7 +176,7 @@ class BarangController extends Controller
         if (is_null($barang->no_barcode)) {
             $barang->no_barcode = 'SB-' . Str::random(8); // Example of a structured barcode
         }
-        
+
         return view('barangs.edit', compact('barang'));
     }
 
@@ -223,65 +281,78 @@ class BarangController extends Controller
 
     public function exit(Request $request)
     {
-        // Log the request data
-        Log::info('Exit request received', ['request_data' => $request->all()]);
+        try {
+            // Log the request data
+            Log::info('Exit request received', ['request_data' => $request->all()]);
 
-        // Validate the request
-        $validatedData = $request->validate([
-            'barang_id' => 'required|exists:barangs,id',
-            'nama_barang' => 'required|string|max:255',
-            'no_barcode' => 'required|string|max:255',
-            'jumlah_sekarang' => 'required|integer',
-            'kode_log' => 'required|string|max:255',
-            'kd_akun' => 'required|string|max:255',
-            'no_bom' => 'required|string|max:255',
-            'institusi' => 'required|string|max:255',
-            'order_number' => 'required|string|max:255',
-            'no_item' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'jumlah_keluar' => 'required|integer',
-            'satuan' => 'required|string|max:255',
-            'operator' => 'required|string|max:255',
-            'jenis' => 'required|string|max:255',
-        ]);
+            // Validate the request
+            $validatedData = $request->validate([
+                'barang_id' => 'required|exists:barangs,id',
+                'nama_barang' => 'required|string|max:255',
+                'no_barcode' => 'required|string|max:255',
+                'jumlah_sekarang' => 'required|integer',
+                'kode_log' => 'required|string|max:255',
+                'no_bom' => 'required|string|max:255',
+                'institusi' => 'required|string|max:255',
+                'order_number' => 'required|string|max:255',
+                'no_item' => 'required|string|max:255',
+                'tanggal' => 'required|date',
+                'jumlah_keluar' => 'required|integer',
+                'satuan' => 'required|string|max:255',
+                'operator' => 'required|string|max:255',
+                'jenis' => 'required|string|max:255',
+            ]);
 
-        // Log the validated data
-        Log::info('Validated data', ['validated_data' => $validatedData]);
+            // Log the validated data
+            Log::info('Validated data', ['validated_data' => $validatedData]);
 
-        $barang = Barang::find($validatedData['barang_id']);
+            $barang = Barang::find($validatedData['barang_id']);
 
-        // Logic for subtracting quantity from the barang
-        Log::info('Checking stock levels', [
-            'barang_id' => $barang->id,
-            'current_stock' => $barang->jumlah,
-            'requested_quantity' => $validatedData['jumlah_keluar']
-        ]);
-
-        if ($barang->jumlah < $validatedData['jumlah_keluar']) {
-            Log::error('Insufficient stock', [
+            // Log before checking stock
+            Log::info('Checking stock levels', [
                 'barang_id' => $barang->id,
                 'current_stock' => $barang->jumlah,
                 'requested_quantity' => $validatedData['jumlah_keluar']
             ]);
-            return redirect()->route('barangs.index')->with('error', 'Jumlah Stok Kurang.');
-        }
 
-        // Update stock of the barang
-        $barang->jumlah -= $validatedData['jumlah_keluar'];
-        $barang->total = $barang->harga * $barang->jumlah;
-        $barang->save();
+            if ($barang->jumlah < $validatedData['jumlah_keluar']) {
+                Log::error('Insufficient stock', [
+                    'barang_id' => $barang->id,
+                    'current_stock' => $barang->jumlah,
+                    'requested_quantity' => $validatedData['jumlah_keluar']
+                ]);
+                return redirect()->route('barangs.index')->with('error', 'Jumlah Stok Kurang.');
+            }
 
-        // Log the stock update
-        Log::info('Stock updated', [
-            'barang_id' => $barang->id,
-            'new_stock' => $barang->jumlah,
-            'new_total' => $barang->total
-        ]);
+            // Update stock of the barang
+            $barang->jumlah -= $validatedData['jumlah_keluar'];
+            $barang->total = $barang->harga * $barang->jumlah;
 
-        // Record the exit in the logs
-        Log::info('Creating log entry for exit', [
-            'barang_id' => $barang->id,
-            'log_data' => [
+            // Log before saving the barang
+            Log::info('Updating barang', [
+                'barang_id' => $barang->id,
+                'new_stock' => $barang->jumlah,
+                'new_total' => $barang->total
+            ]);
+
+            $barang->save();
+
+            // Record the exit in the logs
+            Log::info('Creating log entry for exit', [
+                'barang_id' => $barang->id,
+                'log_data' => [
+                    'action' => 'exit',
+                    'order_number' => $validatedData['order_number'],
+                    'no_item' => $validatedData['no_item'],
+                    'quantity' => $validatedData['jumlah_keluar'],
+                    'satuan' => $validatedData['satuan'],
+                    'operator' => $validatedData['operator'],
+                    'jenis' => $validatedData['jenis'],
+                    'created_at' => now(),
+                ]
+            ]);
+
+            $barang->logs()->create([
                 'action' => 'exit',
                 'order_number' => $validatedData['order_number'],
                 'no_item' => $validatedData['no_item'],
@@ -290,64 +361,38 @@ class BarangController extends Controller
                 'operator' => $validatedData['operator'],
                 'jenis' => $validatedData['jenis'],
                 'created_at' => now(),
-            ]
-        ]);
+            ]);
 
-        $barang->logs()->create([
-            'action' => 'exit',
-            'order_number' => $validatedData['order_number'],
-            'no_item' => $validatedData['no_item'],
-            'quantity' => $validatedData['jumlah_keluar'],
-            'satuan' => $validatedData['satuan'],
-            'operator' => $validatedData['operator'],
-            'jenis' => $validatedData['jenis'],
-            'created_at' => now(),
-        ]);
+            // Log the log entry creation
+            Log::info('Log entry created successfully', [
+                'barang_id' => $barang->id,
+                'log_data' => [
+                    'action' => 'exit',
+                    'order_number' => $validatedData['order_number'],
+                    'no_item' => $validatedData['no_item'],
+                    'quantity' => $validatedData['jumlah_keluar'],
+                    'satuan' => $validatedData['satuan'],
+                    'operator' => $validatedData['operator'],
+                    'created_at' => now(),
+                ]
+            ]);
 
-        // Log the log entry creation
-        Log::info('Log entry created successfully', [
-            'barang_id' => $barang->id,
-            'log_data' => [
-                'action' => 'exit',
-                'order_number' => $validatedData['order_number'],
-                'no_item' => $validatedData['no_item'],
-                'quantity' => $validatedData['jumlah_keluar'],
-                'satuan' => $validatedData['satuan'],
-                'operator' => $validatedData['operator'],
-                'created_at' => now(),
-            ]
-        ]);
+            // Record the additional details in WPLink model
+            Log::info('Creating WPLink entry', [
+                'wplink_data' => [
+                    'order_number' => $validatedData['order_number'],
+                    'no_item' => $validatedData['no_item'],
+                    'barcode_id' => $validatedData['no_barcode'],
+                    'material' => $validatedData['nama_barang'],
+                    'tanggal' => $validatedData['tanggal'],
+                    'jumlah' => $validatedData['jumlah_keluar'],
+                    'harga' => $barang->harga,
+                    'satuan' => $validatedData['satuan'],
+                    'jenis' => $validatedData['jenis'],
+                ]
+            ]);
 
-        // Record the additional details in WPLink model
-        Log::info('Creating WPLink entry', [
-            'wplink_data' => [
-                'order_number' => $validatedData['order_number'],
-                'no_item' => $validatedData['no_item'],
-                'barcode_id' => $validatedData['no_barcode'],
-                'material' => $validatedData['nama_barang'],
-                'tanggal' => $validatedData['tanggal'],
-                'jumlah' => $validatedData['jumlah_keluar'],
-                'harga' => $barang->harga, // Ensure WPLink table has 'harga' column
-                'satuan' => $validatedData['satuan'],
-                'jenis' => $validatedData['jenis'],
-            ]
-        ]);
-
-        WPLink::create([
-            'order_number' => $validatedData['order_number'],
-            'no_item' => $validatedData['no_item'],
-            'barcode_id' => $validatedData['no_barcode'],
-            'material' => $validatedData['nama_barang'],
-            'tanggal' => $validatedData['tanggal'],
-            'jumlah' => $validatedData['jumlah_keluar'],
-            'harga' => $barang->harga, // Ensure WPLink table has 'harga' column
-            'satuan' => $validatedData['satuan'],
-            'jenis' => $validatedData['jenis'],
-        ]);
-
-        // Log the WPLink creation
-        Log::info('WPLink entry created successfully', [
-            'wplink_data' => [
+            WPLink::create([
                 'order_number' => $validatedData['order_number'],
                 'no_item' => $validatedData['no_item'],
                 'barcode_id' => $validatedData['no_barcode'],
@@ -357,11 +402,34 @@ class BarangController extends Controller
                 'harga' => $barang->harga,
                 'satuan' => $validatedData['satuan'],
                 'jenis' => $validatedData['jenis'],
-            ]
-        ]);
+            ]);
 
-        return redirect()->route('barangs.index')->with('success', 'Exit recorded successfully.');
+            // Log the WPLink creation
+            Log::info('WPLink entry created successfully', [
+                'wplink_data' => [
+                    'order_number' => $validatedData['order_number'],
+                    'no_item' => $validatedData['no_item'],
+                    'barcode_id' => $validatedData['no_barcode'],
+                    'material' => $validatedData['nama_barang'],
+                    'tanggal' => $validatedData['tanggal'],
+                    'jumlah' => $validatedData['jumlah_keluar'],
+                    'harga' => $barang->harga,
+                    'satuan' => $validatedData['satuan'],
+                    'jenis' => $validatedData['jenis'],
+                ]
+            ]);
+
+            return redirect()->route('barangs.index')->with('success', 'Exit recorded successfully.');
+        } catch (\Exception $e) {
+            // Log the exception with stack trace
+            Log::error('Exception occurred in exit method', [
+                'error_message' => $e->getMessage(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->route('barangs.index')->with('error', 'An error occurred.');
+        }
     }
+
 
 
 
