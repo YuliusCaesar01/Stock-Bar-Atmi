@@ -6,13 +6,13 @@ use App\Models\Barang;
 use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
-use app\Models\BarangLog;
 use App\Models\UnitKerja;
 use App\Models\MasterAkun;
 use App\Models\namabarang;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KodeInstitusi;
+use App\Models\StockSummary;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -23,64 +23,120 @@ class BarangController extends Controller
     public function dashboard()
     {
         // Get data and group by kd_prod and date
-        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, DATE(barangs.created_at) as date, SUM(barangs.jumlah) as total')
+        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, barangs.no_item, DATE(barangs.created_at) as date, barangs.jumlah, barangs.jumlah_minimal, barangs.jumlah_maksimal, SUM(barangs.jumlah) as total, barangs.updated_at')
             ->join('log_gudangs_tables', 'barangs.kode_log', '=', 'log_gudangs_tables.kd_log')
-            ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log', 'date')
+            ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log', 'barangs.no_item', 'date', 'barangs.jumlah', 'barangs.jumlah_minimal', 'barangs.jumlah_maksimal', 'barangs.updated_at')
             ->orderBy('date')
             ->get();
 
-        // Generate a unique color for each kd_prod
-        $colors = [
-            '#3357FF','#33FFA6', '#A633FF',
-            '#FFA633', '#33A6FF', '#A6FF33', '#5733FF', '#FF5733', '#FF33FF'
+        // Initialize stock categories (Safe, Warning, Danger)
+        $stockCategories = [
+            'Safe' => 0,
+            'Warning' => 0,
+            'Danger' => 0,
         ];
 
-        $colorIndex = 0;
+        // Initialize an array to store the accumulated jumlah for each kd_prod
+        $jumlahAccumulation = [];
 
-        // Determine the start date from the first record and the end date as the current date or latest update
-        $startDate = $barangs->min('date') ? Carbon::parse($barangs->min('date')) : now();
-        $endDate = now();
-        $labels = [];
-        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-            $labels[] = $date->format('d M');
-        }
+        foreach ($barangs as $barang) {
+            // Ensure the date is correctly parsed
+            $barangDate = Carbon::parse($barang->created_at)->format('Y-m-d');
 
-        // Prepare data for chart
-        $chartData = $barangs->groupBy('kd_prod')->map(function ($group) use (&$colorIndex, $colors, $labels) {
-            $cumulativeTotal = 0;
-            $data = array_fill(0, count($labels), null); // Fill with null values
+            // Calculate the stock condition based on the new rules
+            $minPlus10Percent = $barang->jumlah_minimal + ($barang->jumlah_minimal * 0.1);
+            $condition = 'Safe'; // Default to Safe
 
-            foreach ($labels as $index => $label) {
-                // Find the item for the current date label
-                $item = $group->firstWhere('date', Carbon::createFromFormat('d M', $label)->toDateString());
-
-                if ($item) {
-                    // If there's data for this date, update the cumulative total
-                    $cumulativeTotal += $item->total;
-                }
-
-                // Assign the cumulative total to the data array
-                $data[$index] = $cumulativeTotal;
+            if ($barang->jumlah <= $barang->jumlah_minimal || $barang->jumlah > $barang->jumlah_maksimal) {
+                $condition = 'Danger';
+            } elseif ($barang->jumlah > $barang->jumlah_minimal && $barang->jumlah <= $minPlus10Percent) {
+                $condition = 'Warning';
+            } elseif ($barang->jumlah > $minPlus10Percent && $barang->jumlah < $barang->jumlah_maksimal) {
+                $condition = 'Safe';
             }
 
-            // Determine the name based on kd_prod
-            $kdProd = $group->first()->kd_prod;
-            $name = (strpos($kdProd, 'W') === 0) ? 'WF' : ((strpos($kdProd, 'M') === 0) ? 'MDC' : $kdProd);
+            // Update the stock categories count
+            $stockCategories[$condition]++;
+            Log::info("Barang Code: {$barang->kode_log}, Condition: {$condition}, Jumlah: {$barang->jumlah}, Min: {$barang->jumlah_minimal}, Max: {$barang->jumlah_maksimal}, Min + 10%: {$minPlus10Percent}");
 
-            // Assign a unique color to each series
-            $color = $colors[$colorIndex % count($colors)];
-            $colorIndex++;
+            // Continue as before, but use $barangDate
+            if (!isset($jumlahAccumulation[$barang->kd_prod][$barangDate])) {
+                $jumlahAccumulation[$barang->kd_prod][$barangDate] = 0;
+            }
+            $jumlahAccumulation[$barang->kd_prod][$barangDate] += $barang->jumlah;
 
-            return [
+            Log::info("Accumulating KD_Prod: {$barang->kd_prod}, Date: {$barangDate}, Jumlah: {$barang->jumlah}");
+        }
+
+
+        // After the loop, update or create records in StockSummaries
+        foreach ($jumlahAccumulation as $kd_prod => $dates) {
+            foreach ($dates as $date => $totalJumlah) {
+                Log::info("Processing KD_Prod: {$kd_prod}, Date: {$date}, Total Stock: {$totalJumlah}");
+
+                StockSummary::updateOrCreate(
+                    [
+                        'kd_prod' => $kd_prod,
+                        'date' => $date,
+                    ],
+                    [
+                        'total_stock' => $totalJumlah
+                    ]
+                );
+
+                Log::info("StockSummary Updated/Created: KD_Prod: {$kd_prod}, Date: {$date}, Total Stock: {$totalJumlah}");
+            }
+        }
+
+        // Fetch the data from StockSummary model
+        $stockData = StockSummary::select('kd_prod', 'total_stock', 'date')
+            ->get()
+            ->groupBy('kd_prod');
+
+        // Prepare the data for the chart
+        $chartData = [];
+        $allDates = [];
+
+        foreach ($stockData as $kd_prod => $data) {
+            $seriesData = [];
+
+            // Convert the collection to an array and sort it by date
+            $dataArray = $data->toArray();
+            usort($dataArray, function ($a, $b) {
+                return strtotime($a['date']) - strtotime($b['date']);
+            });
+
+            // Collect the sorted dates and series data
+            foreach ($dataArray as $entry) {
+                $allDates[] = $entry['date']; // Collect all unique dates
+                $seriesData[] = $entry['total_stock']; // Collect the stock data
+            }
+
+            // Convert KD_Prod to the correct name
+            $name = ($kd_prod === 'W') ? 'WF' : (($kd_prod === 'M') ? 'MDC' : $kd_prod);
+
+            $chartData[] = [
                 'name' => $name,
-                'data' => $data,
-                'color' => $color,
+                'data' => $seriesData,
             ];
-        })->values()->toArray();
+        }
 
-        return view('dashboard', compact('chartData', 'labels'));
+
+        // Remove duplicate labels and ensure they are sorted
+        $labels = array_values(array_unique($allDates));
+        sort($labels);
+
+        // Log the final stock categories
+        Log::info('Final Stock Categories:', $stockCategories);
+        Log::info('Chart Data:', $chartData);
+        Log::info('Labels:', $labels);
+
+        return view('dashboard', [
+            'chartData' => $chartData,
+            'labels' => $labels,
+            'stockCategories' => $stockCategories,
+        ]);
     }
-
 
 
 
@@ -104,7 +160,6 @@ class BarangController extends Controller
     }
 
 
-
     /**
      * Display a listing of the resource.
      */
@@ -126,15 +181,19 @@ class BarangController extends Controller
         ]);
 
         // Get the authenticated user's kd_prod
-        $userPlant = auth()->user()->plant;
-        Log::info('Authenticated user plant:', ['plant' => $userPlant]);
+        $user = auth()->user();
+        $userPlant = $user->plant;
+        $userRole = $user->role; // Assuming 'role' is a property on the User model
+        Log::info('Authenticated user plant and role:', ['plant' => $userPlant, 'role' => $userRole]);
 
         // Filter barangs based on matching kode_log and kd_prod
         $barangs = Barang::query()
-            ->whereHas('logGudang', function ($query) use ($userPlant) {
+        ->when(!in_array($userRole, ['superadmin', 'viewer']), function ($query) use ($userPlant) {
+            $query->whereHas('logGudang', function ($query) use ($userPlant) {
                 $query->where('kd_prod', $userPlant)
                     ->whereColumn('kd_log', 'barangs.kode_log'); // Ensure matching kode_log
-            })
+            });
+        })
             ->where(function ($query) use ($search) {
                 $query->where('no_barcode', 'like', "%{$search}%")
                     ->orWhere('no_item', 'like', "%{$search}%")

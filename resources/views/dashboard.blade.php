@@ -5,81 +5,52 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            {{-- Grafik Stok Inventory --}}
-            <div class="max-w-full w-full h-[550px] bg-white rounded-lg shadow p-4 md:p-6 mb-4">
-                <div class="flex justify-between">
-                    <div>
-                        <h5 class="leading-none text-xl font-bold text-gray-900 pb-2">Grafik Stok Inventory</h5>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex">
-                        <div class="flex items-center me-4">
-                            <input type="checkbox" value="all" checked
-                                class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                            <label for="all" class="ms-2 text-sm font-medium text-gray-900 ">All</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input type="checkbox" value="WF"
-                                class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                            <label for="WF" class="ms-2 text-sm font-medium text-gray-900 ">WF</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input type="checkbox" value="MDC"
-                                class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
-                            <label for="MDC" class="ms-2 text-sm font-medium text-gray-900 ">MDC</label>
-                        </div>
-                    </div>
-                </div>
-                <div id="data-series-chart"></div>
-            </div>
-
             <div class="flex gap-4">
-                {{-- Grafik Total Perbandingan Stok Inventory --}}
-                {{-- <div class="max-w-md w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+
+                {{-- Grafik Stok Inventory (Chart 1) --}}
+                <div class="max-w-xl w-full h-[350px] bg-white rounded-lg shadow p-4 md:p-6 mb-4">
+                    <div class="flex justify-between">
+                        <div>
+                            <h5 class="leading-none text-xl font-bold text-gray-900 pb-2">Grafik Stok Inventory</h5>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex">
+                            <div class="flex items-center me-4">
+                                <input type="checkbox" value="all" checked
+                                    class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                                <label for="all" class="ms-2 text-sm font-medium text-gray-900 ">All</label>
+                            </div>
+                            <div class="flex items-center me-4">
+                                <input type="checkbox" value="WF"
+                                    class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                                <label for="WF" class="ms-2 text-sm font-medium text-gray-900 ">WF</label>
+                            </div>
+                            <div class="flex items-center me-4">
+                                <input type="checkbox" value="MDC"
+                                    class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 ">
+                                <label for="MDC" class="ms-2 text-sm font-medium text-gray-900 ">MDC</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="data-series-chart"></div>
+                </div>
+
+                {{-- Grafik Total Perbandingan Stok Inventory (Chart 2) --}}
+                <div class="max-w-xl w-full h-[350px] bg-white rounded-lg shadow p-4 md:p-6">
                     <div class="flex justify-between items-start w-full">
                         <div class="flex-col items-center">
                             <div class="flex items-center mb-1">
-                                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Website
-                                    traffic</h5>
+                                <h5 class="text-xl font-bold leading-none text-gray-900 me-1">Grafik Kondisi Stok</h5>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Line Chart -->
                     <div class="py-6" id="pie-chart"></div>
-
-                    <div
-                        class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                        <div class="flex justify-between items-center pt-5">
-                        </div>
-                    </div>
-                </div> --}}
-
-                {{-- Grafik Total Perbandingan Stok Inventory --}}
-                {{-- <div class="max-w-md w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-                    <div class="flex justify-between items-start w-full">
-                        <div class="flex-col items-center">
-                            <div class="flex items-center mb-1">
-                                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Website
-                                    traffic</h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Line Chart -->
-                    <div class="py-6" id="pie-chart"></div>
-
-                    <div
-                        class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                        <div class="flex justify-between items-center pt-5">
-                        </div>
-                    </div>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
@@ -94,19 +65,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    {{-- Chart 1 JScript --}}
     <script>
         // Initial chart rendering
         let originalChartData = @json($chartData);
 
         const maxValue = Math.max(...@json($chartData).map(series => Math.max(...series.data)));
         // Calculate 20% more than the max value
-        const adjustedMaxValue = maxValue * 2;
+        const adjustedMaxValue = maxValue * 1.5;
 
         function renderChart(filteredData) {
             const options = {
                 series: filteredData,
                 chart: {
-                    height: 550,
+                    height: 350,
                     maxWidth: "100%",
                     type: "area",
                     fontFamily: "Inter, sans-serif",
@@ -204,6 +177,40 @@
             });
         });
     </script>
+
+    {{-- Chart 2 JScript --}}
+    <script>
+        const stockCategories = @json($stockCategories);
+
+        const getPieChartOptions = () => {
+            return {
+                series: [stockCategories.Safe, stockCategories.Warning, stockCategories.Danger],
+                colors: ["#33FFA6", "#FFA633", "#FF5733"],
+                chart: {
+                    height: 350,
+                    width: "100%",
+                    type: "pie",
+                },
+                labels: ["Safe", "Warning", "Danger"],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                    },
+                },
+                legend: {
+                    position: "bottom",
+                    fontFamily: "Inter, sans-serif",
+                }
+            };
+        }
+
+        if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById("pie-chart"), getPieChartOptions());
+            chart.render();
+        }
+    </script>
+
 
 
 </x-app-layout>

@@ -13,8 +13,10 @@
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
                             <tr>
+                                <!-- Existing headers... -->
                                 <th scope="col" class="px-6 py-3">QR Code</th>
                                 <th scope="col" class="px-6 py-3">Activity</th>
+                                <th scope="col" class="px-6 py-3">Status</th>
                                 <th scope="col" class="px-6 py-3">No Item</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
                                 <th scope="col" class="px-6 py-3">Kode Akun</th>
@@ -32,11 +34,34 @@
                                 <th scope="col" class="px-6 py-3">No Akun</th>
                                 <th scope="col" class="px-6 py-3">No Refferensi</th>
                                 <th scope="col" class="px-6 py-3">QR(manual)</th>
+                                <!-- New Status column -->
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($barangs as $barang)
+                                @php
+                                    // Calculate the status
+                                    $minPlus10Percent = $barang->jumlah_minimal + $barang->jumlah_minimal * 0.1;
+                                    if (
+                                        $barang->jumlah < $barang->jumlah_minimal ||
+                                        $barang->jumlah > $barang->jumlah_maksimal
+                                    ) {
+                                        $status = 'Danger';
+                                        $statusColor = 'text-red-600'; // Red color for Danger
+                                    } elseif (
+                                        $barang->jumlah >= $barang->jumlah_minimal &&
+                                        $barang->jumlah <= $minPlus10Percent
+                                    ) {
+                                        $status = 'Warning';
+                                        $statusColor = 'text-yellow-400'; // Yellow color for Warning
+                                    } else {
+                                        $status = 'Safe';
+                                        $statusColor = 'text-green-600'; // Green color for Safe
+                                    }
+                                @endphp
+
                                 <tr class="bg-gray-800 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <!-- Existing cells... -->
                                     <td class="px-6 py-4">
                                         <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
                                     </td>
@@ -58,6 +83,8 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td class="px-6 py-4 {{$statusColor}}">{{ $status }}</td>
+                                    <!-- Other data cells -->
                                     <td class="px-6 py-4">{{ $barang->no_item }}</td>
                                     <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
                                     <td class="px-6 py-4">{{ $barang->kd_akun }}</td>
@@ -75,6 +102,7 @@
                                     <td class="px-6 py-4">{{ $barang->no_akun }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_reff }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_barcode }}</td>
+                                    <!-- New Status cell -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -101,7 +129,6 @@
                                 <th scope="col"></th>
                             </tr>
                         </tfoot>
-
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -324,7 +351,8 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="kd_unit"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Unit Kerja</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Unit
+                                        Kerja</label>
                                     <select name="kd_unit" id="kd_unit"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
