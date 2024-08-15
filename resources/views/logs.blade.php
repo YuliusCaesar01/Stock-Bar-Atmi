@@ -9,10 +9,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="tahunTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+                    <input type="date" id="minDate" name="minDate" class="dark:text-gray-800">
+                    <input type="date" id="maxDate" name="maxDate" class="dark:text-gray-800">
+                    <table id="reportTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-6 py-3">Log Id</th>
+                                <th scope="col" class="px-6 py-3">No</th>
                                 <th scope="col" class="px-6 py-3">QR Code Barang</th>
                                 <th scope="col" class="px-6 py-3">ID Barang</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
@@ -33,7 +35,7 @@
                             @endphp
                             @foreach ($logs as $log)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td class="px-6 py-4">{{ $log->id }}</td>
+                                    <td class="px-6 py-4">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4">
                                         {!! QrCode::size(50)->generate($log->barang->no_barcode) !!}
                                     </td>
