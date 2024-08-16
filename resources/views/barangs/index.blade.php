@@ -15,7 +15,9 @@
                             <tr>
                                 <!-- Existing headers... -->
                                 <th scope="col" class="px-6 py-3">QR Code</th>
-                                <th scope="col" class="px-6 py-3">Activity</th>
+                                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
+                                    <th scope="col" class="px-6 py-3">Activity</th>
+                                @endif
                                 <th scope="col" class="px-6 py-3">Status</th>
                                 <th scope="col" class="px-6 py-3">No Item</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
@@ -65,25 +67,31 @@
                                     <td class="px-6 py-4">
                                         <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
                                     </td>
-                                    <td scope="row"
-                                        class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="inline-flex rounded-md shadow-sm">
-                                            <a href="{{ route('barangs.show', $barang) }}" aria-current="page"
-                                                class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 :bg-gray-800 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Detail</a>
+                                    @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
+                                        <td scope="row"
+                                            class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="inline-flex rounded-md shadow-sm">
-                                                <!-- Button to trigger the modal -->
-                                                <button data-modal-target="entry-modal" data-modal-toggle="entry-modal"
-                                                    onclick="setMaterialentryDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->harga }}')"
-                                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
-                                                <button data-modal-target="exit-modal" data-modal-toggle="exit-modal"
-                                                    onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}')"
-                                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
-                                                    Ambil
-                                                </button>
+                                                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin')
+                                                    <a href="{{ route('barangs.show', $barang) }}" aria-current="page"
+                                                        class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 :bg-gray-800 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Detail</a>
+                                                @endif
+                                                <div class="inline-flex rounded-md shadow-sm">
+                                                    <!-- Button to trigger the modal -->
+                                                    <button data-modal-target="entry-modal"
+                                                        data-modal-toggle="entry-modal"
+                                                        onclick="setMaterialentryDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->harga }}')"
+                                                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
+                                                    <button data-modal-target="exit-modal"
+                                                        data-modal-toggle="exit-modal"
+                                                        onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}')"
+                                                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
+                                                        Ambil
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 {{$statusColor}}">{{ $status }}</td>
+                                        </td>
+                                    @endif
+                                    <td class="px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
                                     <!-- Other data cells -->
                                     <td class="px-6 py-4">{{ $barang->no_item }}</td>
                                     <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
