@@ -111,6 +111,17 @@
             </div>
         </div>
     @endforeach
+    
+     {{-- Footer --}}
+     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id"
+                    class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.
+            </span>
+            @include('clock')
+        </div>
+    </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
