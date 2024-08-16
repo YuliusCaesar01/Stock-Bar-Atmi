@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white :bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
@@ -13,7 +13,6 @@
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
                             <tr>
-                                <!-- Existing headers... -->
                                 <th scope="col" class="px-6 py-3">QR Code</th>
                                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
                                     <th scope="col" class="px-6 py-3">Activity</th>
@@ -36,7 +35,6 @@
                                 <th scope="col" class="px-6 py-3">No Akun</th>
                                 <th scope="col" class="px-6 py-3">No Refferensi</th>
                                 <th scope="col" class="px-6 py-3">QR(manual)</th>
-                                <!-- New Status column -->
                             </tr>
                         </thead>
                         <tbody>
@@ -92,30 +90,29 @@
                                         </td>
                                     @endif
                                     <td class="px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
-                                    <!-- Other data cells -->
-                                    <td class="px-6 py-4">{{ $barang->no_item }}</td>
-                                    <td class="px-6 py-4">{{ $barang->nama_barang }}</td>
-                                    <td class="px-6 py-4">{{ $barang->kd_akun }}</td>
-                                    <td class="px-6 py-4">{{ $barang->kode_log }}</td>
-                                    <td class="px-6 py-4">{{ $barang->jumlah }}</td>
-                                    <td class="px-6 py-4">{{ $barang->satuan }}</td>
-                                    <td>{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
-                                    <td>{{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->no_item }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->nama_barang }}</td>
+                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->kd_akun }}</td>
+                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->kode_log }}</td>
+                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->jumlah }}</td>
+                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->satuan }}</td>
+                                    <td class="whitespace-nowrap">{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
+                                    <td class="whitespace-nowrap">{{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->rak }}</td>
-                                    <td class="px-6 py-4">{{ $barang->tanggal }}</td>
-                                    <td class="px-6 py-4">{{ $barang->jumlah_minimal }}</td>
-                                    <td class="px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->tanggal }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_minimal }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_katalog }}</td>
                                     <td class="px-6 py-4">{{ $barang->merk }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_akun }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_reff }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_barcode }}</td>
-                                    <!-- New Status cell -->
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col">Total:</th>
                                 <th scope="col"></th>
