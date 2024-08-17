@@ -34,7 +34,7 @@
                                 <th scope="col" class="px-6 py-3">Merk</th>
                                 <th scope="col" class="px-6 py-3">No Akun</th>
                                 <th scope="col" class="px-6 py-3">No Refferensi</th>
-                                <th scope="col" class="px-6 py-3">QR(manual)</th>
+                                <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,15 +89,17 @@
                                             </div>
                                         </td>
                                     @endif
-                                    <td class="px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
+                                    <td class="font-extrabold px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->no_item }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->nama_barang }}</td>
                                     <td class="whitespace-nowrappx-6 py-4">{{ $barang->kd_akun }}</td>
                                     <td class="whitespace-nowrappx-6 py-4">{{ $barang->kode_log }}</td>
                                     <td class="whitespace-nowrappx-6 py-4">{{ $barang->jumlah }}</td>
                                     <td class="whitespace-nowrappx-6 py-4">{{ $barang->satuan }}</td>
-                                    <td class="whitespace-nowrap">{{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
-                                    <td class="whitespace-nowrap">{{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
+                                    <td class="whitespace-nowrap">
+                                        {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
+                                    <td class="whitespace-nowrap">
+                                        {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">{{ $barang->rak }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->tanggal }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_minimal }}</td>
@@ -106,11 +108,11 @@
                                     <td class="px-6 py-4">{{ $barang->merk }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_akun }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_reff }}</td>
-                                    <td class="px-6 py-4">{{ $barang->no_barcode }}</td>
+                                    <td style="display: none;" class="px-6 py-4">{{ $barang->no_barcode }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
+                        {{-- <tfoot>
                             <tr>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
@@ -133,7 +135,7 @@
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
-                        </tfoot>
+                        </tfoot> --}}
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -141,7 +143,7 @@
                         class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Add
                         Barang</a>
                     <!-- Button to trigger modal -->
-                    <button data-modal-target="qr-modal" data-modal-toggle="qr-modal"
+                    <button data-modal-target="qr-modal" data-modal-toggle="qr-modal" id="scan-qr-btn"
                         class="ms-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">QR
                         Scan</button>
                 </div>
@@ -450,7 +452,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Search & Exit Quantity
+                        QR Scan
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -463,36 +465,13 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <!-- Modal body QR Code -->
-                <form id="search-form" method="POST" action="{{ route('barangs.search') }}" class="p-4 md:p-5">
-                    @csrf
-                    <div class="grid gap-4 mb-4">
-                        <div class="col-span-2">
-                            <label for="qr_code"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QR Code</label>
-                            <input type="text" name="qr_code" id="qr_code"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
-                        </div>
-                        <div class="col-span-2">
-                            <label for="quantity"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                            <input type="number" name="quantity" id="quantity" min="1"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required>
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button"
-                            class="text-gray-400 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
-                            data-modal-toggle="qr-modal">Cancel</button>
-                        <button type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                    </div>
-                </form>
+                <div class="p-4">
+                    <div id="reader" style="width: 100%; display: none;"></div>
+                </div>
             </div>
         </div>
     </div>
+
 
     {{-- Footer --}}
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
@@ -504,6 +483,7 @@
         </div>
     </footer>
 
+    {{-- Populate Entry Modal --}}
     <script>
         function setMaterialentryDetails(id, nama_barang, no_barcode, jumlah, kode_log, harga) {
             // Set the form fields with the passed data
@@ -523,6 +503,7 @@
         }
     </script>
 
+    {{-- Pupulate Exit Modal --}}
     <script>
         function setMaterialDetails(id, nama_barang, no_barcode, jumlah, kode_log, satuan, kd_akun) {
             // Set the form fields with the passed data
@@ -543,6 +524,7 @@
         }
     </script>
 
+    {{-- Pupulate Jenis Barang --}}
     <script>
         function populateJenisBarang(kd_akun) {
             const jenisSelect = document.getElementById('jenis');
@@ -572,6 +554,7 @@
         }
     </script>
 
+    {{-- Populate Item Number for Order Number WP --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const orderNumberSelect = document.getElementById('order_number');
@@ -593,5 +576,80 @@
                 }
             });
         });
+    </script>
+
+    {{-- QR Scan Feature --}}
+    <script>
+        $('#scan-qr-btn').on('click', function() {
+            // Show the QR modal
+            $('#qr-modal').removeClass('hidden').addClass('flex');
+            console.log("QR scan button clicked. Initializing Html5Qrcode...");
+            const html5QrCode = new Html5Qrcode("reader");
+            $('#reader').show();
+
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                console.log(`Code matched = ${decodedText}`, decodedResult);
+                $('#reader').hide();
+                console.log("Stopping Html5Qrcode...");
+                html5QrCode.stop().then((ignore) => {
+                    console.log("Html5Qrcode stopped successfully.");
+                    console.log(`Scanned QR Code Value: ${decodedText}`);
+
+                    // Hide the QR modal and show the exit modal with the data
+                    $('#qr-modal').addClass('hidden').removeClass('flex');
+                    showExitModalByQrCode(decodedText);
+                }).catch((err) => {
+                    console.error("Error stopping Html5Qrcode:", err);
+                });
+            };
+
+            const config = {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            };
+
+            html5QrCode.start({
+                    facingMode: "environment"
+                }, config, qrCodeSuccessCallback)
+                .catch((err) => {
+                    console.error("Error starting Html5Qrcode:", err);
+                });
+        });
+
+        function showExitModalByQrCode(barcode_id) {
+            console.log(`Searching table for barcode ID: ${barcode_id}`);
+            let found = false;
+            $('tbody tr').each(function() {
+                var cells = $(this).find('td');
+                var rowBarcodeId = cells.eq(19).text()
+            .trim(); // Assuming the barcode is in the last column (index 18)
+
+                if (rowBarcodeId === barcode_id) {
+                    found = true;
+                    console.log(`Found matching barcode ID: ${rowBarcodeId}`);
+
+                    // Extracting data for modal
+                    var barangId = cells.eq(0).find('img').data('id'); // Adjust based on your data structure
+                    var namaBarang = cells.eq(4).text().trim(); // Example index, adjust as needed
+                    var noBarcode = rowBarcodeId;
+                    var jumlah = cells.eq(7).text().trim(); // Example index, adjust as needed
+                    var kodeLog = cells.eq(6).text().trim(); // Example index, adjust as needed
+                    var satuan = cells.eq(8).text().trim(); // Example index, adjust as needed
+                    var kdAkun = cells.eq(5).text().trim(); // Example index, adjust as needed
+
+                    // Show exit modal
+                    setMaterialDetails(barangId, namaBarang, noBarcode, jumlah, kodeLog, satuan, kdAkun);
+                    $('#exit-modal').modal('show'); // Assuming you're using Bootstrap modal
+                    return false; // Exit the loop
+                }
+            });
+
+            if (!found) {
+                console.log(`No matching barcode ID found for: ${barcode_id}`);
+            }
+        }
     </script>
 </x-app-layout>

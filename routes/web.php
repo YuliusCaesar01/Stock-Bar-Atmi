@@ -27,6 +27,7 @@ Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
 Route::get('setup/setupbarang', [NamaBarangController::class, 'index'])->name('setupbarang');
 Route::post('/setupbarang', [NamaBarangController::class, 'store'])->name('nama-barang.store');
 Route::get('/getJenisBarang/{kd_akun}', [BarangController::class, 'getJenisBarang']);
+Route::post('/logs/bulk-delete', [BarangController::class, 'bulkDelete'])->name('logs.bulkDelete');
 
 // Route to display the form to edit an existing item
 Route::get('/nama-barang/{id}/edit', [NamaBarangController::class, 'edit'])->name('nama-barang.edit');

@@ -63,7 +63,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
@@ -75,6 +75,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 
 
     <script>
@@ -115,71 +117,6 @@
                         }
                     }
                 ],
-                "footerCallback": function(row, data, start, end, display) {
-                    var api = this.api();
-
-                    // Helper function to format numbers
-                    var intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i : 0;
-                    };
-
-                    // Calculate totals for each column
-                    var totalJumlah = api
-                        .column(6)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    var pageTotalJumlah = api
-                        .column(6, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    var totalHarga = api
-                        .column(8)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    var pageTotalHarga = api
-                        .column(8, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    var totalTotal = api
-                        .column(9)
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    var pageTotalTotal = api
-                        .column(9, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    // Update footer cells
-                    $(api.column(6).footer()).html(pageTotalJumlah);
-                    $(api.column(8).footer()).html('Rp. ' + pageTotalHarga.toLocaleString());
-                    $(api.column(9).footer()).html('Rp. ' + pageTotalTotal.toLocaleString());
-                }
             });
 
             var table = $('#tahunTable').DataTable({
@@ -298,87 +235,86 @@
 
 
             $(document).ready(function() {
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var min = $('#minDate').val();
-            var max = $('#maxDate').val();
-            var timestamp = data[12]; // The timestamp is in the 13th column (index 12)
-            
-            // Manually parse the timestamp
-            var dateParts = timestamp.split(" ");
-            var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
-            
-            // Debugging logs
-            console.log("Min Date: ", min);
-            console.log("Max Date: ", max);
-            console.log("Current Row Date: ", dateOnly);
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
+                        var min = $('#minDate').val();
+                        var max = $('#maxDate').val();
+                        var timestamp = data[12]; // The timestamp is in the 13th column (index 12)
 
-            if (
-                (min === "" && max === "") ||
-                (min === "" && dateOnly <= max) ||
-                (min <= dateOnly && max === "") ||
-                (min <= dateOnly && dateOnly <= max)
-            ) {
-                console.log("Row included in filter");
-                return true;
-            }
-            console.log("Row excluded from filter");
-            return false;
-        }
-    );
+                        // Manually parse the timestamp
+                        var dateParts = timestamp.split(" ");
+                        var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
 
-    var table = $('#reportTable').DataTable({
-        scrollX: false,
-        responsive: false,
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'csv',
-                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-            },
-            {
-                extend: 'excel',
-                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-            },
-            {
-                extend: 'pdf',
-                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-            },
-            {
-                extend: 'print',
-                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                customize: function(win) {
-                    $(win.document.body)
-                        .css('font-size', '10pt')
-                        .prepend(
-                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                            '<img src="logopt1.png" style="width: 200px;">' +
-                            '</div>'
-                        );
+                        // Debugging logs
+                        console.log("Min Date: ", min);
+                        console.log("Max Date: ", max);
+                        console.log("Current Row Date: ", dateOnly);
 
-                    $(win.document.body).find('table')
-                        .addClass('display')
-                        .css('width', '100%')
-                        .css('font-size', 'inherit');
-                }
-            },
-            {
-                extend: 'colvis',
-                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                text: 'Toggle Columns'
-            }
-        ]
-    });
+                        if (
+                            (min === "" && max === "") ||
+                            (min === "" && dateOnly <= max) ||
+                            (min <= dateOnly && max === "") ||
+                            (min <= dateOnly && dateOnly <= max)
+                        ) {
+                            console.log("Row included in filter");
+                            return true;
+                        }
+                        console.log("Row excluded from filter");
+                        return false;
+                    }
+                );
 
-    // Apply filter on date change
-    $('#minDate, #maxDate').on('change', function() {
-        console.log("Date input changed");
-        table.draw();
-    });
+                var table = $('#reportTable').DataTable({
+                    scrollX: false,
+                    responsive: false,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'csv',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'excel',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                            customize: function(win) {
+                                $(win.document.body)
+                                    .css('font-size', '10pt')
+                                    .prepend(
+                                        '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                                        '<img src="logopt1.png" style="width: 200px;">' +
+                                        '</div>'
+                                    );
 
-    // Append buttons container to the DataTable wrapper
-    table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
-});
+                                $(win.document.body).find('table')
+                                    .addClass('display')
+                                    .css('width', '100%')
+                                    .css('font-size', 'inherit');
+                            }
+                        },
+                        {
+                            extend: 'colvis',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                            text: 'Toggle Columns'
+                        }
+                    ]
+                });
+
+                // Apply filter on date change
+                $('#minDate, #maxDate').on('change', function() {
+                    console.log("Date input changed");
+                    table.draw();
+                });
+
+                // Append buttons container to the DataTable wrapper
+                table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
+            });
 
 
 

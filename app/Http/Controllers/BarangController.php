@@ -6,13 +6,14 @@ use App\Models\Barang;
 use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
+use App\Models\BarangLog;
 use App\Models\UnitKerja;
 use App\Models\MasterAkun;
 use App\Models\namabarang;
 use Illuminate\Support\Str;
+use App\Models\StockSummary;
 use Illuminate\Http\Request;
 use App\Models\KodeInstitusi;
-use App\Models\StockSummary;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -188,12 +189,12 @@ class BarangController extends Controller
 
         // Filter barangs based on matching kode_log and kd_prod
         $barangs = Barang::query()
-        ->when(!in_array($userRole, ['superadmin', 'viewer']), function ($query) use ($userPlant) {
-            $query->whereHas('logGudang', function ($query) use ($userPlant) {
-                $query->where('kd_prod', $userPlant)
-                    ->whereColumn('kd_log', 'barangs.kode_log'); // Ensure matching kode_log
-            });
-        })
+            ->when(!in_array($userRole, ['superadmin', 'viewer']), function ($query) use ($userPlant) {
+                $query->whereHas('logGudang', function ($query) use ($userPlant) {
+                    $query->where('kd_prod', $userPlant)
+                        ->whereColumn('kd_log', 'barangs.kode_log'); // Ensure matching kode_log
+                });
+            })
             ->where(function ($query) use ($search) {
                 $query->where('no_barcode', 'like', "%{$search}%")
                     ->orWhere('no_item', 'like', "%{$search}%")
@@ -646,5 +647,44 @@ class BarangController extends Controller
         }
 
         return view('barangs.view', compact('barangs'));
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $logIds = $request->input('log_ids');
+
+        if ($logIds) {
+            // Fetch logs and sort them by date from newest to oldest
+            $logs = BarangLog::whereIn('id', $logIds)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            foreach ($logs as $log) {
+                $barang = Barang::find($log->barang_id);
+
+                if ($barang) {
+                    if ($log->action === 'exit') {
+                        $barang->jumlah += $log->quantity;
+                        Log::info('Membatalkan Pengambilan Stock untuk Barang ID ' . $barang->id . ' dengan jumlah ' . $log->quantity);
+                    } elseif ($log->action === 'entry') {
+                        $barang->jumlah -= $log->quantity;
+                        Log::info('Membatalkan Penambahan Stock untuk Barang ID ' . $barang->id . ' dengan jumlah ' . $log->quantity);
+                    }
+
+                    $barang->save();
+                    Log::info('Updated Barang ID ' . $barang->id . ' to new jumlah: ' . $barang->jumlah);
+                } else {
+                    Log::warning('Barang not found for Log ID ' . $log->id);
+                }
+            }
+
+            BarangLog::whereIn('id', $logIds)->delete();
+            Log::info('Deleted logs with IDs: ' . implode(', ', $logIds));
+
+            return redirect()->back()->with('success', 'Selected logs have been deleted.');
+        }
+
+        Log::warning('No log IDs were selected for deletion.');
+        return redirect()->back()->with('error', 'No logs were selected.');
     }
 }
