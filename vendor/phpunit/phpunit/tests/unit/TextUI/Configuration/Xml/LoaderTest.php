@@ -357,13 +357,15 @@ final class LoaderTest extends TestCase
         $this->assertTrue($phpunit->resolveDependencies());
         $this->assertTrue($phpunit->controlGarbageCollector());
         $this->assertSame(1000, $phpunit->numberOfTestsBeforeGarbageCollection());
+        $this->assertSame(10, $phpunit->shortenArraysForExportThreshold());
     }
 
     public function test_TestDox_configuration_is_parsed_correctly(): void
     {
-        $this->assertTrue(
-            $this->configuration('configuration_testdox.xml')->phpunit()->testdoxPrinter(),
-        );
+        $configuration = $this->configuration('configuration_testdox.xml')->phpunit();
+
+        $this->assertTrue($configuration->testdoxPrinter());
+        $this->assertTrue($configuration->testdoxPrinterSummary());
     }
 
     public function testConfigurationForSingleTestSuiteCanBeLoaded(): void

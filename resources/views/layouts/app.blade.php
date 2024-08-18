@@ -39,12 +39,12 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 ">
         @include('layouts.sidebar')
-        <div class="p-4 sm:ml-64">
-            <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-200 overflow-x-auto">
+        <div class="p-4">
+            <div class="p-2 overflow-x-auto mt-10">
                 <!-- Page Heading -->
                 @if (isset($header))
-                    <header class="bg-white bg-gray-800 shadow">
-                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <header class="bg-white bg-gray-800 shadow rounded-lg mt-5">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-4">
                             {{ $header }}
                         </div>
                     </header>
@@ -75,7 +75,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 
 

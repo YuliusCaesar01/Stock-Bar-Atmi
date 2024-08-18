@@ -483,6 +483,10 @@
         </div>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+
     {{-- Populate Entry Modal --}}
     <script>
         function setMaterialentryDetails(id, nama_barang, no_barcode, jumlah, kode_log, harga) {

@@ -196,6 +196,21 @@ abstract class TestDoubleTestCase extends TestCase
         $this->assertTrue($double->doSomething());
     }
 
+    final public function testMethodConfiguredToReturnDifferentValuesOnConsecutiveCallsCannotBeCalledMoreOftenThanReturnValuesHaveBeenConfigured(): void
+    {
+        $double = $this->createTestDouble(InterfaceWithReturnTypeDeclaration::class);
+
+        $double->method('doSomething')->willReturn(false, true);
+
+        $this->assertFalse($double->doSomething());
+        $this->assertTrue($double->doSomething());
+
+        $this->expectException(NoMoreReturnValuesConfiguredException::class);
+        $this->expectExceptionMessage('Only 2 return values have been configured for PHPUnit\TestFixture\MockObject\InterfaceWithReturnTypeDeclaration::doSomething()');
+
+        $double->doSomething();
+    }
+
     final public function testMethodCanBeConfiguredToReturnDifferentValuesAndThrowExceptionsOnConsecutiveCalls(): void
     {
         $double = $this->createTestDouble(InterfaceWithReturnTypeDeclaration::class);
@@ -263,7 +278,7 @@ abstract class TestDoubleTestCase extends TestCase
     }
 
     #[TestDox('Original __clone() method is not called by default when test double object is cloned (readonly class)')]
-    #[RequiresPhp('8.3')]
+    #[RequiresPhp('^8.3')]
     final public function testOriginalCloneMethodIsNotCalledByDefaultWhenTestDoubleObjectOfReadonlyClassIsCloned(): void
     {
         $double = clone $this->createTestDouble(ExtendableReadonlyClassWithCloneMethod::class);
@@ -272,7 +287,7 @@ abstract class TestDoubleTestCase extends TestCase
     }
 
     #[TestDox('Original __clone() method can optionally be called when test double object is cloned (readonly class)')]
-    #[RequiresPhp('8.3')]
+    #[RequiresPhp('^8.3')]
     final public function testOriginalCloneMethodCanOptionallyBeCalledWhenTestDoubleObjectOfReadonlyClassIsCloned(): void
     {
         $double = $this->getMockBuilder(ExtendableReadonlyClassWithCloneMethod::class)->enableOriginalClone()->getMock();
@@ -309,11 +324,11 @@ abstract class TestDoubleTestCase extends TestCase
     }
 
     /**
-     * @psalm-template RealInstanceType of object
+     * @template RealInstanceType of object
      *
-     * @psalm-param class-string<RealInstanceType> $type
+     * @param class-string<RealInstanceType> $type
      *
-     * @psalm-return (Stub|MockObject)&RealInstanceType
+     * @return (MockObject|Stub)&RealInstanceType
      */
     abstract protected function createTestDouble(string $type): object;
 }

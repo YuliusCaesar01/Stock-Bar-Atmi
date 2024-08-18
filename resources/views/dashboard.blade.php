@@ -85,7 +85,7 @@
         let originalChartData = @json($chartData);
 
         const maxValue = Math.max(...@json($chartData).map(series => Math.max(...series.data)));
-        const adjustedMaxValue = maxValue * 1.5;
+        const adjustedMaxValue = maxValue * 2;
 
         function renderChart(filteredData) {
             const options = {
@@ -138,7 +138,7 @@
                 xaxis: {
                     categories: @json($labels),
                     labels: {
-                        show: true,
+                        show: false,
                     },
                     axisBorder: {
                         show: true,
