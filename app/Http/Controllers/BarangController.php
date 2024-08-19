@@ -48,9 +48,9 @@ class BarangController extends Controller
             $minPlus10Percent = $barang->jumlah_minimal + ($barang->jumlah_minimal * 0.1);
             $condition = 'Safe'; // Default to Safe
 
-            if ($barang->jumlah <= $barang->jumlah_minimal || $barang->jumlah > $barang->jumlah_maksimal) {
+            if ($barang->jumlah < $barang->jumlah_minimal || $barang->jumlah > $barang->jumlah_maksimal) {
                 $condition = 'Danger';
-            } elseif ($barang->jumlah > $barang->jumlah_minimal && $barang->jumlah <= $minPlus10Percent) {
+            } elseif ($barang->jumlah >= $barang->jumlah_minimal && $barang->jumlah <= $minPlus10Percent) {
                 $condition = 'Warning';
             } elseif ($barang->jumlah > $minPlus10Percent && $barang->jumlah < $barang->jumlah_maksimal) {
                 $condition = 'Safe';
