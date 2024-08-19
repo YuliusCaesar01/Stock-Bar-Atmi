@@ -178,23 +178,6 @@
             var table = $('#satuanTable').DataTable({
                 scrollX: false,
                 responsive: false,
-                columnDefs: [{
-                        width: '10%',
-                        targets: 0
-                    }, // Id
-                    {
-                        width: '30%',
-                        targets: 1
-                    }, // Kode Satuan
-                    {
-                        width: '15%',
-                        targets: 2
-                    }, // Nama Satuan
-                    {
-                        width: '15%',
-                        targets: 3
-                    }, // Action
-                ],
                 dom: 'Bfrtip', // Include buttons in the DOM
                 buttons: [{
                         extend: 'csv',
@@ -230,10 +213,8 @@
             });
             // Append buttons container to the DataTable wrapper
             table.buttons().container().appendTo('#barangTable_wrapper .col-md-6:eq(0)');
-
-
-
-            $(document).ready(function() {
+        });
+        $(document).ready(function() {
                 $.fn.dataTable.ext.search.push(
                     function(settings, data, dataIndex) {
                         var min = $('#minDate').val();
@@ -263,11 +244,25 @@
                     }
                 );
 
+                     $('#reportTable tfoot th').each(function (i) {
+                    var title = $('#reportTable thead th')
+                        .eq($(this).index())
+                        .text();
+                    $(this).html(
+                        '<input type="text" placeholder="Search ' + title + '" data-index="' + i + '" />'
+                    );
+                });
+
+                // DataTable initialization
                 var table = $('#reportTable').DataTable({
-                    scrollX: false,
+                    scrollY: '900px',
+                    scrollX: true,
+                    scrollCollapse: true,
                     responsive: false,
+                    paging: false,
                     dom: 'Bfrtip',
-                    buttons: [{
+                    buttons: [
+                        {
                             extend: 'csv',
                             className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
                         },
@@ -307,17 +302,20 @@
 
                 // Apply filter on date change
                 $('#minDate, #maxDate').on('change', function() {
-                    console.log("Date input changed");
                     table.draw();
+                });
+
+                // Filter event handler
+                $(table.table().container()).on('keyup', 'tfoot input', function () {
+                    table
+                        .column($(this).data('index'))
+                        .search(this.value)
+                        .draw();
                 });
 
                 // Append buttons container to the DataTable wrapper
                 table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
             });
-
-
-
-        });
     </script>
     <script>
         function setFormAction(action, type) {
