@@ -43,11 +43,11 @@
             <div class="p-2 overflow-x-auto mt-10">
                 <!-- Page Heading -->
                 @if (isset($header))
-                    <header class="bg-white bg-gray-800 shadow rounded-lg mt-5">
+                    {{-- <header class="bg-white bg-gray-800 shadow rounded-lg mt-5">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-4">
                             {{ $header }}
                         </div>
-                    </header>
+                    </header> --}}
                 @endif
 
                 <!-- Page Content -->

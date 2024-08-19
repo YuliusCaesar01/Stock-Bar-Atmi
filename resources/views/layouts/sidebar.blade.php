@@ -16,8 +16,11 @@
                 <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
                     <img src="{{ asset('logopt.png') }}" class="h-8 me-3" alt="StockBar Logo" />
                     <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">StockBar</span>
+                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">Stockbar| </span>
+                        <span
+                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">{{ $header }}</span>
                 </a>
+                
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ms-3">
