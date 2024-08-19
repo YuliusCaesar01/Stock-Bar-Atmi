@@ -308,11 +308,7 @@
                 { extend: 'colvis', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800', text: 'Toggle Columns' }
 
             ]
-            
-
         }),
-        
-
         satuanTable: $('#satuanTable').DataTable({
             scrollX: false,
             responsive: false,
