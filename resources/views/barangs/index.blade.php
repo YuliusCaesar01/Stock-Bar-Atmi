@@ -6,10 +6,10 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-8xl mx-auto sm:px-4 lg:px-6">
             <div class="bg-white :bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="barangTable"
+                    <table id="export-table"
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
                             <tr>
@@ -35,6 +35,7 @@
                                 <th scope="col" class="px-6 py-3">No Akun</th>
                                 <th scope="col" class="px-6 py-3">No Refferensi</th>
                                 <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
+                                <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,14 +61,14 @@
                                     }
                                 @endphp
 
-                                <tr class="bg-gray-800 border-b dark:bg-gray-800 dark:border-gray-700">
+                                <tr class="bg-white border-b">
                                     <!-- Existing cells... -->
                                     <td class="px-6 py-4">
                                         <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
                                     </td>
                                     @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
                                         <td scope="row"
-                                            class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div class="inline-flex rounded-md shadow-sm">
                                                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin')
                                                     <a href="{{ route('barangs.show', $barang) }}" aria-current="page"
@@ -109,33 +110,10 @@
                                     <td class="px-6 py-4">{{ $barang->no_akun }}</td>
                                     <td class="px-6 py-4">{{ $barang->no_reff }}</td>
                                     <td style="display: none;" class="px-6 py-4">{{ $barang->no_barcode }}</td>
+                                    <td style="display: none;" class="px-6 py-4">{{ $barang->id }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col">Total:</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col" id="totalJumlah"></th>
-                                <th scope="col"></th>
-                                <th scope="col" id="totalHarga"></th>
-                                <th scope="col" id="totalTotal"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                            </tr>
-                        </tfoot> --}}
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -258,7 +236,7 @@
                     <div class="flex justify-end">
                         <button type="button"
                             class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
-                            data-modal-toggle="crud-modal">Cancel</button>
+                            data-modal-toggle="entry-modal">Cancel</button>
                         <button type="submit"
                             class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                     </div>
@@ -600,7 +578,7 @@
                     console.log(`Scanned QR Code Value: ${decodedText}`);
 
                     // Hide the QR modal and show the exit modal with the data
-                    $('#qr-modal').addClass('hidden').removeClass('flex');
+                    $('#qr-modal').remove();
                     showExitModalByQrCode(decodedText);
                 }).catch((err) => {
                     console.error("Error stopping Html5Qrcode:", err);
@@ -636,7 +614,7 @@
                     console.log(`Found matching barcode ID: ${rowBarcodeId}`);
 
                     // Extracting data for modal
-                    var barangId = cells.eq(0).find('img').data('id'); // Adjust based on your data structure
+                    var barangId = cells.eq(20).text().trim(); // Adjust based on your data structure
                     var namaBarang = cells.eq(4).text().trim(); // Example index, adjust as needed
                     var noBarcode = rowBarcodeId;
                     var jumlah = cells.eq(7).text().trim(); // Example index, adjust as needed
@@ -646,7 +624,7 @@
 
                     // Show exit modal
                     setMaterialDetails(barangId, namaBarang, noBarcode, jumlah, kodeLog, satuan, kdAkun);
-                    $('#exit-modal').modal('show'); // Assuming you're using Bootstrap modal
+                    $('#exit-modal').modal('show');
                     return false; // Exit the loop
                 }
             });

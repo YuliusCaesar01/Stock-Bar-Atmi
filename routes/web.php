@@ -23,6 +23,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [BarangController::class, 'dashboard'])->name('dashboard');
 Route::get('/report/kondisistock', [ReportController::class, 'kondisistock'])->name('kondisistock');
+Route::get('/report/jumlahstock', [ReportController::class, 'jumlahstock'])->name('jumlahstock');
+Route::get('/report/daftarbarang', [ReportController::class, 'daftarbarang'])->name('daftarbarang');
 Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
 Route::get('setup/setupbarang', [NamaBarangController::class, 'index'])->name('setupbarang');
 Route::post('/setupbarang', [NamaBarangController::class, 'store'])->name('nama-barang.store');
@@ -87,9 +89,6 @@ Route::get('/saldobulanan', function () {
     return view('report.saldobulanan');
 })->middleware(['auth'])->name('saldobulanan');
 
-Route::get('/report/jumlahstock', function () {
-    return view('report.jumlahstock');
-})->middleware(['auth'])->name('jumlahstock');
 
 Route::get('/hakaksesgudang', function () {
     return view('setup.hakaksesgudang');

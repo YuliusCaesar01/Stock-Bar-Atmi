@@ -15,12 +15,12 @@
                 </button>
                 <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
                     <img src="{{ asset('logopt.png') }}" class="h-8 me-3" alt="StockBar Logo" />
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">Stockbar
+                        |</span>
                     <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">Stockbar| </span>
-                        <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900">{{ $header }}</span>
+                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-900 ms-1">{{ $header }}</span>
                 </a>
-                
+
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ms-3">
@@ -308,6 +308,20 @@
 
                             <span class="ms-3">
                                 Jumlah Stock
+                            </span>
+                        </a>
+                        <a href="{{ route('daftarbarang') }}"
+                            class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-dark dark:hover:bg-gray-200">
+                            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd"
+                                    d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
+                                    clip-rule="evenodd" />
+                                <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
+                            </svg>
+
+                            <span class="ms-3">
+                                Daftar Barang
                             </span>
                         </a>
                         <a href="{{ route('saldobulanan') }}"
