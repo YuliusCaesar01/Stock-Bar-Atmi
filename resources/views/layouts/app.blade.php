@@ -66,18 +66,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
     <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
-    <script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+     <script>
         if (document.getElementById("export-table") && typeof simpleDatatables.DataTable !== 'undefined') {
 
             const exportCustomCSV = function(dataTable, userOptions = {}) {
@@ -225,244 +225,125 @@
         }
     </script>
 
+    
     <script>
-        $(document).ready(function() {
-            // Initialize DataTable with scrollX
-            var table = $('#barangTable').DataTable({
-                scrollX: true,
-                responsive: false,
-                dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [{
-                        extend: 'csv',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        customize: function(win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt')
-                                .prepend(
-                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                    '<img src="logopt1.png" style="width: 200px;">' +
-                                    '</div>'
-                                );
-
-                            $(win.document.body).find('table')
-                                .addClass('display')
-                                .css('width', '100%')
-                                .css('font-size', 'inherit');
-                        }
+    $(document).ready(function() {
+    // Initialize DataTables for multiple tables
+    var tables = {
+        barangTable: $('#barangTable').DataTable({
+            scrollX: true,
+            responsive: false,
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { 
+                    extend: 'print', 
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                    customize: function(win) {
+                        $(win.document.body).css('font-size', '10pt').prepend(
+                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                            '<img src="logopt1.png" style="width: 200px;">' +
+                            '</div>'
+                        );
+                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
                     }
-                ],
-            });
-
-            var table = $('#tahunTable').DataTable({
-                scrollX: true,
-                responsive: false,
-                columnDefs: [{
-                        width: '10%',
-                        targets: 0
-                    }, // Nomor Item
-                    {
-                        width: '30%',
-                        targets: 1
-                    }, // Nama Barang
-                    {
-                        width: '15%',
-                        targets: 2
-                    }, // Kode Log
-                    {
-                        width: '15%',
-                        targets: 3
-                    }, // Satuan
-                    {
-                        width: '30%',
-                        targets: 4
-                    }, // Actions
-                ],
-                dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [{
-                        extend: 'csv',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        customize: function(win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt')
-                                .prepend(
-                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                    '<img src="logopt1.png" style="width: 200px;">' +
-                                    '</div>'
-                                );
-
-                            $(win.document.body).find('table')
-                                .addClass('display')
-                                .css('width', '100%')
-                                .css('font-size', 'inherit');
-                        }
-                    }
-                ]
-            });
-            var table = $('#satuanTable').DataTable({
-                scrollX: false,
-                responsive: false,
-                dom: 'Bfrtip', // Include buttons in the DOM
-                buttons: [{
-                        extend: 'csv',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        customize: function(win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt')
-                                .prepend(
-                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                    '<img src="logopt1.png" style="width: 200px;">' +
-                                    '</div>'
-                                );
-
-                            $(win.document.body).find('table')
-                                .addClass('display')
-                                .css('width', '100%')
-                                .css('font-size', 'inherit');
-                        }
-                    }
-                ]
-            });
-            // Append buttons container to the DataTable wrapper
-            table.buttons().container().appendTo('#barangTable_wrapper .col-md-6:eq(0)');
-        });
-        $(document).ready(function() {
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    var min = $('#minDate').val();
-                    var max = $('#maxDate').val();
-                    var timestamp = data[12]; // The timestamp is in the 13th column (index 12)
-
-                    // Manually parse the timestamp
-                    var dateParts = timestamp.split(" ");
-                    var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
-
-                    // Debugging logs
-                    console.log("Min Date: ", min);
-                    console.log("Max Date: ", max);
-                    console.log("Current Row Date: ", dateOnly);
-
-                    if (
-                        (min === "" && max === "") ||
-                        (min === "" && dateOnly <= max) ||
-                        (min <= dateOnly && max === "") ||
-                        (min <= dateOnly && dateOnly <= max)
-                    ) {
-                        console.log("Row included in filter");
-                        return true;
-                    }
-                    console.log("Row excluded from filter");
-                    return false;
                 }
-            );
+            ]
+        }),
 
-            $('#reportTable tfoot th').each(function(i) {
-                var title = $('#reportTable thead th')
-                    .eq($(this).index())
-                    .text();
-                $(this).html(
-                    '<input type="text" placeholder="Search ' + title + '" data-index="' + i + '" />'
-                );
-            });
-
-            // DataTable initialization
-            var table = $('#reportTable').DataTable({
-                scrollY: '900px',
-                scrollX: true,
-                scrollCollapse: true,
-                responsive: false,
-                paging: false,
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'csv',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        customize: function(win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt')
-                                .prepend(
-                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                    '<img src="logopt1.png" style="width: 200px;">' +
-                                    '</div>'
-                                );
-
-                            $(win.document.body).find('table')
-                                .addClass('display')
-                                .css('width', '100%')
-                                .css('font-size', 'inherit');
-                        }
-                    },
-                    {
-                        extend: 'colvis',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        text: 'Toggle Columns'
+        tahunTable: $('#tahunTable').DataTable({
+            scrollX: true,
+            responsive: false,
+            columnDefs: [
+                { width: '10%', targets: 0 },
+                { width: '30%', targets: 1 },
+                { width: '15%', targets: 2 },
+                { width: '15%', targets: 3 },
+                { width: '30%', targets: 4 }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { 
+                    extend: 'print', 
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                    customize: function(win) {
+                        $(win.document.body).css('font-size', '10pt').prepend(
+                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                            '<img src="logopt1.png" style="width: 200px;">' +
+                            '</div>'
+                        );
+                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
                     }
-                ]
-            });
+                }
+            ]
+        }),
+        reportTable: $('#reportTable').DataTable({
+            scrollY: '900px',
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: false,
+            paging: false,
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { 
+                    extend: 'print', 
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                    customize: function(win) {
+                        $(win.document.body).css('font-size', '10pt').prepend(
+                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                            '<img src="logopt1.png" style="width: 200px;">' +
+                            '</div>'
+                        );
+                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
+                    }
+                },
+                { extend: 'colvis', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800', text: 'Toggle Columns' }
 
-            // Apply filter on date change
-            $('#minDate, #maxDate').on('change', function() {
-                table.draw();
-            });
+            ]
+            
 
-            // Filter event handler
-            $(table.table().container()).on('keyup', 'tfoot input', function() {
-                table
-                    .column($(this).data('index'))
-                    .search(this.value)
-                    .draw();
-            });
+        }),
+        
 
-            // Append buttons container to the DataTable wrapper
-            table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
+        satuanTable: $('#satuanTable').DataTable({
+            scrollX: false,
+            responsive: false,
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+                { 
+                    extend: 'print', 
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                    customize: function(win) {
+                        $(win.document.body).css('font-size', '10pt').prepend(
+                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                            '<img src="logopt1.png" style="width: 200px;">' +
+                            '</div>'
+                        );
+                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
+                    }
+                }
+            ]
+        })
+        };
+
+        // Append buttons container to respective DataTable wrappers
+        $.each(tables, function(key, table) {
+            table.buttons().container().appendTo('#' + key + '_wrapper .col-md-6:eq(0)');
         });
+    });
     </script>
+    
     <script>
         function setFormAction(action, type) {
             const form = document.getElementById('quantity-form');
