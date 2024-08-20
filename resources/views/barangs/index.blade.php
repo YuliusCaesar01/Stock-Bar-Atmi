@@ -9,7 +9,7 @@
         <div class="max-w-8xl mx-auto sm:px-4 lg:px-6">
             <div class="bg-white :bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <table id="export-table"
+                    <table id="barangTable"
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
                             <tr>
@@ -93,10 +93,10 @@
                                     <td class="font-extrabold px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->no_item }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $barang->nama_barang }}</td>
-                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->kd_akun }}</td>
-                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->kode_log }}</td>
-                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->jumlah }}</td>
-                                    <td class="whitespace-nowrappx-6 py-4">{{ $barang->satuan }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->kd_akun }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->kode_log }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->satuan }}</td>
                                     <td class="whitespace-nowrap">
                                         {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
                                     <td class="whitespace-nowrap">
@@ -257,7 +257,7 @@
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="exit-modal">
+                        data-modal-toggle="exit-modal" onclick="location.reload();">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -412,7 +412,7 @@
                     <div class="flex justify-end">
                         <button type="button"
                             class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
-                            data-modal-toggle="exit-modal">Cancel</button>
+                            data-modal-toggle="exit-modal" onclick="location.reload();">Cancel</button>
                         <button type="submit"
                             class="me-3 mb-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                     </div>

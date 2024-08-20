@@ -225,7 +225,7 @@
         }
     </script>
 
-    
+
     <script>
     $(document).ready(function() {
     // Initialize DataTables for multiple tables
@@ -238,8 +238,8 @@
                 { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { 
-                    extend: 'print', 
+                {
+                    extend: 'print',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     customize: function(win) {
                         $(win.document.body).css('font-size', '10pt').prepend(
@@ -268,8 +268,8 @@
                 { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { 
-                    extend: 'print', 
+                {
+                    extend: 'print',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     customize: function(win) {
                         $(win.document.body).css('font-size', '10pt').prepend(
@@ -293,8 +293,8 @@
                 { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { 
-                    extend: 'print', 
+                {
+                    extend: 'print',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     customize: function(win) {
                         $(win.document.body).css('font-size', '10pt').prepend(
@@ -308,7 +308,11 @@
                 { extend: 'colvis', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800', text: 'Toggle Columns' }
 
             ]
+
+
         }),
+
+
         satuanTable: $('#satuanTable').DataTable({
             scrollX: false,
             responsive: false,
@@ -317,8 +321,8 @@
                 { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
                 { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { 
-                    extend: 'print', 
+                {
+                    extend: 'print',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     customize: function(win) {
                         $(win.document.body).css('font-size', '10pt').prepend(
@@ -339,7 +343,7 @@
         });
     });
     </script>
-    
+
     <script>
         function setFormAction(action, type) {
             const form = document.getElementById('quantity-form');
