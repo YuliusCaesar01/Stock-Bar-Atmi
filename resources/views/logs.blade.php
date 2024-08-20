@@ -16,7 +16,9 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
                                 <th scope="col" class="px-6 py-3">QR Code Barang</th>
-                                <th scope="col" class="px-6 py-3">ID Barang</th>
+                                {{-- <th scope="col" class="px-6 py-3">ID Barang</th> --}}
+                                <th scope="col" class="px-6 py-3">No Item</th>
+                                <th scope="col" class="px-6 py-3">Kode Log</th>
                                 <th scope="col" class="px-6 py-3">Nama Barang</th>
                                 <th scope="col" class="px-6 py-3">Order Number</th>
                                 <th scope="col" class="px-6 py-3">Item Number</th>
@@ -39,7 +41,9 @@
                                     <td class="px-6 py-4">
                                         {!! QrCode::size(50)->generate($log->barang->no_barcode) !!}
                                     </td>
-                                    <td class="px-6 py-4">{{ $log->barang_id }}</td>
+                                    {{-- <td class="px-6 py-4">{{ $log->barang_id }}</td> --}}
+                                    <td class="px-6 py-4">{{ $log->no_barang }}</td>
+                                    <td class="px-6 py-4">{{ $log->kd_log }}</td>
                                     <td class="px-6 py-4">{{ $log->barang->nama_barang }}</td>
                                     <td class="px-6 py-4">{{ $log->order_number }}</td>
                                     <td class="px-6 py-4">{{ $log->no_item }}</td>
@@ -55,23 +59,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">QR Code Barang</th>
-                                <th scope="col" class="px-6 py-3">ID Barang</th>
-                                <th scope="col" class="px-6 py-3">Nama Barang</th>
-                                <th scope="col" class="px-6 py-3">Order Number</th>
-                                <th scope="col" class="px-6 py-3">Item Number</th>
-                                <th scope="col" class="px-6 py-3">Operator</th>
-                                <th scope="col" class="px-6 py-3">Satuan</th>
-                                <th scope="col" class="px-6 py-3">Nomor PO</th>
-                                <th scope="col" class="px-6 py-3">Harga</th>
-                                <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">Quantity</th>
-                                <th scope="col" class="px-6 py-3">Timestamp</th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>

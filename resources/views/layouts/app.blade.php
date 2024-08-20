@@ -75,6 +75,10 @@
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
+    {{-- Checkbox filter column in report --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <script>
@@ -225,49 +229,8 @@
         }
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    if (settings.nTable.id !== 'reportTable') {
-                        return true; // Bypass this filter for other tables
-                    }
-                    var min = $('#minDate').val();
-                    var max = $('#maxDate').val();
-                    var timestamp = data[12]; // The timestamp is in the 13th column (index 12)
-
-                    // Manually parse the timestamp
-                    var dateParts = timestamp.split(" ");
-                    var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
-
-                    // Debugging logs
-                    console.log("Min Date: ", min);
-                    console.log("Max Date: ", max);
-                    console.log("Current Row Date: ", dateOnly);
-
-                    if (
-                        (min === "" && max === "") ||
-                        (min === "" && dateOnly <= max) ||
-                        (min <= dateOnly && max === "") ||
-                        (min <= dateOnly && dateOnly <= max)
-                    ) {
-                        console.log("Row included in filter");
-                        return true;
-                    }
-                    console.log("Row excluded from filter");
-                    return false;
-                }
-            );
-        });
-        $('#reportTable tfoot th').each(function(i) {
-            var title = $('#reportTable thead th')
-                .eq($(this).index())
-                .text();
-            $(this).html(
-                '<input type="text" placeholder="Search ' + title + '" data-index="' + i + '" />'
-            );
-        });
-
+<script>
+    $(document).ready(function() {
         // DataTable initialization
         var table = $('#reportTable').DataTable({
             scrollY: '900px',
@@ -276,7 +239,8 @@
             responsive: false,
             paging: false,
             dom: 'Bfrtip',
-            buttons: [{
+            buttons: [
+                {
                     extend: 'csv',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
                 },
@@ -311,25 +275,87 @@
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     text: 'Toggle Columns'
                 }
-            ]
+            ],
+            initComplete: function() {
+                var api = this.api();
+
+                // Modify thead to include an additional row for the filters
+                $('#reportTable thead').append('<tr class="filter-row"></tr>');
+                
+                // Add a select element for each column in the correct position
+                api.columns().every(function() {
+                    var column = this;
+                    var select = $('<select multiple="multiple" class="multi-select form-control"></select>')
+                        .on('change', function() {
+                            var selectedOptions = $(this).val();
+                            if (selectedOptions && selectedOptions.length > 0) {
+                                var regex = selectedOptions.map(function(val) {
+                                    return $.fn.dataTable.util.escapeRegex(val);
+                                }).join('|');
+                                column
+                                    .search(regex, true, false)
+                                    .draw();
+                            } else {
+                                column.search('', true, false).draw();
+                            }
+                        });
+
+                    // Populate the select with unique values from the column
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+
+                    // Add the filter directly under the respective header
+                    $(column.header()).append('<div class="filter-wrapper"></div>');
+                    $(column.header()).find('.filter-wrapper').append(select);
+
+                    // Initialize Select2 on the select element
+                    select.select2({
+                        placeholder: "Select options",
+                        allowClear: true,
+                        closeOnSelect: false // Keep the dropdown open for multi-select
+                    });
+                });
+            }
         });
+
+        // Date range filter
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                if (settings.nTable.id !== 'reportTable') {
+                    return true; // Bypass this filter for other tables
+                }
+                var min = $('#minDate').val();
+                var max = $('#maxDate').val();
+                var timestamp = data[13]; // The timestamp is in the 13th column (index 12)
+
+                // Manually parse the timestamp
+                var dateParts = timestamp.split(" ");
+                var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
+
+                if (
+                    (min === "" && max === "") ||
+                    (min === "" && dateOnly <= max) ||
+                    (min <= dateOnly && max === "") ||
+                    (min <= dateOnly && dateOnly <= max)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
 
         // Apply filter on date change
         $('#minDate, #maxDate').on('change', function() {
             table.draw();
         });
+    });
+</script>
 
-        // Filter event handler
-        $(table.table().container()).on('keyup', 'tfoot input', function() {
-            table
-                .column($(this).data('index'))
-                .search(this.value)
-                .draw();
-        });
 
-        // Append buttons container to the DataTable wrapper
-        table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
-    </script>
+
+
+
     <script>
         $(document).ready(function() {
             // Initialize DataTables for multiple tables
