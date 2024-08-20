@@ -398,6 +398,8 @@ class BarangController extends Controller
         $barang->harga = $validatedData['harga'];
         $barang->jumlah += $validatedData['jumlah_beli'];
         $barang->total = $barang->harga * $barang->jumlah;
+        $kd_log=$barang->kode_log;
+        $no_barang=$barang->no_item;
         $barang->save();
 
         // Log the updated barang data
@@ -410,6 +412,8 @@ class BarangController extends Controller
             'harga' => $validatedData['harga'],
             'no_po' => $validatedData['no_po'],
             'operator' => $validatedData['operator'],
+            'kd_log' => $kd_log,
+            'no_barang' => $no_barang,
             'created_at' => now(),
         ]);
 
@@ -480,6 +484,9 @@ class BarangController extends Controller
             // Update stock of the barang
             $barang->jumlah -= $validatedData['jumlah_keluar'];
             $barang->total = $barang->harga * $barang->jumlah;
+            $kd_log=$barang->kode_log;
+            $no_barang=$barang->no_item;
+
 
             // Log before saving the barang
             Log::info('Updating barang', [
@@ -501,6 +508,8 @@ class BarangController extends Controller
                     'satuan' => $validatedData['satuan'],
                     'operator' => $validatedData['operator'],
                     'jenis' => $validatedData['jenis'],
+                    'kd_log' => $kd_log,
+                    'no_barang' => $no_barang,
                     'created_at' => now(),
                 ]
             ]);
@@ -513,6 +522,8 @@ class BarangController extends Controller
                 'satuan' => $validatedData['satuan'],
                 'operator' => $validatedData['operator'],
                 'jenis' => $validatedData['jenis'],
+                'kd_log' => $kd_log,
+                'no_barang' => $no_barang,
                 'created_at' => now(),
             ]);
 
