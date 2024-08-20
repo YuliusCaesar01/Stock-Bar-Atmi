@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
+use App\Models\barang;
 use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
@@ -25,7 +25,7 @@ class BarangController extends Controller
     public function dashboard()
     {
         // Get data and group by kd_prod and date
-        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, barangs.no_item, DATE(barangs.created_at) as date, barangs.jumlah, barangs.jumlah_minimal, barangs.jumlah_maksimal, SUM(barangs.jumlah) as total, barangs.updated_at')
+        $barangs = barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, barangs.no_item, DATE(barangs.created_at) as date, barangs.jumlah, barangs.jumlah_minimal, barangs.jumlah_maksimal, SUM(barangs.jumlah) as total, barangs.updated_at')
             ->join('log_gudangs_tables', 'barangs.kode_log', '=', 'log_gudangs_tables.kd_log')
             ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log', 'barangs.no_item', 'date', 'barangs.jumlah', 'barangs.jumlah_minimal', 'barangs.jumlah_maksimal', 'barangs.updated_at')
             ->orderBy('date')
@@ -189,7 +189,7 @@ class BarangController extends Controller
         Log::info('Authenticated user plant and role:', ['plant' => $userPlant, 'role' => $userRole]);
 
         // Filter barangs based on matching kode_log and kd_prod
-        $barangs = Barang::query()
+        $barangs = barang::query()
             ->when(!in_array($userRole, ['superadmin', 'viewer']), function ($query) use ($userPlant) {
                 $query->whereHas('logGudang', function ($query) use ($userPlant) {
                     $query->where('kd_prod', $userPlant)
@@ -289,7 +289,7 @@ class BarangController extends Controller
 
         // Attempt to create the Barang record
         try {
-            $barang = Barang::create($validated);
+            $barang = barang::create($validated);
 
             Log::info('Barang created successfully.', [
                 'user_id' => auth()->user()->id,
@@ -314,7 +314,7 @@ class BarangController extends Controller
      */
     public function show($id)
     {
-        $barang = Barang::findOrFail($id);
+        $barang = barang::findOrFail($id);
         $barang->qr_code = QrCode::size(100)->generate($barang->no_barcode);
         $logs = $barang->logs;
 
@@ -327,7 +327,7 @@ class BarangController extends Controller
     public function edit($id)
     {
 
-        $barang = Barang::findOrFail($id);
+        $barang = barang::findOrFail($id);
         if (is_null($barang->no_barcode)) {
             $barang->no_barcode = 'SB-' . Str::random(8); // Example of a structured barcode
         }
@@ -389,7 +389,7 @@ class BarangController extends Controller
         ]);
 
         // Retrieve the correct barang instance
-        $barang = Barang::find($request->barang_id);
+        $barang = barang::find($request->barang_id);
 
         // Log validation success and the ID of the barang
         Log::info('Entry request validated', ['validated_data' => $validatedData, 'barang_id' => $barang->id]);
@@ -425,7 +425,7 @@ class BarangController extends Controller
 
     public function getBarangDetails($nama_barang)
     {
-        $barang = Barang::find($nama_barang);
+        $barang = barang::find($nama_barang);
         return response()->json($barang);
     }
 
@@ -463,7 +463,7 @@ class BarangController extends Controller
             // Log the validated data
             Log::info('Validated data', ['validated_data' => $validatedData]);
 
-            $barang = Barang::find($validatedData['barang_id']);
+            $barang = barang::find($validatedData['barang_id']);
 
             // Log before checking stock
             Log::info('Checking stock levels', [
@@ -614,7 +614,7 @@ class BarangController extends Controller
         $qrCode = $request->input('qr_code');
         $quantity = $request->input('quantity');
 
-        $barang = Barang::where('no_barcode', $qrCode)->first();
+        $barang = barang::where('no_barcode', $qrCode)->first();
 
         if (!$barang) {
             return redirect()->back()->with('error', 'Barang not found');
@@ -633,7 +633,7 @@ class BarangController extends Controller
     {
         $search = $request->input('search');
 
-        $barangs = Barang::query()
+        $barangs = barang::query()
             ->where('no_barcode', 'like', "%{$search}%")
             ->orWhere('no_item', 'like', "%{$search}%")
             ->orWhere('nama_barang', 'like', "%{$search}%")
@@ -671,7 +671,7 @@ class BarangController extends Controller
                 ->get();
 
             foreach ($logs as $log) {
-                $barang = Barang::find($log->barang_id);
+                $barang = barang::find($log->barang_id);
 
                 if ($barang) {
                     if ($log->action === 'exit') {
