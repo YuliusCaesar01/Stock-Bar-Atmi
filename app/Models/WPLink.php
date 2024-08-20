@@ -27,6 +27,7 @@ class WPLink extends Model
         'total',
         'barcode_id',
         'jenis',
+        'log_id',
     ];
 
 

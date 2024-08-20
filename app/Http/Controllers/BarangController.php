@@ -505,7 +505,7 @@ class BarangController extends Controller
                 ]
             ]);
 
-            $barang->logs()->create([
+            $log = $barang->logs()->create([
                 'action' => 'exit',
                 'order_number' => $validatedData['order_number'],
                 'no_item' => $validatedData['no_item'],
@@ -519,18 +519,10 @@ class BarangController extends Controller
             // Log the log entry creation
             Log::info('Log entry created successfully', [
                 'barang_id' => $barang->id,
-                'log_data' => [
-                    'action' => 'exit',
-                    'order_number' => $validatedData['order_number'],
-                    'no_item' => $validatedData['no_item'],
-                    'quantity' => $validatedData['jumlah_keluar'],
-                    'satuan' => $validatedData['satuan'],
-                    'operator' => $validatedData['operator'],
-                    'created_at' => now(),
-                ]
+                'log_data' => $log
             ]);
 
-            // Record the additional details in WPLink model
+            // Record the additional details in WPLink model with log_id
             Log::info('Creating WPLink entry', [
                 'wplink_data' => [
                     'order_number' => $validatedData['order_number'],
@@ -540,8 +532,10 @@ class BarangController extends Controller
                     'tanggal' => $validatedData['tanggal'],
                     'jumlah' => $validatedData['jumlah_keluar'],
                     'harga' => $barang->harga,
+                    'total' => $validatedData['jumlah_keluar'] * $barang->harga,
                     'satuan' => $validatedData['satuan'],
                     'jenis' => $validatedData['jenis'],
+                    'log_id' => $log->id, // Adding log_id here
                 ]
             ]);
 
@@ -553,8 +547,10 @@ class BarangController extends Controller
                 'tanggal' => $validatedData['tanggal'],
                 'jumlah' => $validatedData['jumlah_keluar'],
                 'harga' => $barang->harga,
+                'total' => $validatedData['jumlah_keluar'] * $barang->harga,
                 'satuan' => $validatedData['satuan'],
                 'jenis' => $validatedData['jenis'] === 'STANDART PART' ? 'parts' : ($validatedData['jenis'] === 'MATERIAL' ? 'materials' : $validatedData['jenis']),
+                'log_id' => $log->id, // Saving log_id here
             ]);
 
             // Log the WPLink creation
@@ -567,8 +563,10 @@ class BarangController extends Controller
                     'tanggal' => $validatedData['tanggal'],
                     'jumlah' => $validatedData['jumlah_keluar'],
                     'harga' => $barang->harga,
+                    'total' => $validatedData['jumlah_keluar'] * $barang->harga,
                     'satuan' => $validatedData['satuan'],
                     'jenis' => $validatedData['jenis'],
+                    'log_id' => $log->id, // Logging log_id
                 ]
             ]);
 
@@ -582,6 +580,7 @@ class BarangController extends Controller
             return redirect()->route('barangs.index')->with('error', 'An error occurred.');
         }
     }
+
 
 
 
@@ -684,6 +683,10 @@ class BarangController extends Controller
                     $cancelHistory->created_at = $log->created_at;
                     $cancelHistory->no_item = $barang->no_item; // Added no_item from Barang model
                     $cancelHistory->save();
+
+                    // Delete related WPLink entries
+                    $wpLinksDeleted = WPLink::where('log_id', $log->id)->delete();
+                    Log::info('Deleted ' . $wpLinksDeleted . ' WPLink entry(ies) with Log ID: ' . $log->id);
                 } else {
                     Log::warning('Barang not found for Log ID ' . $log->id);
                 }
@@ -698,6 +701,5 @@ class BarangController extends Controller
         Log::warning('No log IDs were selected for deletion.');
         return redirect()->back()->with('error', 'No logs were selected.');
     }
-
 
 }
