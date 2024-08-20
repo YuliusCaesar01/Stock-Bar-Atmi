@@ -13,7 +13,7 @@
                 <div class="w-full bg-white rounded-lg shadow p-4 md:p-6 mb-4 flex flex-col justify-between h-full">
                     <div>
                         <h5 class="leading-none text-xl font-bold text-gray-900 pb-2">Grafik Stok Inventory</h5>
-                        <div class="flex">
+                        <div class="flex mb-4">
                             <div class="flex items-center me-4">
                                 <input type="checkbox" value="all" checked
                                     class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
@@ -29,6 +29,10 @@
                                     class="filter-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                                 <label for="MDC" class="ms-2 text-sm font-medium text-gray-900">MDC</label>
                             </div>
+                            {{-- <label for="start-date" class="me-2 text-sm text-gray-900">Start Date:</label>
+                            <input type="date" id="start-date" class="border-gray-300 rounded focus:ring-blue-500 text-gray-900">
+                            <label for="end-date" class="ms-4 me-2 text-sm text-gray-900">End Date:</label>
+                            <input type="date" id="end-date" class="border-gray-300 rounded focus:ring-blue-500  text-gray-900"> --}}
                         </div>
                         <div id="data-series-chart" class="mt-4"></div>
                     </div>
@@ -83,7 +87,6 @@
     <script>
         // Initial chart rendering
         let originalChartData = @json($chartData);
-
         const maxValue = Math.max(...@json($chartData).map(series => Math.max(...series.data)));
         const adjustedMaxValue = maxValue * 2;
 
@@ -166,10 +169,26 @@
             }
         }
 
+        // Function to filter data based on date range
+        function filterDataByDateRange(data, startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            return data.map(series => {
+                return {
+                    name: series.name,
+                    data: series.data.filter((_, index) => {
+                        const date = new Date(@json($labels)[index]);
+                        return date >= start && date <= end;
+                    }),
+                };
+            });
+        }
+
         // Initial render with all data
         renderChart(originalChartData);
 
-        // Filter logic
+        // Filter logic for checkboxes
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const selectedValues = Array.from(document.querySelectorAll('.filter-checkbox:checked'))
@@ -183,10 +202,48 @@
                     );
                 }
 
+                // Apply date range filter
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+
+                if (startDate && endDate) {
+                    filteredData = filterDataByDateRange(filteredData, startDate, endDate);
+                }
+
+                renderChart(filteredData);
+            });
+        });
+
+        // Filter logic for date range
+        document.querySelectorAll('#start-date, #end-date').forEach(dateInput => {
+            dateInput.addEventListener('change', function() {
+                let filteredData = originalChartData;
+
+                // Apply checkbox filters
+                const selectedValues = Array.from(document.querySelectorAll('.filter-checkbox:checked'))
+                    .map(cb => cb.value);
+
+                if (!selectedValues.includes('all')) {
+                    filteredData = originalChartData.filter(series =>
+                        selectedValues.includes(series.name)
+                    );
+                }
+
+                // Apply date range filter
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+
+                if (startDate && endDate) {
+                    filteredData = filterDataByDateRange(filteredData, startDate, endDate);
+                }
+
                 renderChart(filteredData);
             });
         });
     </script>
+
+
+
 
     {{-- Chart 2 JScript --}}
     <script>
