@@ -83,7 +83,7 @@ class ReportController extends Controller
     public function jumlahstock()
     {
         // Get data and group by kd_prod and date
-        $barangs = Barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, barangs.no_item, DATE(barangs.created_at) as date, barangs.jumlah, barangs.jumlah_minimal, barangs.jumlah_maksimal, SUM(barangs.jumlah) as total, barangs.updated_at')
+        $barangs = barang::selectRaw('log_gudangs_tables.kd_prod, barangs.kode_log, barangs.no_item, DATE(barangs.created_at) as date, barangs.jumlah, barangs.jumlah_minimal, barangs.jumlah_maksimal, SUM(barangs.jumlah) as total, barangs.updated_at')
             ->join('log_gudangs_tables', 'barangs.kode_log', '=', 'log_gudangs_tables.kd_log')
             ->groupBy('log_gudangs_tables.kd_prod', 'barangs.kode_log', 'barangs.no_item', 'date', 'barangs.jumlah', 'barangs.jumlah_minimal', 'barangs.jumlah_maksimal', 'barangs.updated_at')
             ->orderBy('date')
@@ -201,7 +201,7 @@ class ReportController extends Controller
     {
 
         // Retrieve all barangs without any filters
-        $barangs = Barang::all();
+        $barangs = barang::all();
 
         Log::info('All barangs retrieved', ['barangs_count' => $barangs->count()]);
 

@@ -225,9 +225,6 @@
         }
     </script>
 
-<<<<<<< Updated upstream
-
-=======
     <script>
         $(document).ready(function() {
             $.fn.dataTable.ext.search.push(
@@ -334,7 +331,7 @@
             table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
 
     </script>
->>>>>>> Stashed changes
+    
     <script>
     $(document).ready(function() {
     // Initialize DataTables for multiple tables
@@ -391,40 +388,6 @@
                 }
             ]
         }),
-<<<<<<< Updated upstream
-        reportTable: $('#reportTable').DataTable({
-            scrollY: '900px',
-            scrollX: true,
-            scrollCollapse: true,
-            responsive: false,
-            paging: false,
-            dom: 'Bfrtip',
-            buttons: [
-                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                {
-                    extend: 'print',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                    customize: function(win) {
-                        $(win.document.body).css('font-size', '10pt').prepend(
-                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                            '<img src="logopt1.png" style="width: 200px;">' +
-                            '</div>'
-                        );
-                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
-                    }
-                },
-                { extend: 'colvis', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800', text: 'Toggle Columns' }
-
-            ]
-
-
-        }),
-
-
-=======
->>>>>>> Stashed changes
         satuanTable: $('#satuanTable').DataTable({
             scrollX: false,
             responsive: false,
