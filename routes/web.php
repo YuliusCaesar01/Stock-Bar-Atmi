@@ -89,6 +89,10 @@ Route::get('/saldobulanan', function () {
     return view('report.saldobulanan');
 })->middleware(['auth'])->name('saldobulanan');
 
+Route::get('/cancelhistory', function () {
+    return view('report.cancelhistory');
+})->middleware(['auth'])->name('cancelhistory');
+
 
 Route::get('/hakaksesgudang', function () {
     return view('setup.hakaksesgudang');

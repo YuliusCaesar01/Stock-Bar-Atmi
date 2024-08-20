@@ -279,7 +279,7 @@
                                     stroke-width="2"
                                     d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-                            <span class="ms-3">
+                            <span class="ms-3 text-sm">
                                 Report Transaksi
                             </span>
                         </a>
@@ -292,7 +292,7 @@
                                     stroke-width="2"
                                     d="m11.5 11.5 2.071 1.994M4 10h5m11 0h-1.5M12 7V4M7 7V4m10 3V4m-7 13H8v-2l5.227-5.292a1.46 1.46 0 0 1 2.065 2.065L10 17Zm-5 3h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
                             </svg>
-                            <span class="ms-3">
+                            <span class="ms-3 text-sm">
                                 Kondisi Stock
                             </span>
                         </a>
@@ -306,22 +306,19 @@
                                 <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
                             </svg>
 
-                            <span class="ms-3">
+                            <span class="ms-3 text-sm">
                                 Jumlah Stock
                             </span>
                         </a>
-                        <a href="{{ route('daftarbarang') }}"
+                        <a href="{{ route('cancelhistory') }}"
                             class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-dark dark:hover:bg-gray-200">
-                            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd"
-                                    d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
-                                    clip-rule="evenodd" />
-                                <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
-                            </svg>
+                            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
+                              </svg>
 
-                            <span class="ms-3">
-                                Daftar Barang
+
+                            <span class="ms-3 text-sm">
+                                Riwayat Pembatalan
                             </span>
                         </a>
                         <a href="{{ route('saldobulanan') }}"
@@ -333,7 +330,7 @@
                                     clip-rule="evenodd" />
                             </svg>
 
-                            <span class="ms-3">
+                            <span class="ms-3 text-sm">
                                 Saldo Bulanan
                             </span>
                         </a>

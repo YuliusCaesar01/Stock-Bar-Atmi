@@ -13,6 +13,7 @@ use App\Models\namabarang;
 use Illuminate\Support\Str;
 use App\Models\StockSummary;
 use Illuminate\Http\Request;
+use App\Models\CancelHistory;
 use App\Models\KodeInstitusi;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -673,6 +674,16 @@ class BarangController extends Controller
 
                     $barang->save();
                     Log::info('Updated Barang ID ' . $barang->id . ' to new jumlah: ' . $barang->jumlah);
+
+                    // Store the deleted log into CancelHistory with no_item from Barang
+                    $cancelHistory = new CancelHistory();
+                    $cancelHistory->log_id = $log->id;
+                    $cancelHistory->barang_id = $log->barang_id;
+                    $cancelHistory->action = $log->action;
+                    $cancelHistory->quantity = $log->quantity;
+                    $cancelHistory->created_at = $log->created_at;
+                    $cancelHistory->no_item = $barang->no_item; // Added no_item from Barang model
+                    $cancelHistory->save();
                 } else {
                     Log::warning('Barang not found for Log ID ' . $log->id);
                 }
@@ -687,4 +698,6 @@ class BarangController extends Controller
         Log::warning('No log IDs were selected for deletion.');
         return redirect()->back()->with('error', 'No logs were selected.');
     }
+
+
 }

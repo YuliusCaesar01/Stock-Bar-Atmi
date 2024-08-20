@@ -77,7 +77,7 @@
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-     <script>
+    <script>
         if (document.getElementById("export-table") && typeof simpleDatatables.DataTable !== 'undefined') {
 
             const exportCustomCSV = function(dataTable, userOptions = {}) {
@@ -229,9 +229,9 @@
         $(document).ready(function() {
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-            if (settings.nTable.id !== 'reportTable') {
-                return true; // Bypass this filter for other tables
-            }
+                    if (settings.nTable.id !== 'reportTable') {
+                        return true; // Bypass this filter for other tables
+                    }
                     var min = $('#minDate').val();
                     var max = $('#maxDate').val();
                     var timestamp = data[12]; // The timestamp is in the 13th column (index 12)
@@ -259,105 +259,112 @@
                 }
             );
         });
-            $('#reportTable tfoot th').each(function(i) {
-                var title = $('#reportTable thead th')
-                    .eq($(this).index())
-                    .text();
-                $(this).html(
-                    '<input type="text" placeholder="Search ' + title + '" data-index="' + i + '" />'
-                );
-            });
+        $('#reportTable tfoot th').each(function(i) {
+            var title = $('#reportTable thead th')
+                .eq($(this).index())
+                .text();
+            $(this).html(
+                '<input type="text" placeholder="Search ' + title + '" data-index="' + i + '" />'
+            );
+        });
 
-            // DataTable initialization
-            var table = $('#reportTable').DataTable({
-                scrollY: '900px',
-                scrollX: true,
-                scrollCollapse: true,
-                responsive: false,
-                paging: false,
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'csv',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        customize: function(win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt')
-                                .prepend(
-                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                    '<img src="logopt1.png" style="width: 200px;">' +
-                                    '</div>'
-                                );
-
-                            $(win.document.body).find('table')
-                                .addClass('display')
-                                .css('width', '100%')
-                                .css('font-size', 'inherit');
-                        }
-                    },
-                    {
-                        extend: 'colvis',
-                        className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                        text: 'Toggle Columns'
-                    }
-                ]
-            });
-
-            // Apply filter on date change
-            $('#minDate, #maxDate').on('change', function() {
-                table.draw();
-            });
-
-            // Filter event handler
-            $(table.table().container()).on('keyup', 'tfoot input', function() {
-                table
-                    .column($(this).data('index'))
-                    .search(this.value)
-                    .draw();
-            });
-
-            // Append buttons container to the DataTable wrapper
-            table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
-
-    </script>
-    
-    <script>
-    $(document).ready(function() {
-    // Initialize DataTables for multiple tables
-    var tables = {
-        barangTable: $('#barangTable').DataTable({
+        // DataTable initialization
+        var table = $('#reportTable').DataTable({
+            scrollY: '900px',
             scrollX: true,
+            scrollCollapse: true,
             responsive: false,
+            paging: false,
             dom: 'Bfrtip',
-            buttons: [
-                { extend: 'csv', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { extend: 'excel', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
-                { extend: 'pdf', className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800' },
+            buttons: [{
+                    extend: 'csv',
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                },
+                {
+                    extend: 'excel',
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                },
                 {
                     extend: 'print',
                     className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
                     customize: function(win) {
-                        $(win.document.body).css('font-size', '10pt').prepend(
-                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                            '<img src="logopt1.png" style="width: 200px;">' +
-                            '</div>'
-                        );
-                        $(win.document.body).find('table').addClass('display').css('width', '100%').css('font-size', 'inherit');
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                                '<img src="logopt1.png" style="width: 200px;">' +
+                                '</div>'
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('display')
+                            .css('width', '100%')
+                            .css('font-size', 'inherit');
                     }
+                },
+                {
+                    extend: 'colvis',
+                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                    text: 'Toggle Columns'
                 }
             ]
-        }),
+        });
+
+        // Apply filter on date change
+        $('#minDate, #maxDate').on('change', function() {
+            table.draw();
+        });
+
+        // Filter event handler
+        $(table.table().container()).on('keyup', 'tfoot input', function() {
+            table
+                .column($(this).data('index'))
+                .search(this.value)
+                .draw();
+        });
+
+        // Append buttons container to the DataTable wrapper
+        table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTables for multiple tables
+            var tables = {
+                barangTable: $('#barangTable').DataTable({
+                    scrollX: true,
+                    responsive: false,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'csv',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'excel',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                            customize: function(win) {
+                                $(win.document.body).css('font-size', '10pt').prepend(
+                                    '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                                    '<img src="logopt1.png" style="width: 200px;">' +
+                                    '</div>'
+                                );
+                                $(win.document.body).find('table').addClass('display').css(
+                                    'width', '100%').css('font-size', 'inherit');
+                            }
+                        }
+                    ]
+                }),
 
         tahunTable: $('#tahunTable').DataTable({
             scrollX: true,
@@ -412,11 +419,11 @@
         })
         };
 
-        // Append buttons container to respective DataTable wrappers
-        $.each(tables, function(key, table) {
-            table.buttons().container().appendTo('#' + key + '_wrapper .col-md-6:eq(0)');
+            // Append buttons container to respective DataTable wrappers
+            $.each(tables, function(key, table) {
+                table.buttons().container().appendTo('#' + key + '_wrapper .col-md-6:eq(0)');
+            });
         });
-    });
     </script>
 
     <script>
