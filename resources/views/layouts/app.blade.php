@@ -276,6 +276,26 @@
                     text: 'Toggle Columns'
                 }
             ],
+            footerCallback: function(row, data, start, end, display) {
+            // Calculate the total harga
+            var api = this.api();
+
+            var total = api
+                .column(10, { page: 'current' }) // Column index for "Harga"
+                .data()
+                .reduce(function(a, b) {
+                    // Convert to float or return 0 if not a valid number
+                    var numA = parseFloat(a) || 0;
+                    var numB = parseFloat(b) || 0;
+                    return numA + numB;
+                }, 0);
+
+            // Format the total as Rupiah using your formatRupiah helper
+            var formattedTotal = (total);
+
+            // Update the total in the tfoot
+            $('#total-harga').html(formattedTotal);
+        },
             initComplete: function() {
                 var api = this.api();
 
@@ -352,11 +372,7 @@
     });
 </script>
 
-
-
-
-
-    <script>
+<script>
         $(document).ready(function() {
             // Initialize DataTables for multiple tables
             var tables = {

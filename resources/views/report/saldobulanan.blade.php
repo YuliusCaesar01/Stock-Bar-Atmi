@@ -11,28 +11,33 @@
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
                     <input type="date" id="minDate" name="minDate" class="dark:text-gray-800">
                     <input type="date" id="maxDate" name="maxDate" class="dark:text-gray-800">
-                    <table id="reportTable"
-                        class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
+                    <table id="satuanTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-6 py-3">No. Item</th>
-                                <th scope="col" class="px-6 py-3">Nama Item</th>
-                                <th scope="col" class="px-6 py-3">Kode Log</th>
-                                <th scope="col" class="px-6 py-3">Merk</th>
-                                <th scope="col" class="px-6 py-3">Satuan</th>
-                                <th scope="col" class="px-6 py-3">Harga</th>
-                                <th scope="col" class="px-6 py-3">Rak</th>
-                                <th scope="col" class="px-6 py-3">Total</th>
-                                <th scope="col" class="px-6 py-3">Tanggal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
-                                <th scope="col" class="px-6 py-3">No Katalog</th>
-                                <th scope="col" class="px-6 py-3">Merk</th>
-                                <th scope="col" class="px-6 py-3">No Akun</th>
-                                <th scope="col" class="px-6 py-3">QR(manual)</th>
+                                <th rowspan="2" scope="col" class="px-6 py-3">Nomor Item</th>
+                                <th rowspan="2" scope="col" class="px-6 py-3">Kode Log</th>
+                                <th rowspan="2" scope="col" class="px-6 py-3">Nama Barang</th>
+                                <th colspan="2" scope="col" class="px-6 py-3">Saldo Awal</th>
+                                <th colspan="2" scope="col" class="px-6 py-3">Barang Masuk</th>
+                                <th colspan="2" scope="col" class="px-6 py-3">Barang Keluar</th>
+                                <th colspan="2" scope="col" class="px-6 py-3">Saldo Akhir</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Qty</th>
+                                <th scope="col" class="px-6 py-3">Rp</th>
+                                <th scope="col" class="px-6 py-3">Qty</th>
+                                <th scope="col" class="px-6 py-3">Rp</th>
+                                <th scope="col" class="px-6 py-3">Qty</th>
+                                <th scope="col" class="px-6 py-3">Rp</th>
+                                <th scope="col" class="px-6 py-3">Qty</th>
+                                <th scope="col" class="px-6 py-3">Rp</th>
                             </tr>
                         </thead>
-                        
+                        <tbody>
+                            
+                        </tbody>
                     </table>
+                    
                 </div>
             </div>
         </div>

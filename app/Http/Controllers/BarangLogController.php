@@ -36,5 +36,28 @@ class BarangLogController extends Controller
         return view('logs', compact('logs'));
     }
 
+    public function saldobulanan(Request $request)
+    {
+        $query = BarangLog::query();
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('updated_at', [$startDate, $endDate]);
+            }
+        }
+
+        $logs = $query->get();
+
+        // Debugging output
+        if ($request->has('start_date') || $request->has('end_date')) {
+            echo 'Filtered Logs Count: ' . $logs->count() . '<br>';
+        }
+
+        return view('saldobulanan', compact('saldobulanan'));
+    }
+
     // Additional methods for CRUD operations can be added here
 }
