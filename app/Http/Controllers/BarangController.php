@@ -185,7 +185,7 @@ class BarangController extends Controller
         // Get the authenticated user's kd_prod
         $user = auth()->user();
         $userPlant = $user->plant;
-        $userRole = $user->role; // Assuming 'role' is a property on the User model
+        $userRole = $user->role;
         Log::info('Authenticated user plant and role:', ['plant' => $userPlant, 'role' => $userRole]);
 
         // Filter barangs based on matching kode_log and kd_prod
@@ -221,6 +221,45 @@ class BarangController extends Controller
         Log::info('Filtered barangs retrieved', ['barangs_count' => $barangs->count()]);
 
         foreach ($barangs as $barang) {
+            // Check if no_item is null or empty
+            if (empty($barang->no_item)) {
+                // Fetch related logGudang to get kd_prod and kd_gudang
+                $logGudang = $barang->logGudang()->where('kd_log', $barang->kode_log)->first();
+                if ($logGudang) {
+                    // Format: kd_akun-kd_prod-kd_gudang-0000
+                    $kd_akun = $barang->kd_akun;
+                    $kd_prod = $logGudang->kd_prod;
+                    $kd_gudang = $logGudang->kd_log;
+
+                    // Generate the next increment number
+                    $lastItem = barang::where('kd_akun', $kd_akun)
+                        ->whereHas('logGudang', function ($query) use ($kd_prod, $kd_gudang) {
+                            $query->where('kd_prod', $kd_prod)
+                                  ->where('kd_log', $kd_gudang);
+                        })
+                        ->orderBy('no_item', 'desc')
+                        ->first();
+
+                    $increment = 1; // Default starting value
+                    if ($lastItem && preg_match('/-(\d+)$/', $lastItem->no_item, $matches)) {
+                        $increment = (int)$matches[1] + 1;
+                    }
+
+                    $barang->no_item = "{$kd_akun}-{$kd_prod}-{$kd_gudang}-" . str_pad($increment, 4, '0', STR_PAD_LEFT);
+                    Log::info('Generated no_item for barang', ['barang_id' => $barang->id, 'no_item' => $barang->no_item]);
+                }
+            }
+
+            // Check if no_barcode is null or empty
+            if (empty($barang->no_barcode)) {
+                $barang->no_barcode = 'SB-' . Str::random(8); // Example of a structured barcode
+                Log::info('Generated random barcode for barang', ['barang_id' => $barang->id, 'no_barcode' => $barang->no_barcode]);
+            }
+
+            // Save the barang with the updated no_item and no_barcode
+            $barang->save();
+
+            // Generate the QR code for display purposes only (but do not save it to the database)
             $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
             Log::info('QR code generated for barang', ['barang_id' => $barang->id]);
         }
@@ -229,6 +268,9 @@ class BarangController extends Controller
 
         return view('barangs.index', compact('barangs', 'orders', 'institusi', 'unitkerja'));
     }
+
+
+
 
 
 
