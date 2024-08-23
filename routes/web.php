@@ -89,6 +89,10 @@ Route::get('/saldobulanan', function () {
     return view('report.saldobulanan');
 })->middleware(['auth'])->name('saldobulanan');
 
+
+// Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
+
+
 Route::get('/cancelhistory', function () {
     return view('report.cancelhistory');
 })->middleware(['auth'])->name('cancelhistory');
