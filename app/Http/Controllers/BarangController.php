@@ -15,8 +15,11 @@ use App\Models\StockSummary;
 use Illuminate\Http\Request;
 use App\Models\CancelHistory;
 use App\Models\KodeInstitusi;
+use App\Imports\BarangsImport;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BarangController extends Controller
@@ -267,6 +270,32 @@ class BarangController extends Controller
         Log::info('Index method finished.');
 
         return view('barangs.index', compact('barangs', 'orders', 'institusi', 'unitkerja'));
+    }
+
+    public function import(Request $request)
+    {
+
+        $file = $request->file('file');
+
+        // membuat nama file unik
+        $nama_file = $file->hashName();
+
+        //temporary file
+        $path = $file->storeAs('public/excel/',$nama_file);
+
+        // import data
+        $import = Excel::import(new BarangsImport(), storage_path('app/public/excel/'.$nama_file));
+
+        //remove from server
+        Storage::delete($path);
+
+        if($import) {
+            //redirect
+            return redirect()->back()->with('success', 'Data imported successfully!');
+        } else {
+            //redirect
+            return redirect()->back()->with('error', 'Data imported successfully!');
+        }
     }
 
 

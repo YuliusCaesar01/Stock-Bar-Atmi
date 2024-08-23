@@ -134,6 +134,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/barangs/search', [BarangController::class, 'searchAndExit'])->name('barangs.search');
 });
 
+Route::post('/barangs/import', [BarangController::class, 'import'])->name('barangs.import');
+
 Route::get('/clock', [ClockController::class, 'showClock']);
 
 require __DIR__.'/auth.php';

@@ -124,6 +124,9 @@
                     <button data-modal-target="qr-modal" data-modal-toggle="qr-modal" id="scan-qr-btn"
                         class="ms-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">QR
                         Scan</button>
+                    <button data-modal-target="import-modal" data-modal-toggle="import-modal"
+                        class="ms-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Import
+                        Data</button>
                 </div>
             </div>
         </div>
@@ -235,7 +238,7 @@
                     </div>
                     <div class="flex justify-end">
                         <button type="button"
-                            class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
+                            class="mb-3 me-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="entry-modal">Cancel</button>
                         <button type="submit"
                             class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
@@ -450,6 +453,43 @@
         </div>
     </div>
 
+    <!-- Import Modal -->
+    <div id="import-modal" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        Import Data
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                        data-modal-toggle="import-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <div class="ms-3 mt-3 flex">
+                        <form action="{{ route('barangs.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" class="text-gray-800 rounded-lg border" required>
+                            <button type="submit"
+                                class="mb-3 text-gray-100 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm px-5 py-2.5 me-2">Import
+                                Data</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     {{-- Footer --}}
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
@@ -607,7 +647,7 @@
             $('tbody tr').each(function() {
                 var cells = $(this).find('td');
                 var rowBarcodeId = cells.eq(19).text()
-            .trim(); // Assuming the barcode is in the last column (index 18)
+                    .trim(); // Assuming the barcode is in the last column (index 18)
 
                 if (rowBarcodeId === barcode_id) {
                     found = true;
