@@ -15,8 +15,11 @@ namespace Tests\Carbon;
 
 use BadMethodCallException;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Carbon\Month;
+use Carbon\Unit;
 use Carbon\WeekDay;
+use DateInterval;
 use DateTime;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
@@ -812,6 +815,90 @@ class IsTest extends AbstractTestCase
         $this->assertFalse(Carbon::now()->addMonth()->previous(Carbon::SUNDAY)->isSaturday());
     }
 
+    public function testIsStartOfMillisecond()
+    {
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999999')->isStartOfMillisecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45')->isStartOfMillisecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.123')->isStartOfMillisecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.000001')->isStartOfMillisecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999999')->isStartOfMillisecond());
+    }
+
+    public function testIsEndOfMillisecond()
+    {
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.999999')->isEndOfMillisecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45')->isEndOfMillisecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.999999')->isEndOfMillisecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999998')->isEndOfMillisecond());
+    }
+
+    public function testIsStartOfSecond()
+    {
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999999')->isStartOfSecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45')->isStartOfSecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.000001')->isStartOfSecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999999')->isStartOfSecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45')->isStartOfSecond(Unit::Millisecond));
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.000999')->isStartOfSecond(Unit::Millisecond));
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.001')->isStartOfSecond(Unit::Millisecond));
+    }
+
+    public function testIsEndOfSecond()
+    {
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.999999')->isEndOfSecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45')->isEndOfSecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.999999')->isEndOfSecond());
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:45.999998')->isEndOfSecond());
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.999998')->isEndOfSecond(Unit::Second));
+        $this->assertTrue(Carbon::parse('2025-01-30 21:33:45.123456')->isEndOfSecond(Unit::Second));
+    }
+
+    public function testIsStartOfMinute()
+    {
+        $this->assertFalse(Carbon::parse('2025-01-30 21:33:59.999999')->isStartOfMinute());
+        $this->assertTrue(Carbon::parse('2025-01-01 22:34:00')->isStartOfMinute());
+        $this->assertFalse(Carbon::parse('2025-01-01 22:34:00.000001')->isStartOfMinute());
+        $this->assertFalse(Carbon::parse('2025-01-01 21:33:59.999999')->isStartOfMinute());
+        $this->assertTrue(Carbon::parse('2025-01-31 22:34:00')->isStartOfMinute(Unit::Second));
+        $this->assertTrue(Carbon::parse('2025-01-31 22:34:00.999999')->isStartOfMinute(Unit::Second));
+        $this->assertFalse(Carbon::parse('2025-02-01 22:34:01')->isStartOfMinute(Unit::Second));
+        $this->assertFalse(Carbon::parse('2025-01-02 21:33:59.999999')->isStartOfMinute());
+        $this->assertFalse(Carbon::parse('2025-12-31 21:33:59.999999')->isStartOfMinute());
+    }
+
+    public function testIsEndOfMinute()
+    {
+        $this->assertTrue(Carbon::parse('2024-05-16 12:34:59.999999')->isEndOfMinute());
+        $this->assertFalse(Carbon::parse('2024-05-16 12:35:00')->isEndOfMinute());
+        $this->assertTrue(Carbon::parse('2024-05-16 12:34:59.999999')->isEndOfMinute());
+        $this->assertFalse(Carbon::parse('2024-05-16 12:34:59.999998')->isEndOfMinute());
+        $this->assertTrue(Carbon::parse('2024-05-16 12:34:59.999998')->isEndOfMinute(Unit::Second));
+        $this->assertTrue(Carbon::parse('2024-05-16 12:34:59.123456')->isEndOfMinute(Unit::Second));
+    }
+
+    public function testIsStartOfHour()
+    {
+        $this->assertFalse(Carbon::parse('2025-01-30 21:59:59.999999')->isStartOfHour());
+        $this->assertTrue(Carbon::parse('2025-01-01 22:00:00')->isStartOfHour());
+        $this->assertFalse(Carbon::parse('2025-01-01 22:00:00.000001')->isStartOfHour());
+        $this->assertFalse(Carbon::parse('2025-01-01 21:59:59.999999')->isStartOfHour());
+        $this->assertTrue(Carbon::parse('2025-01-31 22:00:00')->isStartOfHour(Unit::Second));
+        $this->assertTrue(Carbon::parse('2025-01-31 22:00:00.999999')->isStartOfHour(Unit::Second));
+        $this->assertFalse(Carbon::parse('2025-02-01 22:00:01')->isStartOfHour(Unit::Second));
+        $this->assertFalse(Carbon::parse('2025-01-02 21:59:59.999999')->isStartOfHour());
+        $this->assertFalse(Carbon::parse('2025-12-31 21:59:59.999999')->isStartOfHour());
+    }
+
+    public function testIsEndOfHour()
+    {
+        $this->assertTrue(Carbon::parse('2024-05-16 23:59:59.999999')->isEndOfHour());
+        $this->assertFalse(Carbon::parse('2024-05-16 00:00:00')->isEndOfHour());
+        $this->assertTrue(Carbon::parse('2024-05-16 23:59:59.999999')->isEndOfHour());
+        $this->assertFalse(Carbon::parse('2024-05-16 23:59:59.999998')->isEndOfHour());
+        $this->assertTrue(Carbon::parse('2024-05-16 23:59:59.999998')->isEndOfHour(Unit::Second));
+        $this->assertTrue(Carbon::parse('2024-05-16 23:59:59.123456')->isEndOfHour(Unit::Second));
+    }
+
     public function testIsStartOfDay()
     {
         $this->assertTrue(Carbon::parse('00:00:00')->isStartOfDay(false));
@@ -835,6 +922,53 @@ class IsTest extends AbstractTestCase
         $this->assertTrue(Carbon::now()->startOfDay()->isStartOfDay(true));
 
         $this->assertFalse(Carbon::parse('00:00:00.000001')->isStartOfDay(true));
+    }
+
+    public function testIsStartOfDayInterval()
+    {
+        $this->assertTrue(Carbon::parse('00:00:00')->isStartOfDay('15 minutes'));
+        $this->assertTrue(Carbon::parse('00:14:59.999999')->isStartOfDay('15 minutes'));
+        $this->assertFalse(Carbon::parse('00:15:00')->isStartOfDay('15 minutes'));
+        $this->assertTrue(Carbon::parse('00:59:59.999999')->isStartOfDay(Unit::Hour));
+        $this->assertFalse(Carbon::parse('01:00:00')->isStartOfDay(Unit::Hour));
+        $this->assertTrue(Carbon::parse('00:00:59.999999')->isStartOfDay(new DateInterval('PT1M')));
+        $this->assertFalse(Carbon::parse('00:01:00')->isStartOfDay(new DateInterval('PT1M')));
+
+        $this->assertTrue(Carbon::parse('00:00:00')->isStartOfDay(interval: '15 minutes'));
+        $this->assertTrue(Carbon::parse('00:14:59.999999')->isStartOfDay(interval: '15 minutes'));
+        $this->assertFalse(Carbon::parse('00:15:00')->isStartOfDay(interval: '15 minutes'));
+        $this->assertTrue(Carbon::parse('00:59:59.999999')->isStartOfDay(interval: Unit::Hour));
+        $this->assertFalse(Carbon::parse('01:00:00')->isStartOfDay(interval: Unit::Hour));
+        $this->assertTrue(Carbon::parse('00:00:59.999999')->isStartOfDay(interval: new DateInterval('PT1M')));
+        $this->assertFalse(Carbon::parse('00:01:00')->isStartOfDay(interval: new DateInterval('PT1M')));
+
+        $this->assertTrue(Carbon::parse('00:01:59.999999')->isStartOfDay(interval: CarbonInterval::minutes(2)));
+        $this->assertFalse(Carbon::parse('00:02:00')->isStartOfDay(interval: CarbonInterval::minutes(2)));
+
+        // Always false with negative interval
+        $this->assertFalse(Carbon::parse('00:00:00')->isStartOfDay(interval: CarbonInterval::minutes(-2)));
+
+        // Always true with  interval bigger than 1 day
+        $this->assertTrue(Carbon::parse('23:59:59.999999')->isStartOfDay(interval: CarbonInterval::hours(36)));
+    }
+
+    public function testIsStartOfUnit()
+    {
+        $this->assertTrue(Carbon::parse('00:00:00')->isStartOfUnit(Unit::Hour));
+
+        $this->assertFalse(Carbon::parse('00:00:00.000001')->isStartOfUnit(Unit::Hour));
+        $this->assertFalse(Carbon::parse('00:00:01')->isStartOfUnit(Unit::Hour));
+
+        $this->assertTrue(Carbon::parse('00:00:00')->isStartOfUnit(Unit::Hour, '5 minutes'));
+        $this->assertTrue(Carbon::parse('00:04:59.999999')->isStartOfUnit(Unit::Hour, '5 minutes'));
+
+        $this->assertFalse(Carbon::parse('00:05:00')->isStartOfUnit(Unit::Hour, '5 minutes'));
+
+        $this->assertTrue(Carbon::parse('Monday')->isStartOfUnit(Unit::Week));
+        $this->assertTrue(Carbon::parse('Monday 23:59:59.999999')->isStartOfUnit(Unit::Week));
+
+        $this->assertFalse(Carbon::parse('Tuesday')->isStartOfUnit(Unit::Week));
+        $this->assertFalse(Carbon::parse('Monday')->isStartOfUnit(Unit::Week, CarbonInterval::day(-1)));
     }
 
     public function testIsEndOfDay()
@@ -861,6 +995,221 @@ class IsTest extends AbstractTestCase
 
         $this->assertFalse(Carbon::parse('23:59:59')->isEndOfDay(true));
         $this->assertFalse(Carbon::parse('23:59:59.999998')->isEndOfDay(true));
+    }
+
+    public function testIsEndOfDayInterval()
+    {
+        $this->assertTrue(Carbon::parse('23:59:59.999999')->isEndOfDay('15 minutes'));
+        $this->assertTrue(Carbon::parse('23:45:00')->isEndOfDay('15 minutes'));
+        $this->assertFalse(Carbon::parse('23:44:59.999999')->isEndOfDay('15 minutes'));
+        $this->assertTrue(Carbon::parse('23:00:00')->isEndOfDay(Unit::Hour));
+        $this->assertFalse(Carbon::parse('22:59:59.999999')->isEndOfDay(Unit::Hour));
+        $this->assertTrue(Carbon::parse('23:59:00')->isEndOfDay(new DateInterval('PT1M')));
+        $this->assertFalse(Carbon::parse('23:58:59.999999')->isEndOfDay(new DateInterval('PT1M')));
+
+        $this->assertTrue(Carbon::parse('23:59:59.999999')->isEndOfDay(interval: '15 minutes'));
+        $this->assertTrue(Carbon::parse('23:45:00')->isEndOfDay(interval: '15 minutes'));
+        $this->assertFalse(Carbon::parse('23:44:59.999999')->isEndOfDay(interval: '15 minutes'));
+        $this->assertTrue(Carbon::parse('23:00:00')->isEndOfDay(interval: Unit::Hour));
+        $this->assertFalse(Carbon::parse('22:59:59.999999')->isEndOfDay(interval: Unit::Hour));
+        $this->assertTrue(Carbon::parse('23:59:00')->isEndOfDay(interval: new DateInterval('PT1M')));
+        $this->assertFalse(Carbon::parse('23:58:59.999999')->isEndOfDay(interval: new DateInterval('PT1M')));
+
+        // Always false with negative interval
+        $this->assertFalse(Carbon::parse('00:00:00')->isEndOfDay(interval: CarbonInterval::minutes(-2)));
+
+        // Always true with  interval bigger than 1 day
+        $this->assertTrue(Carbon::parse('23:59:59.999999')->isEndOfDay(interval: CarbonInterval::hours(36)));
+    }
+
+    public function testIsEndOfUnit()
+    {
+        $this->assertTrue(Carbon::parse('23:59:59.999999')->isEndOfUnit(Unit::Hour));
+
+        $this->assertFalse(Carbon::parse('23:59:59.999998')->isEndOfUnit(Unit::Hour));
+        $this->assertFalse(Carbon::parse('23:59:59')->isEndOfUnit(Unit::Hour));
+
+        $this->assertTrue(Carbon::parse('23:55:00.000001')->isEndOfUnit(Unit::Hour, '5 minutes'));
+        $this->assertTrue(Carbon::parse('23:55:00')->isEndOfUnit(Unit::Hour, '5 minutes'));
+
+        $this->assertFalse(Carbon::parse('23:54:59.999999')->isEndOfUnit(Unit::Hour, '5 minutes'));
+
+        $this->assertTrue(Carbon::parse('Sunday 23:59:59')->isEndOfUnit(Unit::Week, '2 days'));
+        $this->assertTrue(Carbon::parse('Saturday 00:00')->isEndOfUnit(Unit::Week, '2 days'));
+
+        $this->assertFalse(Carbon::parse('Saturday 00:00')->isEndOfUnit(Unit::Week));
+        $this->assertFalse(Carbon::parse('Friday 23:59:59.999999')->isEndOfUnit(Unit::Week, '2 days'));
+        $this->assertFalse(Carbon::parse('Sunday 23:59:59.999999')->isEndOfUnit(Unit::Week, CarbonInterval::day(-1)));
+    }
+
+    public function testIsStartOfWeek()
+    {
+        $this->assertTrue(Carbon::parse('Monday 01:06:12')->isStartOfWeek());
+        $this->assertFalse(Carbon::parse('Saturday 01:06:12')->isStartOfWeek());
+
+        Carbon::setLocale('ar');
+
+        $this->assertTrue(Carbon::parse('Saturday 01:06:12')->isStartOfWeek());
+        $this->assertFalse(Carbon::parse('Monday 01:06:12')->isStartOfWeek());
+
+        $this->assertTrue(Carbon::parse('Sunday 01:06:12')->isStartOfWeek(weekStartsAt: WeekDay::Sunday));
+        $this->assertFalse(Carbon::parse('Saturday 01:06:12')->isStartOfWeek(weekStartsAt: WeekDay::Sunday));
+
+        $this->assertTrue(Carbon::parse('Saturday 01:06:12')->isStartOfWeek('2 hours'));
+        $this->assertFalse(Carbon::parse('Saturday 01:06:12')->isStartOfWeek('1 hour'));
+    }
+
+    public function testIsEndOfWeek()
+    {
+        $this->assertTrue(Carbon::parse('Sunday 01:06:12')->isEndOfWeek());
+        $this->assertFalse(Carbon::parse('Friday 01:06:12')->isEndOfWeek());
+
+        Carbon::setLocale('ar');
+
+        $this->assertTrue(Carbon::parse('Friday 01:06:12')->isEndOfWeek());
+        $this->assertFalse(Carbon::parse('Sunday 01:06:12')->isEndOfWeek());
+
+        $this->assertTrue(Carbon::parse('Saturday 01:06:12')->isEndOfWeek(weekEndsAt: WeekDay::Saturday));
+        $this->assertFalse(Carbon::parse('Friday 01:06:12')->isEndOfWeek(weekEndsAt: WeekDay::Saturday));
+
+        $this->assertTrue(Carbon::parse('Friday 22:06:12')->isEndOfWeek('2 hours'));
+        $this->assertFalse(Carbon::parse('Saturday 22:06:12')->isEndOfWeek('1 hour'));
+    }
+
+    public function testIsStartOfMonth()
+    {
+        $this->assertFalse(Carbon::parse('2024-01-31 23:59:59.999999')->isStartOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-01 00:00:00')->isStartOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-01 23:59:59.999999')->isStartOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-01 00:00:00')->isStartOfMonth(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2024-02-01 00:00:00.000001')->isStartOfMonth(Unit::Microsecond));
+        $this->assertTrue(Carbon::parse('2024-02-01 00:00:59')->isStartOfMonth(Unit::Minute));
+        $this->assertFalse(Carbon::parse('2024-02-01 00:01:00')->isStartOfMonth(Unit::Minute));
+        $this->assertFalse(Carbon::parse('2024-02-02 23:59:59.999999')->isStartOfMonth());
+        $this->assertFalse(Carbon::parse('2024-02-29 23:59:59.999999')->isStartOfMonth());
+    }
+
+    public function testIsEndOfMonth()
+    {
+        $this->assertTrue(Carbon::parse('2024-01-31 23:59:59.999999')->isEndOfMonth());
+        $this->assertFalse(Carbon::parse('2024-02-01 00:00:00')->isEndOfMonth());
+        $this->assertFalse(Carbon::parse('2024-02-28 23:59:59.999999')->isEndOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-29 00:00:00')->isEndOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-29 23:59:59.999999')->isEndOfMonth());
+        $this->assertTrue(Carbon::parse('2024-02-29 23:59:59.999999')->isEndOfMonth(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2024-02-29 23:59:59.999998')->isEndOfMonth(Unit::Microsecond));
+    }
+
+    public function testIsStartOfQuarter()
+    {
+        $this->assertFalse(Carbon::parse('2024-01-31 23:59:59.999999')->isStartOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-01-01 00:00:00')->isStartOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-01-01 23:59:59.999999')->isStartOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-01-01 00:00:00')->isStartOfQuarter(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2024-01-01 00:00:00.000001')->isStartOfQuarter(Unit::Microsecond));
+        $this->assertTrue(Carbon::parse('2024-01-01 00:00:59')->isStartOfQuarter(Unit::Minute));
+        $this->assertFalse(Carbon::parse('2024-01-01 00:01:00')->isStartOfQuarter(Unit::Minute));
+        $this->assertFalse(Carbon::parse('2024-01-02 23:59:59.999999')->isStartOfQuarter());
+        $this->assertFalse(Carbon::parse('2024-03-31 23:59:59.999999')->isStartOfQuarter());
+    }
+
+    public function testIsEndOfQuarter()
+    {
+        $this->assertTrue(Carbon::parse('2024-12-31 23:59:59.999999')->isEndOfQuarter());
+        $this->assertFalse(Carbon::parse('2024-03-01 00:00:00')->isEndOfQuarter());
+        $this->assertFalse(Carbon::parse('2024-03-30 23:59:59.999999')->isEndOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-03-31 00:00:00')->isEndOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-03-31 23:59:59.999999')->isEndOfQuarter());
+        $this->assertTrue(Carbon::parse('2024-03-31 23:59:59.999999')->isEndOfQuarter(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2024-03-31 23:59:59.999998')->isEndOfQuarter(Unit::Microsecond));
+    }
+
+    public function testIsStartOfYear()
+    {
+        $this->assertFalse(Carbon::parse('2024-01-31 23:59:59.999999')->isStartOfYear());
+        $this->assertTrue(Carbon::parse('2024-01-01 00:00:00')->isStartOfYear());
+        $this->assertTrue(Carbon::parse('2024-01-01 23:59:59.999999')->isStartOfYear());
+        $this->assertTrue(Carbon::parse('2024-01-31 00:00:00')->isStartOfYear(Unit::Month));
+        $this->assertFalse(Carbon::parse('2024-02-01 00:00:00')->isStartOfYear(Unit::Month));
+        $this->assertFalse(Carbon::parse('2024-01-02 23:59:59.999999')->isStartOfYear());
+        $this->assertFalse(Carbon::parse('2024-12-31 23:59:59.999999')->isStartOfYear());
+    }
+
+    public function testIsEndOfYear()
+    {
+        $this->assertTrue(Carbon::parse('2024-12-31 23:59:59.999999')->isEndOfYear());
+        $this->assertFalse(Carbon::parse('2024-03-01 00:00:00')->isEndOfYear());
+        $this->assertFalse(Carbon::parse('2024-03-30 23:59:59.999999')->isEndOfYear());
+        $this->assertTrue(Carbon::parse('2024-12-31 00:00:00')->isEndOfYear());
+        $this->assertTrue(Carbon::parse('2024-12-31 23:59:59.999999')->isEndOfYear());
+        $this->assertTrue(Carbon::parse('2024-12-31 23:59:59.999999')->isEndOfYear(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2024-12-31 23:59:59.999998')->isEndOfYear(Unit::Microsecond));
+    }
+
+    public function testIsStartOfDecade()
+    {
+        $this->assertFalse(Carbon::parse('2019-01-31 23:59:59.999999')->isStartOfDecade());
+        $this->assertTrue(Carbon::parse('2020-01-01 00:00:00')->isStartOfDecade());
+        $this->assertTrue(Carbon::parse('2020-01-01 23:59:59.999999')->isStartOfDecade());
+        $this->assertTrue(Carbon::parse('2020-01-31 00:00:00')->isStartOfDecade(Unit::Month));
+        $this->assertFalse(Carbon::parse('2020-02-01 00:00:00')->isStartOfDecade(Unit::Month));
+        $this->assertFalse(Carbon::parse('2020-01-02 23:59:59.999999')->isStartOfDecade());
+        $this->assertFalse(Carbon::parse('2029-12-31 23:59:59.999999')->isStartOfDecade());
+    }
+
+    public function testIsEndOfDecade()
+    {
+        $this->assertTrue(Carbon::parse('2019-12-31 23:59:59.999999')->isEndOfDecade());
+        $this->assertFalse(Carbon::parse('2020-01-01 00:00:00')->isEndOfDecade());
+        $this->assertFalse(Carbon::parse('2020-01-30 23:59:59.999999')->isEndOfDecade());
+        $this->assertTrue(Carbon::parse('2029-12-31 00:00:00')->isEndOfDecade());
+        $this->assertTrue(Carbon::parse('2029-12-31 23:59:59.999999')->isEndOfDecade());
+        $this->assertTrue(Carbon::parse('2029-12-31 23:59:59.999999')->isEndOfDecade(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2029-12-31 23:59:59.999998')->isEndOfDecade(Unit::Microsecond));
+    }
+
+    public function testIsStartOfCentury()
+    {
+        $this->assertFalse(Carbon::parse('2000-01-31 23:59:59.999999')->isStartOfCentury());
+        $this->assertTrue(Carbon::parse('2001-01-01 00:00:00')->isStartOfCentury());
+        $this->assertTrue(Carbon::parse('2001-01-01 23:59:59.999999')->isStartOfCentury());
+        $this->assertTrue(Carbon::parse('2001-01-31 00:00:00')->isStartOfCentury(Unit::Month));
+        $this->assertFalse(Carbon::parse('2001-02-01 00:00:00')->isStartOfCentury(Unit::Month));
+        $this->assertFalse(Carbon::parse('2001-01-02 23:59:59.999999')->isStartOfCentury());
+        $this->assertFalse(Carbon::parse('2100-12-31 23:59:59.999999')->isStartOfCentury());
+    }
+
+    public function testIsEndOfCentury()
+    {
+        $this->assertTrue(Carbon::parse('2000-12-31 23:59:59.999999')->isEndOfCentury());
+        $this->assertFalse(Carbon::parse('2001-01-01 00:00:00')->isEndOfCentury());
+        $this->assertFalse(Carbon::parse('2001-01-30 23:59:59.999999')->isEndOfCentury());
+        $this->assertTrue(Carbon::parse('2100-12-31 00:00:00')->isEndOfCentury());
+        $this->assertTrue(Carbon::parse('2100-12-31 23:59:59.999999')->isEndOfCentury());
+        $this->assertTrue(Carbon::parse('2100-12-31 23:59:59.999999')->isEndOfCentury(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('2100-12-31 23:59:59.999998')->isEndOfCentury(Unit::Microsecond));
+    }
+
+    public function testIsStartOfMillennium()
+    {
+        $this->assertFalse(Carbon::parse('2000-01-31 23:59:59.999999')->isStartOfMillennium());
+        $this->assertTrue(Carbon::parse('2001-01-01 00:00:00')->isStartOfMillennium());
+        $this->assertTrue(Carbon::parse('2001-01-01 23:59:59.999999')->isStartOfMillennium());
+        $this->assertTrue(Carbon::parse('2001-01-31 00:00:00')->isStartOfMillennium(Unit::Month));
+        $this->assertFalse(Carbon::parse('2001-02-01 00:00:00')->isStartOfMillennium(Unit::Month));
+        $this->assertFalse(Carbon::parse('2001-01-02 23:59:59.999999')->isStartOfMillennium());
+        $this->assertFalse(Carbon::parse('3000-12-31 23:59:59.999999')->isStartOfMillennium());
+    }
+
+    public function testIsEndOfMillennium()
+    {
+        $this->assertTrue(Carbon::parse('2000-12-31 23:59:59.999999')->isEndOfMillennium());
+        $this->assertFalse(Carbon::parse('2001-01-01 00:00:00')->isEndOfMillennium());
+        $this->assertFalse(Carbon::parse('2001-01-30 23:59:59.999999')->isEndOfMillennium());
+        $this->assertTrue(Carbon::parse('3000-12-31 00:00:00')->isEndOfMillennium());
+        $this->assertTrue(Carbon::parse('3000-12-31 23:59:59.999999')->isEndOfMillennium());
+        $this->assertTrue(Carbon::parse('3000-12-31 23:59:59.999999')->isEndOfMillennium(Unit::Microsecond));
+        $this->assertFalse(Carbon::parse('3000-12-31 23:59:59.999998')->isEndOfMillennium(Unit::Microsecond));
     }
 
     public function testIsMidnight()

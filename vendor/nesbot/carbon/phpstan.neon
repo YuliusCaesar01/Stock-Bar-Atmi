@@ -1,7 +1,6 @@
 parameters:
     scanFiles:
         - lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php
-        - lazy/Carbon/PHPStan/MacroStrongType.php
         - lazy/Carbon/TranslatorStrongType.php
         - lazy/Carbon/UnprotectedDatePeriod.php
         - tests/Fixtures/DateMalformedIntervalStringException.php
@@ -28,11 +27,9 @@ parameters:
         - '#should return (\S*)(static|\$this)\(Carbon\\CarbonImmutable\)(\|null)? but returns Carbon\\Carbon(Immutable|Interface)(\|null)?\.$#'
         - '#should return (\S*)\$this\(Carbon\\CarbonInterval\)(\|null)? but returns static\(Carbon\\CarbonInterval\)(\|null)?\.$#'
         - '#should return (\S*)static\(Carbon\\CarbonInterval\)(\|null)? but returns Carbon\\CarbonInterval(\|null)?\.$#'
-        - '#^Access to an undefined property DatePeriod::\$include_end_date\.$#'
-        - '#^Call to an undefined method DatePeriod::[a-zA-Z]+\(\)\.$#'
         - '#^Call to an undefined method DateInterval::(spec|optimize)\(\)\.$#'
         - '#^Property Carbon\\Carbon::\$timezone \(Carbon\\CarbonTimeZone\) does not accept string\.$#'
-        - '#^Method class@anonymous/tests/Carbon/TestingAidsTest\.php:\d+::modify\(\) should return class@anonymous/tests/Carbon/TestingAidsTest\.php:\d+ but returns \(DateTimeImmutable\|false\)\.$#'
+        - '#^Method class@anonymous/tests/Carbon/TestingAidsTest\.php:\d+::modify\(\) should return class@anonymous/tests/Carbon/TestingAidsTest\.php:\d+ but returns \(?DateTimeImmutable#'
         -
             message: '#^Undefined variable: \$this$#'
             paths:
@@ -58,9 +55,18 @@ parameters:
             paths:
                 - tests/CarbonImmutable/GettersTest.php
         -
-            message: '#^Access to an undefined property Carbon\\CarbonInterval::\$tz_?name\.$#'
+            message: '#^Access to an undefined property Carbon\\CarbonInterval::\$tz_?[Nn]ame\.$#'
             paths:
+                - tests/CarbonInterval/GettersTest.php
                 - tests/CarbonInterval/SettersTest.php
+        -
+            message: '#^Access to an undefined property Carbon\\CarbonPeriod::\$(include)?(Start|End)Date\.$#'
+            paths:
+                - tests/CarbonPeriod/GettersTest.php
+        -
+            message: '#^Access to protected property Carbon\\CarbonPeriod::\$endDate\.$#'
+            paths:
+                - tests/CarbonPeriod/GettersTest.php
         -
             message: '#^Cannot access property \$locale on Carbon\\CarbonPeriod\|string\.$#'
             paths:
