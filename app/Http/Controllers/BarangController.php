@@ -16,11 +16,14 @@ use Illuminate\Http\Request;
 use App\Models\CancelHistory;
 use App\Models\KodeInstitusi;
 use App\Imports\BarangsImport;
+use App\Models\BarangSummary;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\DB;
+
 
 class BarangController extends Controller
 {
@@ -782,6 +785,48 @@ class BarangController extends Controller
 
         Log::warning('No log IDs were selected for deletion.');
         return redirect()->back()->with('error', 'No logs were selected.');
+    }
+
+
+    public function stockRecap()
+{
+    // Get summaries for multiple days
+    $summaries = BarangSummary::select('barang_id', 'summary_date', 'total_entry', 'total_exit')
+        ->with('barang') // Assuming there's a relation 'barang' in BarangSummary
+        ->orderBy('summary_date', 'desc')
+        ->get()
+        ->groupBy('summary_date');
+
+    // Prepare $summaryPerDay for the view
+    $summaryPerDay = $summaries->map(function ($summariesForDate, $date) {
+        return $summariesForDate->map(function ($summary) {
+            $barang = $summary->barang;
+
+            // Get the stock_awal from the day before this summary_date
+            $stockAwal = Barang::where('id', $summary->barang_id)
+                ->whereDate('updated_at', '<', $summary->summary_date)
+                ->orderBy('updated_at', 'desc')
+                ->value('jumlah');
+
+            if (is_null($stockAwal)) {
+                $stockAwal = 0; // Handle case where no previous stock is found
+            }
+
+            // Calculate stock_akhir
+            $stockAkhir = $stockAwal + $summary->total_entry - $summary->total_exit;
+
+            return [
+                'nama_barang'   => $barang->nama_barang,
+                'stock_awal'    => $stockAwal,
+                'barang_masuk'  => $summary->total_entry,
+                'barang_keluar' => $summary->total_exit,
+                'stock_akhir'   => $stockAkhir,
+                'summary_date'  => $summary->summary_date,
+            ];
+        });
+    });
+
+    return view('report.saldobulanan', compact('summaryPerDay'));
     }
 
 }
