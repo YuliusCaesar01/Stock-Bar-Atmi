@@ -27,6 +27,7 @@ class BarangLog extends Model
         'jenis',
         'kd_log',
         'no_barang',
+        'nama_barang'
         // Add other fields if needed
     ];
 

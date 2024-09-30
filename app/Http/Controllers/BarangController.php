@@ -13,16 +13,17 @@ use App\Models\namabarang;
 use Illuminate\Support\Str;
 use App\Models\StockSummary;
 use Illuminate\Http\Request;
+use App\Models\BarangSummary;
 use App\Models\CancelHistory;
 use App\Models\KodeInstitusi;
 use App\Imports\BarangsImport;
-use App\Models\BarangSummary;
 use Illuminate\Support\Carbon;
+use App\Models\DailyStockRecap;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\DB;
 
 
 class BarangController extends Controller
@@ -460,6 +461,7 @@ class BarangController extends Controller
             'harga' => 'required|integer',
             'jumlah_beli' => 'required|integer|min:1',
             'operator' => 'required|string|max:255',
+            'nama_barang' => 'required|string|max:255'
         ]);
 
         // Retrieve the correct barang instance
@@ -474,6 +476,7 @@ class BarangController extends Controller
         $barang->total = $barang->harga * $barang->jumlah;
         $kd_log=$barang->kode_log;
         $no_barang=$barang->no_item;
+        $barang->nama_barang = $validatedData['nama_barang'];
         $barang->save();
 
         // Log the updated barang data
@@ -488,6 +491,7 @@ class BarangController extends Controller
             'operator' => $validatedData['operator'],
             'kd_log' => $kd_log,
             'no_barang' => $no_barang,
+            'nama_barang' => $validatedData['nama_barang'],
             'created_at' => now(),
         ]);
 
@@ -598,6 +602,7 @@ class BarangController extends Controller
                 'jenis' => $validatedData['jenis'],
                 'kd_log' => $kd_log,
                 'no_barang' => $no_barang,
+                'nama_barang' => $validatedData['nama_barang'],
                 'created_at' => now(),
             ]);
 
@@ -828,5 +833,31 @@ class BarangController extends Controller
 
     return view('report.saldobulanan', compact('summaryPerDay'));
     }
+
+
+    public function getDailyStockRecap(Request $request)
+{
+    // Fetch daily stock recap by `nama_barang` and `jumlah`
+    $recap = DB::table('barangs')
+        ->select('nama_barang', DB::raw('SUM(jumlah) as total_jumlah'), DB::raw('DATE(tanggal) as date'))
+        ->groupBy('nama_barang', DB::raw('DATE(tanggal)'))
+        ->get();
+
+    // Insert recap into daily_stock_recaps table
+    foreach ($recap as $item) {
+        DailyStockRecap::updateOrCreate(
+            [
+                'nama_barang' => $item->nama_barang,
+                'recap_date' => $item->date,
+            ],
+            [
+                'total_jumlah' => $item->total_jumlah
+            ]
+        );
+    }
+
+    // Return the recap to the view if needed
+    return view('report.saldobulanan', ['recap' => $recap]);
+}
 
 }
