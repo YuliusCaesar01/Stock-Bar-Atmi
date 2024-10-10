@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kode_institusi', function (Blueprint $table) {
+        Schema::create('recap_barangs', function (Blueprint $table) {
             $table->id();
-            $table->string('kd_ins');
-            $table->string('nama_ins');
+            $table->date('recap_date'); // The date of the recap
+            $table->string('no_item');
+            $table->string('nama_barang');
+            $table->string('kode_log');
+            $table->integer('jumlah'); // Total quantity
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kode_institusi');
+        Schema::dropIfExists('recap_barangs');
     }
 };

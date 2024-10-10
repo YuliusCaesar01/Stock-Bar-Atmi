@@ -9,30 +9,48 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
+                    <!-- Button to trigger the recap process -->
+                    <a href="{{ route('saldobulanan') }}" class="btn btn-primary mb-3 dark:text-gray-400">Recap Today's Data</a>
+
+                    <!-- Table to display recap data -->
                     <table id="satuanTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
                             <tr>
-                                <th rowspan="1" scope="col" class="px-6 py-3">Nama Barang</th>
-                                <th colspan="1" scope="col" class="px-6 py-3">Jumlah</th>
-                                <th colspan="1" scope="col" class="px-6 py-3">Date</th>
+                                <th rowspan="2" class="px-6 py-3">Date</th>
+                                <th rowspan="2" class="px-6 py-3">Nomor Item</th>
+                                <th rowspan="2" class="px-6 py-3">Kode Log</th>
+                                <th rowspan="2" class="px-6 py-3">Nama Barang</th>
+                                <th colspan="2" class="px-6 py-3">Saldo Awal</th>
+                            </tr>
+                            <tr>
+                                <th class="px-6 py-3">Qty</th>
+                                <th class="px-6 py-3">Rp</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($recap as $item)
+                            @if ($recaps->isEmpty())
                                 <tr>
-                                    <td>{{ $item->nama_barang }}</td>
-                                    <td>{{ $item->total_jumlah }}</td>
-                                    <td>{{ $item->date }}</td>
+                                    <td colspan="5">No recap data available.</td>
                                 </tr>
+                            @else
+                                @foreach ($recaps as $recap)
+                                    <tr>
+                                        <td>{{ \Carbon\Carbon::parse($recap->recap_date)->format('d-m-Y') }}</td>
+                                        <td>{{ $recap->no_item }}</td>
+                                        <td>{{ $recap->kode_log }}</td>
+                                        <td>{{ $recap->nama_barang }}</td>
+                                        <td>{{ $recap->jumlah }}</td>
+                                        <td>{{ $recap->harga * $recap->jumlah }}</td>
+                                    </tr>
                                 @endforeach
+                            @endif
                         </tbody>
-                    </table>
+                    </table>                    
                 </div>
             </div>
         </div>
     </div>
-    
-    
+
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-dark-800">
         <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span class="text-sm text-gray-700 sm:text-center dark:text-gray-700">© 2024 <a href="http://atmi.co.id" class="hover:underline">PT. ATMI SOLO</a>. All Rights Reserved.

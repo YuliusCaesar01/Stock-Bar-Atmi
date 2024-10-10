@@ -10,12 +10,14 @@ use App\Models\BarangLog;
 use App\Models\UnitKerja;
 use App\Models\MasterAkun;
 use App\Models\namabarang;
+use App\Models\RecapBarang;
 use Illuminate\Support\Str;
 use App\Models\StockSummary;
 use Illuminate\Http\Request;
 use App\Models\BarangSummary;
 use App\Models\CancelHistory;
 use App\Models\KodeInstitusi;
+use App\Models\RecapsBarangs;
 use App\Imports\BarangsImport;
 use Illuminate\Support\Carbon;
 use App\Models\DailyStockRecap;
@@ -371,6 +373,8 @@ class BarangController extends Controller
                 'barang_id' => $barang->id,
                 'barang_data' => $validated
             ]);
+            // Call the recap method after creating the new barang
+        $this->recapExistingDataToToday(); // Ensure this method is available in the controller
         } catch (\Exception $e) {
             Log::error('Failed to create Barang.', [
                 'exception_message' => $e->getMessage(),
@@ -793,71 +797,115 @@ class BarangController extends Controller
     }
 
 
-    public function stockRecap()
+
+
+
+// public function recapExistingDataToToday()
+// {
+//     Log::info('RecapExistingDataToToday method started.');
+
+//     // Fetch all records from barangs (remove the date condition)
+//     $barangs = barang::all();  // Fetch all barangs
+
+//     Log::info('Fetched barang data for recap', ['count' => $barangs->count()]);
+
+//     foreach ($barangs as $barang) {
+//         // Check if there's already a recap for this no_item for today (optional)
+//         $existingRecap = RecapBarang::where('recap_date', today())
+//             ->where('no_item', $barang->no_item)
+//             ->first();
+
+//         // If no recap for today exists, create a new recap
+//         if (!$existingRecap) {
+//           // Log the harga value to debug it
+//           Log::info('Harga value from barang:', ['harga' => $barang->harga]);
+
+//             RecapBarang::create([
+//                 'recap_date' => today(), // Use today's date for the recap
+//                 'no_item' => $barang->no_item,
+//                 'nama_barang' => $barang->nama_barang,
+//                 'kode_log' => $barang->kode_log,
+//                 'jumlah' => $barang->jumlah,
+//                 'harga' => $barang->harga, // Add harga field
+//             ]);
+
+//             Log::info('Recapped barang for today', [
+//                 'no_item' => $barang->no_item,
+//                 'nama_barang' => $barang->nama_barang,
+//                 'kode_log' => $barang->kode_log,
+//                 'jumlah' => $barang->jumlah,
+//                 'harga' => $barang->harga, // Log harga as well
+//             ]);
+//         } else {
+//             Log::info('Barang already recapped for today', ['no_item' => $barang->no_item]);
+//         }
+//     }
+
+//     Log::info('RecapExistingDataToToday method finished.');
+// }
+
+// public function showRecap()
+// {
+//     // Fetch recapped data, optionally order by date (descending) to show the latest recaps first
+//     $recaps = RecapBarang::orderBy('recap_date', 'desc')->get();
+
+//     // Pass the data to the view
+//     return view('report.saldobulanan', compact('recaps'));
+// }
+
+public function recapExistingDataToTodays()
 {
-    // Get summaries for multiple days
-    $summaries = BarangSummary::select('barang_id', 'summary_date', 'total_entry', 'total_exit')
-        ->with('barang') // Assuming there's a relation 'barang' in BarangSummary
-        ->orderBy('summary_date', 'desc')
-        ->get()
-        ->groupBy('summary_date');
+    Log::info('RecapExistingDataToToday method started.');
 
-    // Prepare $summaryPerDay for the view
-    $summaryPerDay = $summaries->map(function ($summariesForDate, $date) {
-        return $summariesForDate->map(function ($summary) {
-            $barang = $summary->barang;
+    // Fetch all records from barangs (remove the date condition)
+    $barangs = barang::all();  // Fetch all barangs
 
-            // Get the stock_awal from the day before this summary_date
-            $stockAwal = Barang::where('id', $summary->barang_id)
-                ->whereDate('updated_at', '<', $summary->summary_date)
-                ->orderBy('updated_at', 'desc')
-                ->value('jumlah');
+    Log::info('Fetched barang data for recap', ['count' => $barangs->count()]);
 
-            if (is_null($stockAwal)) {
-                $stockAwal = 0; // Handle case where no previous stock is found
-            }
+    foreach ($barangs as $barang) {
+        // Check if there's already a recap for this no_item for today (optional)
+        $existingRecap = RecapsBarangs::where('recap_date', today())
+            ->where('no_item', $barang->no_item)
+            ->first();
 
-            // Calculate stock_akhir
-            $stockAkhir = $stockAwal + $summary->total_entry - $summary->total_exit;
+        // If no recap for today exists, create a new recap
+        if (!$existingRecap) {
+          // Log the harga value to debug it
+          Log::info('Harga value from barang:', ['harga' => $barang->harga]);
 
-            return [
-                'nama_barang'   => $barang->nama_barang,
-                'stock_awal'    => $stockAwal,
-                'barang_masuk'  => $summary->total_entry,
-                'barang_keluar' => $summary->total_exit,
-                'stock_akhir'   => $stockAkhir,
-                'summary_date'  => $summary->summary_date,
-            ];
-        });
-    });
+            RecapsBarangs::create([
+                'recap_date' => today(), // Use today's date for the recap
+                'no_item' => $barang->no_item,
+                'nama_barang' => $barang->nama_barang,
+                'kode_log' => $barang->kode_log,
+                'jumlah' => $barang->jumlah,
+                'harga' => $barang->harga, // Add harga field
+            ]);
 
-    return view('report.saldobulanan', compact('summaryPerDay'));
+            Log::info('Recapped barang for today', [
+                'no_item' => $barang->no_item,
+                'nama_barang' => $barang->nama_barang,
+                'kode_log' => $barang->kode_log,
+                'jumlah' => $barang->jumlah,
+                'harga' => $barang->harga, // Log harga as well
+            ]);
+        } else {
+            Log::info('Barang already recapped for today', ['no_item' => $barang->no_item]);
+        }
     }
 
-
-    public function getDailyStockRecap(Request $request)
-{
-    // Fetch daily stock recap by `nama_barang` and `jumlah`
-    $recap = DB::table('barangs')
-        ->select('nama_barang', DB::raw('SUM(jumlah) as total_jumlah'), DB::raw('DATE(tanggal) as date'))
-        ->groupBy('nama_barang', DB::raw('DATE(tanggal)'))
-        ->get();
-
-    // Insert recap into daily_stock_recaps table
-    foreach ($recap as $item) {
-        DailyStockRecap::updateOrCreate(
-            [
-                'nama_barang' => $item->nama_barang,
-                'recap_date' => $item->date,
-            ],
-            [
-                'total_jumlah' => $item->total_jumlah
-            ]
-        );
-    }
-
-    // Return the recap to the view if needed
-    return view('report.saldobulanan', ['recap' => $recap]);
+    Log::info('RecapExistingDataToToday method finished.');
 }
+
+public function showRecaps()
+{
+    // Fetch recapped data, optionally order by date (descending) to show the latest recaps first
+    $recaps = RecapsBarangs::orderBy('recap_date', 'desc')->get();
+
+    // Pass the data to the view
+    return view('report.saldobulanan', compact('recaps'));
+}
+
+
 
 }
