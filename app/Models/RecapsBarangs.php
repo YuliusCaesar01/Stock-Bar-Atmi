@@ -16,6 +16,8 @@ class RecapsBarangs extends Model
         'jumlah',
         'recap_date',
         'harga',
+        'entry',
+        'exit',
     ];
 
     public $timestamps = false; // if you're not using created_at and updated_at columns

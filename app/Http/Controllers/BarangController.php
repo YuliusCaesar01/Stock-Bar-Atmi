@@ -8,6 +8,7 @@ use App\Models\WPLink;
 use App\Models\ItemAdd;
 use App\Models\BarangLog;
 use App\Models\UnitKerja;
+use App\Models\DailyRecap;
 use App\Models\MasterAkun;
 use App\Models\namabarang;
 use App\Models\RecapBarang;
@@ -304,14 +305,6 @@ class BarangController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -374,7 +367,7 @@ class BarangController extends Controller
                 'barang_data' => $validated
             ]);
             // Call the recap method after creating the new barang
-        $this->recapExistingDataToToday(); // Ensure this method is available in the controller
+        $this->recapExistingDataToTodays(); // Ensure this method is available in the controller
         } catch (\Exception $e) {
             Log::error('Failed to create Barang.', [
                 'exception_message' => $e->getMessage(),
@@ -868,33 +861,70 @@ public function recapExistingDataToTodays()
             ->where('no_item', $barang->no_item)
             ->first();
 
-        // If no recap for today exists, create a new recap
-        if (!$existingRecap) {
-          // Log the harga value to debug it
-          Log::info('Harga value from barang:', ['harga' => $barang->harga]);
+        // Get the last recap data for the same item (no_item)
+        $previousRecap = RecapsBarangs::where('no_item', $barang->no_item)
+            ->orderBy('recap_date', 'desc')
+            ->first();
 
+        $entry = 0;
+        $exit = 0;
+
+        if ($existingRecap) {
+            // If there's already a recap for today, compare it to the current jumlah
+            if ($barang->jumlah > $existingRecap->jumlah) {
+                // Calculate how much has been added and accumulate it
+                $entry = $barang->jumlah - $existingRecap->jumlah;
+                $existingRecap->entry += $entry; // Accumulate the add value
+            } elseif ($barang->jumlah < $existingRecap->jumlah) {
+                // Calculate how much has been subtracted and accumulate it
+                $exit = $existingRecap->jumlah - $barang->jumlah;
+                $existingRecap->exit += $exit; // Accumulate the subtracted value
+            }
+
+            // Update the jumlah for today
+            $existingRecap->update([
+                'jumlah' => $barang->jumlah,
+                'entry' => $existingRecap->entry, // Keep the accumulated add value
+                'exit' => $existingRecap->exit, // Keep the accumulated subtracted value
+            ]);
+
+            Log::info('Updated recap for today', [
+                'no_item' => $barang->no_item,
+                'entry' => $entry,
+                'exit' => $exit,
+            ]);
+        } else {
+            // If no recap exists for today, create one and calculate add/subtracted based on the previous day
+            if ($previousRecap) {
+                if ($barang->jumlah > $previousRecap->jumlah) {
+                    $entry = $barang->jumlah - $previousRecap->jumlah;
+                } elseif ($barang->jumlah < $previousRecap->jumlah) {
+                    $exit = $previousRecap->jumlah - $barang->jumlah;
+                }
+            }
+
+            // Create a new recap for today
             RecapsBarangs::create([
-                'recap_date' => today(), // Use today's date for the recap
+                'recap_date' => today(),
                 'no_item' => $barang->no_item,
                 'nama_barang' => $barang->nama_barang,
                 'kode_log' => $barang->kode_log,
                 'jumlah' => $barang->jumlah,
-                'harga' => $barang->harga, // Add harga field
+                'harga' => $barang->harga,
+                'entry' => $entry, 
+                'exit' => $exit,
             ]);
 
             Log::info('Recapped barang for today', [
                 'no_item' => $barang->no_item,
-                'nama_barang' => $barang->nama_barang,
-                'kode_log' => $barang->kode_log,
                 'jumlah' => $barang->jumlah,
-                'harga' => $barang->harga, // Log harga as well
+                'entry' => $entry,
+                'exit' => $exit,
             ]);
-        } else {
-            Log::info('Barang already recapped for today', ['no_item' => $barang->no_item]);
         }
     }
-
     Log::info('RecapExistingDataToToday method finished.');
+    return view('recap-all-data');
 }
 
 public function showRecaps()
@@ -906,6 +936,35 @@ public function showRecaps()
     return view('report.saldobulanan', compact('recaps'));
 }
 
+// public function dailyRecap(Request $request)
+// {
+//     // Query all barangs and their logs for the day
+//     $recapData = barang::with(['logs' => function($query) use ($date) {
+//         $query->whereDate('created_at', $date);
+//     }])->get();
 
+//     // Loop through each barang and save the recap
+//     foreach ($recapData as $barang) {
+//         $additions = $barang->logs->where('operation', 'add')->sum('jumlah');
+//         $subtractions = $barang->logs->where('operation', 'subtract')->sum('jumlah');
+
+//         // Save the recap to the database
+//         DailyRecap::updateOrCreate(
+//             [
+//                 'nama_barang' => $barang->nama_barang,
+//                 'recap_date' => $date,
+//             ],
+//             [
+//                 'added' => $additions,
+//                 'subtracted' => $subtractions,
+//             ]
+//         );
+//     }
+
+//     // Retrieve the recap data for display
+//     $dailyRecaps = DailyRecap::whereDate('recap_date', $date)->get();
+
+//     return view('barangs.recap', compact('dailyRecaps', 'date'));
+// }
 
 }

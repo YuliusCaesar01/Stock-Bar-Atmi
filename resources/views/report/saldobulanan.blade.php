@@ -10,7 +10,7 @@
             <div class="bg-white">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
                     <!-- Button to trigger the recap process -->
-                    <a href="{{ route('saldobulanan') }}" class="btn btn-primary mb-3 dark:text-gray-400">Recap Today's Data</a>
+                    <a href="{{ route('recap-all-data') }}" class="btn btn-primary mb-3 dark:text-gray-400">Recap Today's Data</a>
 
                     <!-- Table to display recap data -->
                     <table id="satuanTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
@@ -21,8 +21,17 @@
                                 <th rowspan="2" class="px-6 py-3">Kode Log</th>
                                 <th rowspan="2" class="px-6 py-3">Nama Barang</th>
                                 <th colspan="2" class="px-6 py-3">Saldo Awal</th>
+                                <th colspan="2" class="px-6 py-3">Barang Masuk</th>
+                                <th colspan="2" class="px-6 py-3">Barang Keluar</th>
+                                <th colspan="2" class="px-6 py-3">Saldo Akhir</th>
                             </tr>
                             <tr>
+                                <th class="px-6 py-3">Qty</th>
+                                <th class="px-6 py-3">Rp</th>
+                                <th class="px-6 py-3">Qty</th>
+                                <th class="px-6 py-3">Rp</th>
+                                <th class="px-6 py-3">Qty</th>
+                                <th class="px-6 py-3">Rp</th>
                                 <th class="px-6 py-3">Qty</th>
                                 <th class="px-6 py-3">Rp</th>
                             </tr>
@@ -34,14 +43,20 @@
                                 </tr>
                             @else
                                 @foreach ($recaps as $recap)
-                                    <tr>
+                                    <tr> 
                                         <td>{{ \Carbon\Carbon::parse($recap->recap_date)->format('d-m-Y') }}</td>
                                         <td>{{ $recap->no_item }}</td>
                                         <td>{{ $recap->kode_log }}</td>
                                         <td>{{ $recap->nama_barang }}</td>
+                                        <td>{{ $recap->jumlah - $recap->entry + $recap->exit }}</td>
+                                        <td>{{'Rp. ' . number_format($recap->jumlah - $recap->entry + $recap->exit, 0, ',', '.') * $recap->harga }}</td>
+                                        <td>{{ $recap->entry }}</td>
+                                        <td>{{'Rp. ' . number_format($recap->harga * $recap->entry, 0, ',', '.' )}}</td>
+                                        <td>{{ $recap->exit }}</td>
+                                        <td>{{'Rp. ' . number_format($recap->harga * $recap->entry, 0, ',', '.' )}}</td>
                                         <td>{{ $recap->jumlah }}</td>
-                                        <td>{{ $recap->harga * $recap->jumlah }}</td>
-                                    </tr>
+                                        <td>{{'Rp. ' . number_format($recap->harga * $recap->jumlah, 0, ',', '.' )}}</td>
+                                    </tr> 
                                 @endforeach
                             @endif
                         </tbody>

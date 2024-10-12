@@ -86,11 +86,7 @@ Route::delete('/setupinstitusi/{id}', [KodeInstitusiController::class, 'destroy'
 
 
 Route::get('/report/saldobulanan', [BarangController::class, 'showRecaps'])->name('saldobulanan');
-Route::get('/recap-all-data', [BarangController::class, 'recapExistingDataToTodays']);
-
-Route::get('/summarize-logs', [BarangLogController::class, 'summarizeLogs']);
-
-
+Route::get('/recap-all-data', [BarangController::class, 'recapExistingDataToTodays'])->name('recap-all-data');
 
 
 // Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');
