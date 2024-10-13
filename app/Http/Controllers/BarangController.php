@@ -495,7 +495,7 @@ class BarangController extends Controller
         // Log the creation of the log entry
         Log::info('Log entry created', ['log' => $log, 'barang_id' => $barang->id]);
 
-        return redirect()->route('barangs.index')->with('success', 'Entry recorded successfully.');
+        return redirect()->route('recap-all-data')->with('success', 'Entry recorded successfully.');
     }
 
     public function getBarangDetails($nama_barang)
@@ -657,14 +657,14 @@ class BarangController extends Controller
                 ]
             ]);
 
-            return redirect()->route('barangs.index')->with('success', 'Exit recorded successfully.');
+            return redirect()->route('recap-all-data')->with('success', 'Exit recorded successfully.');
         } catch (\Exception $e) {
             // Log the exception with stack trace
             Log::error('Exception occurred in exit method', [
                 'error_message' => $e->getMessage(),
                 'stack_trace' => $e->getTraceAsString()
             ]);
-            return redirect()->route('barangs.index')->with('error', 'An error occurred.');
+            return redirect()->route('recap-all-data')->with('error', 'An error occurred.');
         }
     }
 
@@ -789,63 +789,6 @@ class BarangController extends Controller
         return redirect()->back()->with('error', 'No logs were selected.');
     }
 
-
-
-
-
-// public function recapExistingDataToToday()
-// {
-//     Log::info('RecapExistingDataToToday method started.');
-
-//     // Fetch all records from barangs (remove the date condition)
-//     $barangs = barang::all();  // Fetch all barangs
-
-//     Log::info('Fetched barang data for recap', ['count' => $barangs->count()]);
-
-//     foreach ($barangs as $barang) {
-//         // Check if there's already a recap for this no_item for today (optional)
-//         $existingRecap = RecapBarang::where('recap_date', today())
-//             ->where('no_item', $barang->no_item)
-//             ->first();
-
-//         // If no recap for today exists, create a new recap
-//         if (!$existingRecap) {
-//           // Log the harga value to debug it
-//           Log::info('Harga value from barang:', ['harga' => $barang->harga]);
-
-//             RecapBarang::create([
-//                 'recap_date' => today(), // Use today's date for the recap
-//                 'no_item' => $barang->no_item,
-//                 'nama_barang' => $barang->nama_barang,
-//                 'kode_log' => $barang->kode_log,
-//                 'jumlah' => $barang->jumlah,
-//                 'harga' => $barang->harga, // Add harga field
-//             ]);
-
-//             Log::info('Recapped barang for today', [
-//                 'no_item' => $barang->no_item,
-//                 'nama_barang' => $barang->nama_barang,
-//                 'kode_log' => $barang->kode_log,
-//                 'jumlah' => $barang->jumlah,
-//                 'harga' => $barang->harga, // Log harga as well
-//             ]);
-//         } else {
-//             Log::info('Barang already recapped for today', ['no_item' => $barang->no_item]);
-//         }
-//     }
-
-//     Log::info('RecapExistingDataToToday method finished.');
-// }
-
-// public function showRecap()
-// {
-//     // Fetch recapped data, optionally order by date (descending) to show the latest recaps first
-//     $recaps = RecapBarang::orderBy('recap_date', 'desc')->get();
-
-//     // Pass the data to the view
-//     return view('report.saldobulanan', compact('recaps'));
-// }
-
 public function recapExistingDataToTodays()
 {
     Log::info('RecapExistingDataToToday method started.');
@@ -927,44 +870,25 @@ public function recapExistingDataToTodays()
     return view('recap-all-data');
 }
 
-public function showRecaps()
+public function showRecaps(Request $request)
 {
-    // Fetch recapped data, optionally order by date (descending) to show the latest recaps first
-    $recaps = RecapsBarangs::orderBy('recap_date', 'desc')->get();
+    // Get the selected date range from the request
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+
+    // Build the query
+    $recapsQuery = RecapsBarangs::query();
+
+    // Apply date filter if both start_date and end_date are provided
+    if ($startDate && $endDate) {
+        $recapsQuery->whereBetween('recap_date', [$startDate, $endDate]);
+    }
+
+    // Fetch the filtered or all recap data
+    $recaps = $recapsQuery->orderBy('recap_date', 'desc')->get();
 
     // Pass the data to the view
-    return view('report.saldobulanan', compact('recaps'));
+    return view('report.saldobulanan', compact('recaps', 'startDate', 'endDate'));
 }
-
-// public function dailyRecap(Request $request)
-// {
-//     // Query all barangs and their logs for the day
-//     $recapData = barang::with(['logs' => function($query) use ($date) {
-//         $query->whereDate('created_at', $date);
-//     }])->get();
-
-//     // Loop through each barang and save the recap
-//     foreach ($recapData as $barang) {
-//         $additions = $barang->logs->where('operation', 'add')->sum('jumlah');
-//         $subtractions = $barang->logs->where('operation', 'subtract')->sum('jumlah');
-
-//         // Save the recap to the database
-//         DailyRecap::updateOrCreate(
-//             [
-//                 'nama_barang' => $barang->nama_barang,
-//                 'recap_date' => $date,
-//             ],
-//             [
-//                 'added' => $additions,
-//                 'subtracted' => $subtractions,
-//             ]
-//         );
-//     }
-
-//     // Retrieve the recap data for display
-//     $dailyRecaps = DailyRecap::whereDate('recap_date', $date)->get();
-
-//     return view('barangs.recap', compact('dailyRecaps', 'date'));
-// }
 
 }

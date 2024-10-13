@@ -84,9 +84,10 @@ Route::get('/setupinstitusi/{id}/edit', [KodeInstitusiController::class, 'edit']
 Route::put('/setupinstitusi/{id}', [KodeInstitusiController::class, 'update'])->name('setupinstitusi.update');
 Route::delete('/setupinstitusi/{id}', [KodeInstitusiController::class, 'destroy'])->name('setupinstitusi.destroy');
 
-
+// Report Saldo bulanan
 Route::get('/report/saldobulanan', [BarangController::class, 'showRecaps'])->name('saldobulanan');
 Route::get('/recap-all-data', [BarangController::class, 'recapExistingDataToTodays'])->name('recap-all-data');
+Route::get('/recaps', [BarangController::class, 'showRecaps'])->name('recaps');
 
 
 // Route::get('/logs', [BarangLogController::class, 'index'])->name('logs');

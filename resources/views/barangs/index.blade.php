@@ -240,8 +240,12 @@
                         <button type="button"
                             class="mb-3 me-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="entry-modal">Cancel</button>
-                        <button type="submit"
-                            class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                            <form action="{{ route('recap-all-data') }}" method="GET">
+                                <button type="submit"
+                                    class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Submit
+                                </button>
+                            </form>                            
                     </div>
             </div>
             </form>
@@ -416,8 +420,12 @@
                         <button type="button"
                             class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="exit-modal" onclick="location.reload();">Cancel</button>
-                        <button type="submit"
-                            class="me-3 mb-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                            <form action="{{ route('recap-all-data') }}" method="GET">
+                                <button type="submit"
+                                    class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Submit
+                                </button>
+                            </form>
                     </div>
                 </form>
             </div>

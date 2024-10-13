@@ -12,6 +12,25 @@
                     <!-- Button to trigger the recap process -->
                     <a href="{{ route('recap-all-data') }}" class="btn btn-primary mb-3 dark:text-gray-400">Recap Today's Data</a>
 
+                      <!-- Date filter form -->
+                    <form method="GET" action="{{ route('recaps') }}" class="mb-4">
+                        <div class="flex items-center space-x-2">
+                            <div>
+                                <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+                                <input type="date" id="start_date" name="start_date" value="{{ $startDate ?? '' }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-700">
+                            </div>
+                            <div>
+                                <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                                <input type="date" id="end_date" name="end_date" value="{{ $endDate ?? '' }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-700">
+                            </div>
+                            <div class="pt-6">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     <!-- Table to display recap data -->
                     <table id="satuanTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
@@ -39,7 +58,7 @@
                         <tbody>
                             @if ($recaps->isEmpty())
                                 <tr>
-                                    <td colspan="5">No recap data available.</td>
+                                    <td colspan="20">No recap data available.</td>
                                 </tr>
                             @else
                                 @foreach ($recaps as $recap)
