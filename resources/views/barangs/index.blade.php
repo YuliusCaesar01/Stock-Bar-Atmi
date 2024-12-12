@@ -82,7 +82,7 @@
                                                         class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
                                                     <button data-modal-target="exit-modal"
                                                         data-modal-toggle="exit-modal"
-                                                        onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}')"
+                                                        onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}', '{{ $barang->harga }}')"
                                                         class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
                                                         Ambil
                                                     </button>
@@ -114,6 +114,33 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="col" class="px-6 py-3">QR Code</th>
+                                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
+                                    <th scope="col" class="px-6 py-3">Activity</th>
+                                @endif
+                                <th scope="col" class="px-6 py-3">Status</th>
+                                <th scope="col" class="px-6 py-3">No Item</th>
+                                <th scope="col" class="px-6 py-3">Nama Barang</th>
+                                <th scope="col" class="px-6 py-3">Kode Akun</th>
+                                <th scope="col" class="px-6 py-3">Kode Log</th>
+                                <th scope="col" class="px-6 py-3">Jumlah</th>
+                                <th scope="col" class="px-6 py-3">Satuan</th>
+                                <th scope="col" class="px-6 py-3">Harga</th>
+                                <th scope="col" class="px-6 py-3">Total</th>
+                                <th scope="col" class="px-6 py-3">Rak</th>
+                                <th scope="col" class="px-6 py-3">Tanggal</th>
+                                <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
+                                <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
+                                <th scope="col" class="px-6 py-3">No Katalog</th>
+                                <th scope="col" class="px-6 py-3">Merk</th>
+                                <th scope="col" class="px-6 py-3">No Akun</th>
+                                <th scope="col" class="px-6 py-3">No Refferensi</th>
+                                <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
+                                <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -299,15 +326,12 @@
                                 <label for="order_number"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor
                                     Order</label>
-                                <select name="order_number" id="order_number"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                    <option value="">Select Order Number</option>
-                                    @foreach ($orders as $order)
-                                        <option value="{{ $order->order_number }}">{{ $order->order_number }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                    <input list="order_numbers" id="order_number_input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Select Order Number" required>
+                                    <datalist id="order_numbers">
+                                        @foreach ($orders as $order)
+                                            <option value="{{ $order->order_number }}"></option>
+                                        @endforeach
+                                    </datalist>
                             </div>
                             <div class="form-group">
                                 <label for="no_item"
@@ -398,6 +422,19 @@
                                 <input type="number" name="jumlah_keluar" id="jumlah_keluar"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
+                            </div>
+                            <div class="form-group">
+                                <label for="harga"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Harga</label>
+                                <input type="number" name="harga" id="harga"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="total_harga" class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Total Harga</label>
+                                <div id="total-harga-display" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark">
+                                    0
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="satuan"
@@ -535,7 +572,7 @@
 
     {{-- Pupulate Exit Modal --}}
     <script>
-        function setMaterialDetails(id, nama_barang, no_barcode, jumlah, kode_log, satuan, kd_akun) {
+        function setMaterialDetails(id, nama_barang, no_barcode, jumlah, kode_log, satuan, kd_akun, harga) {
             // Set the form fields with the passed data
             document.getElementById('barang-id-exit').value = id;
             document.getElementById('nama_barang').value = nama_barang;
@@ -544,14 +581,39 @@
             document.getElementById('kode_log').value = kode_log;
             document.getElementById('satuan').value = satuan;
             document.getElementById('kd_akun').value = kd_akun;
-
+            document.getElementById('harga').value = harga;
+    
             // Open the modal
             console.log('ID:', id);
             const modal = document.getElementById('exit-modal');
             modal.classList.remove('hidden');
             modal.classList.add('block');
             populateJenisBarang(kd_akun);
+    
+            // Trigger calculation for initial values
+            updateTotalHarga();
         }
+    
+        function updateTotalHarga() {
+            const jumlahKeluar = document.getElementById('jumlah_keluar').value;
+            const harga = document.getElementById('harga').value;
+    
+            // Calculate total harga
+            const totalHarga = jumlahKeluar * harga;
+    
+            // Display the calculated total
+            const totalHargaDisplay = document.getElementById('total-harga-display');
+            totalHargaDisplay.textContent = isNaN(totalHarga) ? '0' : totalHarga;
+        }
+    
+        // Add event listeners to calculate dynamically
+        document.addEventListener('DOMContentLoaded', function () {
+            const jumlahKeluarInput = document.getElementById('jumlah_keluar');
+            const hargaInput = document.getElementById('harga');
+    
+            jumlahKeluarInput.addEventListener('input', updateTotalHarga);
+            hargaInput.addEventListener('input', updateTotalHarga);
+        });
     </script>
 
     {{-- Pupulate Jenis Barang --}}
@@ -587,10 +649,12 @@
     {{-- Populate Item Number for Order Number WP --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const orderNumberSelect = document.getElementById('order_number');
+            const orderNumberInput = document.getElementById('order_number_input');
             const noItemSelect = document.getElementById('no_item');
-            orderNumberSelect.addEventListener('change', function() {
+    
+            orderNumberInput.addEventListener('input', function() {
                 const orderNumber = this.value;
+    
                 if (orderNumber) {
                     fetch(`/get-order-items/${orderNumber}`)
                         .then(response => response.json())
@@ -606,7 +670,7 @@
                 }
             });
         });
-    </script>
+    </script>    
 
     {{-- QR Scan Feature --}}
     <script>
