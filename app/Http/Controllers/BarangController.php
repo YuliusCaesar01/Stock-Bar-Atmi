@@ -495,7 +495,8 @@ class BarangController extends Controller
         // Log the creation of the log entry
         Log::info('Log entry created', ['log' => $log, 'barang_id' => $barang->id]);
 
-        return redirect()->route('recap-all-data')->with('success', 'Entry recorded successfully.');
+        return redirect()->route('barangs.index')->with('success', 'Entry recorded successfully.');
+        // return redirect()->route('recap-all-data')->with('success', 'Entry recorded successfully.');
     }
 
     public function getBarangDetails($nama_barang)
@@ -656,15 +657,17 @@ class BarangController extends Controller
                     'log_id' => $log->id, // Logging log_id
                 ]
             ]);
-
-            return redirect()->route('recap-all-data')->with('success', 'Exit recorded successfully.');
+            return redirect()->route('barangs.index')->with('success', 'Exit recorded successfully.');
+            // return redirect()->route('recap-all-data')->with('success', 'Exit recorded successfully.');
         } catch (\Exception $e) {
             // Log the exception with stack trace
             Log::error('Exception occurred in exit method', [
                 'error_message' => $e->getMessage(),
                 'stack_trace' => $e->getTraceAsString()
             ]);
-            return redirect()->route('recap-all-data')->with('error', 'An error occurred.');
+
+            return redirect()->route('barangs.index')->with('error', 'An error occurred.');
+            // return redirect()->route('recap-all-data')->with('error', 'An error occurred.');
         }
     }
 

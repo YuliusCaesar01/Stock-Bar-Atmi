@@ -267,12 +267,12 @@
                         <button type="button"
                             class="mb-3 me-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="entry-modal">Cancel</button>
-                            <form action="{{ route('recap-all-data') }}" method="GET">
+                            {{-- <form action="{{ route('recap-all-data') }}" method="GET"> --}}
                                 <button type="submit"
                                     class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Submit
                                 </button>
-                            </form>                            
+                            {{-- </form>                             --}}
                     </div>
             </div>
             </form>
@@ -326,7 +326,7 @@
                                 <label for="order_number"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-dark">Nomor
                                     Order</label>
-                                    <input list="order_numbers" id="order_number_input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Select Order Number" required>
+                                    <input list="order_numbers" name="order_number" id="order_number_input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-300 dark:border-gray-500 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Select Order Number" required>
                                     <datalist id="order_numbers">
                                         @foreach ($orders as $order)
                                             <option value="{{ $order->order_number }}"></option>
@@ -457,12 +457,12 @@
                         <button type="button"
                             class="mb-3 text-gray-100 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5 me-2"
                             data-modal-toggle="exit-modal" onclick="location.reload();">Cancel</button>
-                            <form action="{{ route('recap-all-data') }}" method="GET">
+                            {{-- <form action="{{ route('recap-all-data') }}" method="GET"> --}}
                                 <button type="submit"
                                     class="mb-3 me-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Submit
                                 </button>
-                            </form>
+                            {{-- </form> --}}
                     </div>
                 </form>
             </div>
