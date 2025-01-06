@@ -184,7 +184,7 @@ class BarangController extends Controller
 
         $institusi = KodeInstitusi::all();
         $unitkerja = UnitKerja::all();
-        $orders = Orders::whereNotIn('order_status', ['Finished', 'QCPass', 'Delivered'])->get();
+        $orders = Orders::whereNotIn('order_status', ['Finished', 'QC Pass', 'Delivered'])->get();
 
         Log::info('Supporting data retrieved', [
             'institusi_count' => $institusi->count(),
