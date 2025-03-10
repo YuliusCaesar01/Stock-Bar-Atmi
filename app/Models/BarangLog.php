@@ -32,9 +32,9 @@ class BarangLog extends Model
     ];
 
     public function barang()
-    {
-        return $this->belongsTo(barang::class, 'barang_id');
-    }
+{
+    return $this->belongsTo(Barang::class);
+}
 
     // Define relationships and other model methods here
 }

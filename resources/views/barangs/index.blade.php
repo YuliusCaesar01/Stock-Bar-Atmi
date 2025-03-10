@@ -9,10 +9,49 @@
         <div class="max-w-8xl mx-auto sm:px-4 lg:px-6">
             <div class="bg-white :bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
+                    <div class="mb-4 flex items-center gap-4">
+                         <!-- Kode Log Filter with Role-Based Conditions -->
+                            <div>
+                                <form action="{{ route('barangs.index') }}" method="GET" class="flex flex-wrap items-center gap-2">
+                                    <label for="kode_log_filter" class="mr-2 text-sm font-medium text-gray-700">Filter Kode Log:</label>
+                                    <select id="kode_log_filter" name="kode_log_filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                                    <option value="">All Kode Log</option>
+                                    @php
+                                        $user = auth()->user();
+                                        $userRole = $user->role;
+                                        $userPlant = $user->plant;
+                                        
+                                        // Get kode_log options based on role
+                                        if (in_array($userRole, ['superadmin', 'viewer'])) {
+                                            // For superadmin or viewer, show all options
+                                            $kodeLogOptions = \App\Models\LogGudang::distinct()->pluck('kd_log');
+                                        } else {
+                                            // For other roles, only show options where kd_prod matches user's plant
+                                            $kodeLogOptions = \App\Models\LogGudang::where('kd_prod', $userPlant)
+                                                ->distinct()
+                                                ->pluck('kd_log');
+                                        }
+                                    @endphp
+                                    @foreach($kodeLogOptions as $kodeLog)
+                                        <option value="{{ $kodeLog }}" {{ request('kode_log_filter') == $kodeLog ? 'selected' : '' }}>{{ $kodeLog }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <!-- Action buttons -->
+                            <div class="flex gap-2">
+                                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Apply</button>
+                                @if(request('search') || request('kode_log_filter'))
+                                    <a href="{{ route('barangs.index') }}" class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5">Clear</a>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
                     <table id="barangTable"
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
                             <tr>
+                                <th scope="col" class="px-6 py-3">No</th>
                                 <th scope="col" class="px-6 py-3">QR Code</th>
                                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
                                     <th scope="col" class="px-6 py-3">Activity</th>
@@ -63,6 +102,7 @@
 
                                 <tr class="bg-white border-b">
                                     <!-- Existing cells... -->
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4">
                                         <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
                                     </td>
@@ -116,6 +156,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <th scope="col" class="px-6 py-3">NO</th>
                                 <th scope="col" class="px-6 py-3">QR Code</th>
                                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
                                     <th scope="col" class="px-6 py-3">Activity</th>

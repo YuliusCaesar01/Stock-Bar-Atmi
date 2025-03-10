@@ -9,8 +9,61 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white">
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
-                    <input type="date" id="minDate" name="minDate" class="dark:text-gray-800">
-                    <input type="date" id="maxDate" name="maxDate" class="dark:text-gray-800">
+                    <div class="mb-4 bg-white p-4 rounded shadow">
+                        <form method="GET" action="{{ route('logs') }}" class="flex flex-wrap gap-2">
+                            <div class="flex flex-col">
+                                <label for="start_date" class="text-xs text-gray-700">Start Date</label>
+                                <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" 
+                                       class="px-2 py-1 border rounded text-xs text-gray-700">
+                            </div>
+                            
+                            <div class="flex flex-col">
+                                <label for="end_date" class="text-xs text-gray-700">End Date</label>
+                                <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" 
+                                       class="px-2 py-1 border rounded text-xs text-gray-700 ">
+                            </div>
+                            
+                            <div class="flex flex-col">
+                                <label for="action" class="text-xs text-gray-700">Status</label>
+                                <select id="action" name="action" class="px-2 py-1 border rounded text-xs text-gray-700">
+                                    <option value="">All</option>
+                                    <option class="text-xs text-gray-700" value="entry" {{ request('action') == 'entry' ? 'selected' : '' }}>Barang Masuk</option>
+                                    <option class="text-xs text-gray-700" value="exit" {{ request('action') == 'exit' ? 'selected' : '' }}>Barang Keluar</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col">
+                                <label for="operator" class="text-xs text-gray-700">Operator</label>
+                                <select id="operator" name="operator" class="px-2 py-1 border rounded text-sm">
+                                    <option value="">All</option>
+                                    @foreach($operators as $operator)
+                                        <option class="text-xs text-gray-700" value="{{ $operator }}" {{ request('operator') == $operator ? 'selected' : '' }}>{{ $operator }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col">
+                                <label for="no_po" class="text-xs text-gray-700">Nomor PO</label>
+                                <input type="text" id="no_po" name="no_po" value="{{ request('no_po') }}" 
+                                       class="px-2 py-1 border rounded text-xs text-gray-700" placeholder="Filter by PO">
+                            </div>
+                            
+                            <div class="flex flex-col">
+                                <label for="nama_barang" class="text-xs text-gray-700">Nama Barang</label>
+                                <input type="text" id="nama_barang" name="nama_barang" value="{{ request('nama_barang') }}" 
+                                       class="px-2 py-1 border rounded text-xs text-gray-700" placeholder="Filter by name">
+                            </div>
+                            
+                            <div class="flex items-end">
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-sm">
+                                    Filter
+                                </button>
+                                <a href="{{ route('logs') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded text-sm ml-2">
+                                    Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                     <table id="reportTable" class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
                             <tr>
@@ -62,7 +115,7 @@
                         <tfoot>
                             <tr>
                                 <th colspan="7" class="text-right">Total Harga:</th>
-                                <th id="total-harga" colspan="3"></th>
+                                <th id="total-harga" colspan="3">{{ $logs->sum('harga') }}</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -76,4 +129,28 @@
             </div>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculate total harga
+            const rows = document.querySelectorAll('tbody tr');
+            let totalHarga = 0;
+            
+            rows.forEach(row => {
+                const hargaCell = row.querySelector('td:nth-child(12)');
+                const quantityCell = row.querySelector('td:nth-child(14)');
+                
+                if (hargaCell && quantityCell) {
+                    const harga = parseFloat(hargaCell.textContent.replace(/[^\d.-]/g, '')) || 0;
+                    const quantity = parseFloat(quantityCell.textContent) || 0;
+                    totalHarga += harga * quantity;
+                }
+            });
+            
+            document.getElementById('total-harga').textContent = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(totalHarga);
+        });
+        </script>
 </x-app-layout>

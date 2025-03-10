@@ -231,145 +231,193 @@
 
 <script>
     $(document).ready(function() {
-        // DataTable initialization
-        var table = $('#reportTable').DataTable({
-            scrollY: '900px',
-            scrollX: true,
-            scrollCollapse: true,
-            responsive: false,
-            paging: false,
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'csv',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                },
-                {
-                    extend: 'excel',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                },
-                {
-                    extend: 'pdf',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
-                },
-                {
-                    extend: 'print',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                    customize: function(win) {
-                        $(win.document.body)
-                            .css('font-size', '10pt')
-                            .prepend(
-                                '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
-                                '<img src="logopt1.png" style="width: 200px;">' +
-                                '</div>'
-                            );
+    // DataTable initialization
+    var table = $('#reportTable').DataTable({
+        scrollY: '900px',
+        scrollX: true,
+        scrollCollapse: true,
+        responsive: false,
+        paging: false,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'csv',
+                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+            },
+            {
+                extend: 'excel',
+                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+            },
+            {
+                extend: 'pdf',
+                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800'
+            },
+            {
+                extend: 'print',
+                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                customize: function(win) {
+                    $(win.document.body)
+                        .css('font-size', '10pt')
+                        .prepend(
+                            '<div style="display:flex; text-align: center; justify-content: space-between; align-items: center; margin-bottom: 20px;">' +
+                            '<img src="logopt1.png" style="width: 200px;">' +
+                            '</div>'
+                        );
 
-                        $(win.document.body).find('table')
-                            .addClass('display')
-                            .css('width', '100%')
-                            .css('font-size', 'inherit');
-                    }
-                },
-                {
-                    extend: 'colvis',
-                    className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
-                    text: 'Toggle Columns'
+                    $(win.document.body).find('table')
+                        .addClass('display')
+                        .css('width', '100%')
+                        .css('font-size', 'inherit');
                 }
-            ],
-            footerCallback: function(row, data, start, end, display) {
+            },
+            {
+                extend: 'colvis',
+                className: 'bg-blue-500 text-white px-4 py-2 rounded-lg dark:bg-blue-700 dark:hover:bg-blue-800',
+                text: 'Toggle Columns'
+            }
+        ],
+        // Ensure columns are defined explicitly to match your table structure
+        columns: [
+            { data: 'no', title: 'NO' },
+            { data: 'qrCode', title: 'QR CODE' },
+            { data: 'noItem', title: 'NO ITEM' },
+            { data: 'kodeLog', title: 'KODE LOG' },
+            { data: 'namaBarang', title: 'NAMA BARANG' },
+            { data: 'orderNumber', title: 'ORDER NUMBER' },
+            { data: 'itemNumber', title: 'ITEM NUMBER' },
+            { data: 'operator', title: 'OPERATOR' },
+            { data: 'satuan', title: 'SATUAN' },
+            { data: 'nomorPo', title: 'NOMOR PO' },
+            { data: 'harga', title: 'HARGA' },
+            { data: 'status', title: 'STATUS' },
+            { data: 'quantity', title: 'QUANTITY' },
+            { data: 'timestamp', title: 'TIMESTAMP' }
+        ],
+        footerCallback: function(row, data, start, end, display) {
             // Calculate the total harga
             var api = this.api();
+            
+            // Assuming the price column is at index 10 (adjust if needed)
+            var hargaColumnIndex = 10;
+            
+            // Check if the column exists
+            if (api.column(hargaColumnIndex).visible()) {
+                var total = api
+                    .column(hargaColumnIndex, { page: 'current' })
+                    .data()
+                    .reduce(function(a, b) {
+                        // Clean up the values before conversion
+                        var valueA = typeof a === 'string' ? a.replace(/[^\d.-]/g, '') : a;
+                        var valueB = typeof b === 'string' ? b.replace(/[^\d.-]/g, '') : b;
+                        
+                        // Convert to float or return 0 if not valid
+                        var numA = parseFloat(valueA) || 0;
+                        var numB = parseFloat(valueB) || 0;
+                        return numA + numB;
+                    }, 0);
 
-            var total = api
-                .column(10, { page: 'current' }) // Column index for "Harga"
-                .data()
-                .reduce(function(a, b) {
-                    // Convert to float or return 0 if not a valid number
-                    var numA = parseFloat(a) || 0;
-                    var numB = parseFloat(b) || 0;
-                    return numA + numB;
-                }, 0);
+                // Format the total as Rupiah
+                var formattedTotal = formatRupiah(total);
 
-            // Format the total as Rupiah using your formatRupiah helper
-            var formattedTotal = (total);
-
-            // Update the total in the tfoot
-            $('#total-harga').html(formattedTotal);
-        },
-            initComplete: function() {
-                var api = this.api();
-
-                // Modify thead to include an additional row for the filters
-                $('#reportTable thead').append('<tr class="filter-row"></tr>');
-                
-                // Add a select element for each column in the correct position
-                api.columns().every(function() {
-                    var column = this;
-                    var select = $('<select multiple="multiple" class="multi-select form-control"></select>')
-                        .on('change', function() {
-                            var selectedOptions = $(this).val();
-                            if (selectedOptions && selectedOptions.length > 0) {
-                                var regex = selectedOptions.map(function(val) {
-                                    return $.fn.dataTable.util.escapeRegex(val);
-                                }).join('|');
-                                column
-                                    .search(regex, true, false)
-                                    .draw();
-                            } else {
-                                column.search('', true, false).draw();
-                            }
-                        });
-
-                    // Populate the select with unique values from the column
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
-                    });
-
-                    // Add the filter directly under the respective header
-                    $(column.header()).append('<div class="filter-wrapper"></div>');
-                    $(column.header()).find('.filter-wrapper').append(select);
-
-                    // Initialize Select2 on the select element
-                    select.select2({
-                        placeholder: "Select options",
-                        allowClear: true,
-                        closeOnSelect: false // Keep the dropdown open for multi-select
-                    });
-                });
+                // Update the total in the tfoot
+                $('#total-harga').html(formattedTotal);
+            } else {
+                $('#total-harga').html('Column not visible');
             }
-        });
+        }
+    });
 
-        // Date range filter
-        $.fn.dataTable.ext.search.push(
-            function(settings, data, dataIndex) {
-                if (settings.nTable.id !== 'reportTable') {
-                    return true; // Bypass this filter for other tables
+    // Helper function to format currency
+    function formatRupiah(angka) {
+        var number_string = angka.toString(),
+            split = number_string.split('.'),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+            
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return 'Rp ' + rupiah;
+    }
+
+    // Date range filter
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            if (settings.nTable.id !== 'reportTable') {
+                return true; // Bypass this filter for other tables
+            }
+            
+            var minDateStr = $('#minDate').val();
+            var maxDateStr = $('#maxDate').val();
+            
+            // Default to allowing all rows if no date range is specified
+            if (minDateStr === "" && maxDateStr === "") {
+                return true;
+            }
+            
+            try {
+                // Get the timestamp from the data (adjust the index if needed)
+                var timestampColumnIndex = 13;
+                var timestamp = data[timestampColumnIndex];
+                
+                if (!timestamp) {
+                    return true; // If no timestamp, include the row
                 }
-                var min = $('#minDate').val();
-                var max = $('#maxDate').val();
-                var timestamp = data[13]; // The timestamp is in the 13th column (index 12)
-
-                // Manually parse the timestamp
+                
+                // Parse the dates using consistent formatting
                 var dateParts = timestamp.split(" ");
-                var dateOnly = dateParts[0]; // Extract the date portion (YYYY-MM-DD)
-
-                if (
-                    (min === "" && max === "") ||
-                    (min === "" && dateOnly <= max) ||
-                    (min <= dateOnly && max === "") ||
-                    (min <= dateOnly && dateOnly <= max)
-                ) {
+                var dateOnly = dateParts[0]; // Extract the date portion (assumed YYYY-MM-DD)
+                
+                // Convert to Date objects for proper comparison
+                var rowDate = new Date(dateOnly);
+                var minDate = minDateStr ? new Date(minDateStr) : null;
+                var maxDate = maxDateStr ? new Date(maxDateStr) : null;
+                
+                // Check if the date is valid
+                if (isNaN(rowDate.getTime())) {
+                    console.warn("Invalid date found in row: " + dateOnly);
+                    return true; // Include rows with invalid dates
+                }
+                
+                // Set time to midnight for consistent comparison
+                rowDate.setHours(0, 0, 0, 0);
+                if (minDate) minDate.setHours(0, 0, 0, 0);
+                if (maxDate) maxDate.setHours(0, 0, 0, 0);
+                
+                // Compare dates
+                if ((!minDate || rowDate >= minDate) && (!maxDate || rowDate <= maxDate)) {
                     return true;
                 }
                 return false;
+            } catch (error) {
+                console.error("Error in date filtering: " + error.message);
+                return true; // Include the row on error
             }
-        );
+        }
+    );
 
-        // Apply filter on date change
-        $('#minDate, #maxDate').on('change', function() {
-            table.draw();
-        });
+    // Apply filter on date change
+    $('#minDate, #maxDate').on('change', function() {
+        table.draw();
     });
+    
+    // Handle any errors during initialization
+    try {
+        // Initialize date pickers if needed (optional)
+        if ($.fn.datepicker) {
+            $('#minDate, #maxDate').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        }
+    } catch (error) {
+        console.error("Error initializing date pickers: " + error.message);
+    }
+});
 </script>
 
 <script>

@@ -17,27 +17,46 @@ class BarangLogController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $query = BarangLog::query();
+{
+    $query = BarangLog::query();
 
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $startDate = $request->input('start_date');
-            $endDate = $request->input('end_date');
-
-            if ($startDate && $endDate) {
-                $query->whereBetween('updated_at', [$startDate, $endDate]);
-            }
-        }
-
-        $logs = $query->get();
-
-        // Debugging output
-        if ($request->has('start_date') || $request->has('end_date')) {
-            echo 'Filtered Logs Count: ' . $logs->count() . '<br>';
-        }
-
-        return view('logs', compact('logs'));
+    // Date filter
+    if ($request->filled('start_date') && $request->filled('end_date')) {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $query->whereBetween('updated_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
     }
+
+    // Action filter
+    if ($request->filled('action')) {
+        $query->where('action', $request->input('action'));
+    }
+
+    // Operator filter
+    if ($request->filled('operator')) {
+        $query->where('operator', $request->input('operator'));
+    }
+
+    // No PO filter
+    if ($request->filled('no_po')) {
+        $query->where('no_po', 'like', '%' . $request->input('no_po') . '%');
+    }
+    
+    // Item name filter
+    if ($request->filled('nama_barang')) {
+        $searchTerm = $request->input('nama_barang');
+        $query->whereHas('barang', function($q) use ($searchTerm) {
+            $q->where('nama_barang', 'like', '%' . $searchTerm . '%');
+        });
+    }
+
+    $logs = $query->get();
+    
+    // Get unique operators for the dropdown
+    $operators = BarangLog::distinct()->pluck('operator')->filter();
+    
+    return view('logs', compact('logs', 'operators'));
+}
 
     public function getStockRecap(Request $request)
     {

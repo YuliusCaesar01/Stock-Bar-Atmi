@@ -7,6 +7,7 @@ use App\Models\Orders;
 use App\Models\WPLink;
 use App\Models\ItemAdd;
 use App\Models\BarangLog;
+use App\Models\LogGudang;
 use App\Models\UnitKerja;
 use App\Models\DailyRecap;
 use App\Models\MasterAkun;
@@ -176,108 +177,129 @@ class BarangController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        Log::info('Index method started.');
+{
+    Log::info('Index method started.');
 
-        $search = $request->input('search');
-        Log::info('Search term:', ['search' => $search]);
+    $search = $request->input('search');
+    $kodeLogFilter = $request->input('kode_log_filter');
+    Log::info('Search and filter terms:', ['search' => $search, 'kode_log_filter' => $kodeLogFilter]);
 
-        $institusi = KodeInstitusi::all();
-        $unitkerja = UnitKerja::all();
-        $orders = Orders::whereNotIn('order_status', ['Finished', 'QC Pass', 'Delivered'])->get();
+    $institusi = KodeInstitusi::all();
+    $unitkerja = UnitKerja::all();
+    $orders = Orders::whereNotIn('order_status', ['Finished', 'QC Pass', 'Delivered'])->get();
 
-        Log::info('Supporting data retrieved', [
-            'institusi_count' => $institusi->count(),
-            'unitkerja_count' => $unitkerja->count(),
-            'orders_count' => $orders->count(),
-        ]);
+    // Get the authenticated user's info
+    $user = auth()->user();
+    $userPlant = $user->plant;
+    $userRole = $user->role;
+    Log::info('Authenticated user plant and role:', ['plant' => $userPlant, 'role' => $userRole]);
 
-        // Get the authenticated user's kd_prod
-        $user = auth()->user();
-        $userPlant = $user->plant;
-        $userRole = $user->role;
-        Log::info('Authenticated user plant and role:', ['plant' => $userPlant, 'role' => $userRole]);
+    // For non-superadmin and non-viewer roles, validate that the selected kode_log belongs to their plant
+    if (!in_array($userRole, ['superadmin', 'viewer']) && $kodeLogFilter) {
+        $validKodeLog = LogGudang::where('kd_prod', $userPlant)
+            ->where('kd_log', $kodeLogFilter)
+            ->exists();
+        
+        // If the selected kode_log doesn't belong to the user's plant, ignore the filter
+        if (!$validKodeLog) {
+            $kodeLogFilter = null;
+            Log::warning('Invalid kode_log filter attempted by user', [
+                'user_id' => $user->id,
+                'role' => $userRole,
+                'plant' => $userPlant,
+                'attempted_kode_log' => $kodeLogFilter
+            ]);
+        }
+    }
 
-        // Filter barangs based on matching kode_log and kd_prod
-        $barangs = barang::query()
-            ->when(!in_array($userRole, ['superadmin', 'viewer']), function ($query) use ($userPlant) {
-                $query->whereHas('logGudang', function ($query) use ($userPlant) {
-                    $query->where('kd_prod', $userPlant)
-                        ->whereColumn('kd_log', 'barangs.kode_log'); // Ensure matching kode_log
-                });
-            })
-            ->where(function ($query) use ($search) {
-                $query->where('no_barcode', 'like', "%{$search}%")
-                    ->orWhere('no_item', 'like', "%{$search}%")
-                    ->orWhere('nama_barang', 'like', "%{$search}%")
-                    ->orWhere('kode_log', 'like', "%{$search}%")
-                    ->orWhere('kd_unit', 'like', "%{$search}%")
-                    ->orWhere('kd_akun', 'like', "%{$search}%")
-                    ->orWhere('jumlah', 'like', "%{$search}%")
-                    ->orWhere('satuan', 'like', "%{$search}%")
-                    ->orWhere('harga', 'like', "%{$search}%")
-                    ->orWhere('rak', 'like', "%{$search}%")
-                    ->orWhere('total', 'like', "%{$search}%")
-                    ->orWhere('tanggal', 'like', "%{$search}%")
-                    ->orWhere('jumlah_minimal', 'like', "%{$search}%")
-                    ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
-                    ->orWhere('no_katalog', 'like', "%{$search}%")
-                    ->orWhere('merk', 'like', "%{$search}%")
-                    ->orWhere('no_akun', 'like', "%{$search}%")
-                    ->orWhere('no_reff', 'like', "%{$search}%");
-            })
-            ->get();
+    // Filter barangs based on user role, plant, and kode_log filter
+    $barangsQuery = barang::query();
+    
+    // Apply role-based filtering
+    if (!in_array($userRole, ['superadmin', 'viewer'])) {
+        $barangsQuery->whereHas('logGudang', function ($query) use ($userPlant) {
+            $query->where('kd_prod', $userPlant)
+                ->whereColumn('kd_log', 'barangs.kode_log');
+        });
+    }
+    
+    // Apply the kode_log filter if provided
+    if ($kodeLogFilter) {
+        $barangsQuery->where('kode_log', $kodeLogFilter);
+    }
+    
+    // Apply search filter
+    if ($search) {
+        $barangsQuery->where(function ($query) use ($search) {
+            $query->where('no_barcode', 'like', "%{$search}%")
+                ->orWhere('no_item', 'like', "%{$search}%")
+                ->orWhere('nama_barang', 'like', "%{$search}%")
+                ->orWhere('kode_log', 'like', "%{$search}%")
+                ->orWhere('kd_unit', 'like', "%{$search}%")
+                ->orWhere('kd_akun', 'like', "%{$search}%")
+                ->orWhere('jumlah', 'like', "%{$search}%")
+                ->orWhere('satuan', 'like', "%{$search}%")
+                ->orWhere('harga', 'like', "%{$search}%")
+                ->orWhere('rak', 'like', "%{$search}%")
+                ->orWhere('total', 'like', "%{$search}%")
+                ->orWhere('tanggal', 'like', "%{$search}%")
+                ->orWhere('jumlah_minimal', 'like', "%{$search}%")
+                ->orWhere('jumlah_maksimal', 'like', "%{$search}%")
+                ->orWhere('no_katalog', 'like', "%{$search}%")
+                ->orWhere('merk', 'like', "%{$search}%")
+                ->orWhere('no_akun', 'like', "%{$search}%")
+                ->orWhere('no_reff', 'like', "%{$search}%");
+        });
+    }
+    
+    $barangs = $barangsQuery->get();
+    Log::info('Filtered barangs retrieved', ['barangs_count' => $barangs->count()]);
 
-        Log::info('Filtered barangs retrieved', ['barangs_count' => $barangs->count()]);
+    // Process barangs (generate no_item, no_barcode, QR codes)
+    foreach ($barangs as $barang) {
+        // Check if no_item is null or empty
+        if (empty($barang->no_item)) {
+            // Fetch related logGudang to get kd_prod and kd_gudang
+            $logGudang = $barang->logGudang()->where('kd_log', $barang->kode_log)->first();
+            if ($logGudang) {
+                // Format: kd_akun-kd_prod-kd_gudang-0000
+                $kd_akun = $barang->kd_akun;
+                $kd_prod = $logGudang->kd_prod;
+                $kd_gudang = $logGudang->kd_log;
 
-        foreach ($barangs as $barang) {
-            // Check if no_item is null or empty
-            if (empty($barang->no_item)) {
-                // Fetch related logGudang to get kd_prod and kd_gudang
-                $logGudang = $barang->logGudang()->where('kd_log', $barang->kode_log)->first();
-                if ($logGudang) {
-                    // Format: kd_akun-kd_prod-kd_gudang-0000
-                    $kd_akun = $barang->kd_akun;
-                    $kd_prod = $logGudang->kd_prod;
-                    $kd_gudang = $logGudang->kd_log;
+                // Generate the next increment number
+                $lastItem = barang::where('kd_akun', $kd_akun)
+                    ->whereHas('logGudang', function ($query) use ($kd_prod, $kd_gudang) {
+                        $query->where('kd_prod', $kd_prod)
+                              ->where('kd_log', $kd_gudang);
+                    })
+                    ->orderBy('no_item', 'desc')
+                    ->first();
 
-                    // Generate the next increment number
-                    $lastItem = barang::where('kd_akun', $kd_akun)
-                        ->whereHas('logGudang', function ($query) use ($kd_prod, $kd_gudang) {
-                            $query->where('kd_prod', $kd_prod)
-                                  ->where('kd_log', $kd_gudang);
-                        })
-                        ->orderBy('no_item', 'desc')
-                        ->first();
-
-                    $increment = 1; // Default starting value
-                    if ($lastItem && preg_match('/-(\d+)$/', $lastItem->no_item, $matches)) {
-                        $increment = (int)$matches[1] + 1;
-                    }
-
-                    $barang->no_item = "{$kd_akun}-{$kd_prod}-{$kd_gudang}-" . str_pad($increment, 4, '0', STR_PAD_LEFT);
-                    Log::info('Generated no_item for barang', ['barang_id' => $barang->id, 'no_item' => $barang->no_item]);
+                $increment = 1; // Default starting value
+                if ($lastItem && preg_match('/-(\d+)$/', $lastItem->no_item, $matches)) {
+                    $increment = (int)$matches[1] + 1;
                 }
+
+                $barang->no_item = "{$kd_akun}-{$kd_prod}-{$kd_gudang}-" . str_pad($increment, 4, '0', STR_PAD_LEFT);
+                $barang->save();
             }
-
-            // Check if no_barcode is null or empty
-            if (empty($barang->no_barcode)) {
-                $barang->no_barcode = 'SB-' . Str::random(8); // Example of a structured barcode
-                Log::info('Generated random barcode for barang', ['barang_id' => $barang->id, 'no_barcode' => $barang->no_barcode]);
-            }
-
-            // Save the barang with the updated no_item and no_barcode
-            $barang->save();
-
-            // Generate the QR code for display purposes only (but do not save it to the database)
-            $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
-            Log::info('QR code generated for barang', ['barang_id' => $barang->id]);
         }
 
-        Log::info('Index method finished.');
+        // Check if no_barcode is null or empty
+        if (empty($barang->no_barcode)) {
+            $barang->no_barcode = 'SB-' . Str::random(8);
+            $barang->save();
+        }
 
-        return view('barangs.index', compact('barangs', 'orders', 'institusi', 'unitkerja'));
+        // Generate QR code for display
+        $barang->qr_code = base64_encode(QrCode::format('svg')->size(100)->generate($barang->no_barcode));
     }
+
+    Log::info('Index method finished.');
+
+    return view('barangs.index', compact('barangs', 'orders', 'institusi', 'unitkerja'));
+}
 
     public function import(Request $request)
     {
