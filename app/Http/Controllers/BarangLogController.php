@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\barang;
 use App\Models\BarangLog;
 use Illuminate\Http\Request;
 use App\Models\BarangSummary;
@@ -42,6 +43,26 @@ class BarangLogController extends Controller
         $query->where('no_po', 'like', '%' . $request->input('no_po') . '%');
     }
     
+    // No Barang filter
+    if ($request->filled('no_barang')) {
+        $query->where('no_barang', $request->input('no_barang'));
+    }
+    
+    // Kode Log filter
+    if ($request->filled('kd_log')) {
+        $query->where('kd_log', $request->input('kd_log'));
+    }
+    
+    // Order Number filter
+    if ($request->filled('order_number')) {
+        $query->where('order_number', $request->input('order_number'));
+    }
+    
+    // Item Number filter
+    if ($request->filled('no_item')) {
+        $query->where('no_item', $request->input('no_item'));
+    }
+    
     // Item name filter
     if ($request->filled('nama_barang')) {
         $searchTerm = $request->input('nama_barang');
@@ -52,10 +73,17 @@ class BarangLogController extends Controller
 
     $logs = $query->get();
     
-    // Get unique operators for the dropdown
+    // Get unique values for dropdown filters
     $operators = BarangLog::distinct()->pluck('operator')->filter();
+    $noBarangs = BarangLog::distinct()->pluck('no_barang')->filter();
+    $kdLogs = BarangLog::distinct()->pluck('kd_log')->filter();
+    $orderNumbers = BarangLog::distinct()->pluck('order_number')->filter();
+    $noItems = BarangLog::distinct()->pluck('no_item')->filter();
     
-    return view('logs', compact('logs', 'operators'));
+    // Get unique nama_barang through the relationship
+    $namaBarangs = barang::distinct()->pluck('nama_barang')->filter();
+    
+    return view('logs', compact('logs', 'operators', 'noBarangs', 'kdLogs', 'orderNumbers', 'noItems', 'namaBarangs'));
 }
 
     public function getStockRecap(Request $request)

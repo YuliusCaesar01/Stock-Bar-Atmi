@@ -11,47 +11,95 @@
                 <div class="p-3 relative border overflow-x-auto shadow-md sm:rounded-lg">
                     <div class="mb-4 bg-white p-4 rounded shadow">
                         <form method="GET" action="{{ route('logs') }}" class="flex flex-wrap gap-2">
-                            <div class="flex flex-col">
-                                <label for="start_date" class="text-xs text-gray-700">Start Date</label>
-                                <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" 
-                                       class="px-2 py-1 border rounded text-xs text-gray-700">
+                            <!-- Top row with date filters -->
+                            <div class="w-full flex gap-2 mb-2">
+                                <div class="flex flex-col">
+                                    <label for="start_date" class="text-xs text-gray-700">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" 
+                                           class="px-2 py-1 border rounded text-xs text-gray-700">
+                                </div>
+                                
+                                <div class="flex flex-col">
+                                    <label for="end_date" class="text-xs text-gray-700">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" 
+                                           class="px-2 py-1 border rounded text-xs text-gray-700">
+                                </div>
                             </div>
                             
-                            <div class="flex flex-col">
-                                <label for="end_date" class="text-xs text-gray-700">End Date</label>
-                                <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" 
-                                       class="px-2 py-1 border rounded text-xs text-gray-700 ">
-                            </div>
-                            
-                            <div class="flex flex-col">
-                                <label for="action" class="text-xs text-gray-700">Status</label>
-                                <select id="action" name="action" class="px-2 py-1 border rounded text-xs text-gray-700">
+                            <!-- Second row with all other filters, each with the same width -->
+                            <div class="flex flex-col w-32">
+                                <label for="no_barang" class="text-xs text-gray-700">No Item</label>
+                                <select id="no_barang" name="no_barang" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
                                     <option value="">All</option>
-                                    <option class="text-xs text-gray-700" value="entry" {{ request('action') == 'entry' ? 'selected' : '' }}>Barang Masuk</option>
-                                    <option class="text-xs text-gray-700" value="exit" {{ request('action') == 'exit' ? 'selected' : '' }}>Barang Keluar</option>
+                                    @foreach($noBarangs as $noBarang)
+                                        <option class="text-xs text-gray-700" value="{{ $noBarang }}" {{ request('no_barang') == $noBarang ? 'selected' : '' }}>{{ $noBarang }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                    
+                            <div class="flex flex-col w-32">
+                                <label for="kd_log" class="text-xs text-gray-700">Kode Log</label>
+                                <select id="kd_log" name="kd_log" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
+                                    <option value="">All</option>
+                                    @foreach($kdLogs as $kdLog)
+                                        <option class="text-xs text-gray-700" value="{{ $kdLog }}" {{ request('kd_log') == $kdLog ? 'selected' : '' }}>{{ $kdLog }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             
-                            <div class="flex flex-col">
+                            <div class="flex flex-col w-32">
+                                <label for="nama_barang" class="text-xs text-gray-700">Nama Barang</label>
+                                <select id="nama_barang" name="nama_barang" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
+                                    <option value="">All</option>
+                                    @foreach($namaBarangs as $namaBarang)
+                                        <option class="text-xs text-gray-700" value="{{ $namaBarang }}" {{ request('nama_barang') == $namaBarang ? 'selected' : '' }}>{{ $namaBarang }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col w-32">
+                                <label for="order_number" class="text-xs text-gray-700">Order Number</label>
+                                <select id="order_number" name="order_number" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
+                                    <option value="">All</option>
+                                    @foreach($orderNumbers as $orderNumber)
+                                        <option class="text-xs text-gray-700" value="{{ $orderNumber }}" {{ request('order_number') == $orderNumber ? 'selected' : '' }}>{{ $orderNumber }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col w-32">
+                                <label for="no_item" class="text-xs text-gray-700">Item Number</label>
+                                <select id="no_item" name="no_item" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
+                                    <option value="">All</option>
+                                    @foreach($noItems as $noItem)
+                                        <option class="text-xs text-gray-700" value="{{ $noItem }}" {{ request('no_item') == $noItem ? 'selected' : '' }}>{{ $noItem }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col w-32">
                                 <label for="operator" class="text-xs text-gray-700">Operator</label>
-                                <select id="operator" name="operator" class="px-2 py-1 border rounded text-sm">
+                                <select id="operator" name="operator" class="px-2 py-1 border rounded text-sm text-gray-700 w-full">
                                     <option value="">All</option>
                                     @foreach($operators as $operator)
                                         <option class="text-xs text-gray-700" value="{{ $operator }}" {{ request('operator') == $operator ? 'selected' : '' }}>{{ $operator }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            
-                            <div class="flex flex-col">
+                    
+                            <div class="flex flex-col w-32">
                                 <label for="no_po" class="text-xs text-gray-700">Nomor PO</label>
                                 <input type="text" id="no_po" name="no_po" value="{{ request('no_po') }}" 
-                                       class="px-2 py-1 border rounded text-xs text-gray-700" placeholder="Filter by PO">
+                                       class="px-2 py-1 border rounded text-xs text-gray-700 w-full" placeholder="Filter by PO">
                             </div>
                             
-                            <div class="flex flex-col">
-                                <label for="nama_barang" class="text-xs text-gray-700">Nama Barang</label>
-                                <input type="text" id="nama_barang" name="nama_barang" value="{{ request('nama_barang') }}" 
-                                       class="px-2 py-1 border rounded text-xs text-gray-700" placeholder="Filter by name">
+                            <div class="flex flex-col w-32">
+                                <label for="action" class="text-xs text-gray-700">Status</label>
+                                <select id="action" name="action" class="px-2 py-1 border rounded text-xs text-gray-700 w-full">
+                                    <option value="">All</option>
+                                    <option class="text-xs text-gray-700" value="entry" {{ request('action') == 'entry' ? 'selected' : '' }}>Barang Masuk</option>
+                                    <option class="text-xs text-gray-700" value="exit" {{ request('action') == 'exit' ? 'selected' : '' }}>Barang Keluar</option>
+                                </select>
                             </div>
                             
                             <div class="flex items-end">
@@ -85,9 +133,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $logs = \App\Models\BarangLog::get();
-                            @endphp
                             @foreach ($logs as $log)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-6 py-4">{{ $loop->iteration }}</td>
@@ -114,8 +159,9 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="7" class="text-right">Total Harga:</th>
-                                <th id="total-harga" colspan="3">{{ $logs->sum('harga') }}</th>
+                                <td colspan="10" class="text-right">Total Harga:</td>
+                                <td id="total-harga">Rp 50.000</td>
+                                <td colspan="3"></td>
                             </tr>
                         </tfoot>
                     </table>
