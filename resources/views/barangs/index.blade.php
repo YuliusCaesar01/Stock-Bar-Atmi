@@ -47,141 +47,146 @@
                             </div>
                         </form>
                     </div>
+                    
                     <table id="barangTable"
                         class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-dark-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dark-700 dark:text-dark-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">QR Code</th>
-                                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
-                                    <th scope="col" class="px-6 py-3">Activity</th>
-                                @endif
-                                <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">No Item</th>
-                                <th scope="col" class="px-6 py-3">Nama Barang</th>
-                                <th scope="col" class="px-6 py-3">Kode Akun</th>
-                                <th scope="col" class="px-6 py-3">Kode Log</th>
-                                <th scope="col" class="px-6 py-3">Jumlah</th>
-                                <th scope="col" class="px-6 py-3">Satuan</th>
-                                <th scope="col" class="px-6 py-3">Harga</th>
-                                <th scope="col" class="px-6 py-3">Total</th>
-                                <th scope="col" class="px-6 py-3">Rak</th>
-                                <th scope="col" class="px-6 py-3">Tanggal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
-                                <th scope="col" class="px-6 py-3">No Katalog</th>
-                                <th scope="col" class="px-6 py-3">Merk</th>
-                                <th scope="col" class="px-6 py-3">No Akun</th>
-                                <th scope="col" class="px-6 py-3">No Refferensi</th>
-                                <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
-                                <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
-                            </tr>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">No</th>
+                            <th scope="col" class="px-6 py-3">QR Code</th>
+                            @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
+                                <th scope="col" class="px-6 py-3">Activity</th>
+                            @endif
+                            <th scope="col" class="px-6 py-3">Status</th>
+                            <th scope="col" class="px-6 py-3">No Item</th>
+                            <th scope="col" class="px-6 py-3">Nama Barang</th>
+                            <th scope="col" class="px-6 py-3">Kode Akun</th>
+                            <th scope="col" class="px-6 py-3">Kode Log</th>
+                            <th scope="col" class="px-6 py-3">Jumlah</th>
+                            <th scope="col" class="px-6 py-3">Satuan</th>
+                            <th scope="col" class="px-6 py-3">Harga</th>
+                            <th scope="col" class="px-6 py-3">Total</th>
+                            <th scope="col" class="px-6 py-3">Rak</th>
+                            <th scope="col" class="px-6 py-3">Tanggal</th>
+                            <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
+                            <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
+                            <th scope="col" class="px-6 py-3">No Katalog</th>
+                            <th scope="col" class="px-6 py-3">Merk</th>
+                            <th scope="col" class="px-6 py-3">No Akun</th>
+                            <th scope="col" class="px-6 py-3">No Refferensi</th>
+                            <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
+                            <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
+                        </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($barangs as $barang)
-                                @php
-                                    // Calculate the status
-                                    $minPlus10Percent = $barang->jumlah_minimal + $barang->jumlah_minimal * 0.1;
-                                    if (
-                                        $barang->jumlah < $barang->jumlah_minimal ||
-                                        $barang->jumlah > $barang->jumlah_maksimal
-                                    ) {
-                                        $status = 'Danger';
-                                        $statusColor = 'text-red-600'; // Red color for Danger
-                                    } elseif (
-                                        $barang->jumlah >= $barang->jumlah_minimal &&
-                                        $barang->jumlah <= $minPlus10Percent
-                                    ) {
-                                        $status = 'Warning';
-                                        $statusColor = 'text-yellow-400'; // Yellow color for Warning
-                                    } else {
-                                        $status = 'Safe';
-                                        $statusColor = 'text-green-600'; // Green color for Safe
-                                    }
-                                @endphp
+                    <tbody>
+                        @foreach ($barangs as $barang)
+                            @php
+                                // Calculate the status
+                                $minPlus10Percent = $barang->jumlah_minimal + $barang->jumlah_minimal * 0.1;
+                                if (
+                                    $barang->jumlah < $barang->jumlah_minimal
+                                ) {
+                                    $status = 'Danger';
+                                    $statusColor = 'text-red-600'; // Red color for Danger
+                                } elseif (
+                                    $barang->jumlah > $barang->jumlah_maksimal
+                                ) {
+                                    $status = 'Over';
+                                    $statusColor = 'text-red-600'; // Red color for Over
+                                } elseif (
+                                    $barang->jumlah >= $barang->jumlah_minimal &&
+                                    $barang->jumlah <= $minPlus10Percent
+                                ) {
+                                    $status = 'Warning';
+                                    $statusColor = 'text-yellow-400'; // Yellow color for Warning
+                                } else {
+                                    $status = 'Safe';
+                                    $statusColor = 'text-green-600'; // Green color for Safe
+                                }
+                            @endphp
 
-                                <tr class="bg-white border-b">
-                                    <!-- Existing cells... -->
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $loop->iteration }}</td>
-                                    <td class="px-6 py-4">
-                                        <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
-                                    </td>
-                                    @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
-                                        <td scope="row"
-                                            class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <div class="inline-flex rounded-md shadow-sm">
-                                                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin')
-                                                    <a href="{{ route('barangs.show', $barang) }}" aria-current="page"
-                                                        class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 :bg-gray-800 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Detail</a>
-                                                @endif
-                                                <div class="inline-flex rounded-md shadow-sm">
-                                                    <!-- Button to trigger the modal -->
-                                                    <button data-modal-target="entry-modal"
-                                                        data-modal-toggle="entry-modal"
-                                                        onclick="setMaterialentryDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->harga }}')"
-                                                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
-                                                    <button data-modal-target="exit-modal"
-                                                        data-modal-toggle="exit-modal"
-                                                        onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}', '{{ $barang->harga }}')"
-                                                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
-                                                        Ambil
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    @endif
-                                    <td class="font-extrabold px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->no_item }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->nama_barang }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->kd_akun }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->kode_log }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->satuan }}</td>
-                                    <td class="whitespace-nowrap">
-                                        {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
-                                    <td class="whitespace-nowrap">
-                                        {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
-                                    <td class="px-6 py-4">{{ $barang->rak }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->tanggal }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_minimal }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
-                                    <td class="px-6 py-4">{{ $barang->no_katalog }}</td>
-                                    <td class="px-6 py-4">{{ $barang->merk }}</td>
-                                    <td class="px-6 py-4">{{ $barang->no_akun }}</td>
-                                    <td class="px-6 py-4">{{ $barang->no_reff }}</td>
-                                    <td style="display: none;" class="px-6 py-4">{{ $barang->no_barcode }}</td>
-                                    <td style="display: none;" class="px-6 py-4">{{ $barang->id }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th scope="col" class="px-6 py-3">NO</th>
-                                <th scope="col" class="px-6 py-3">QR Code</th>
+                            <tr class="bg-white border-b">
+                                <!-- Existing cells... -->
+                                <td class="whitespace-nowrap px-6 py-4">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4">
+                                    <img src="data:image/svg+xml;base64,{{ $barang->qr_code }}" alt="QR Code">
+                                </td>
                                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
-                                    <th scope="col" class="px-6 py-3">Activity</th>
+                                    <td scope="row"
+                                        class="flex items-center justify-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        <div class="inline-flex rounded-md shadow-sm">
+                                            @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin')
+                                                <a href="{{ route('barangs.show', $barang) }}" aria-current="page"
+                                                    class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 :bg-gray-800 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Detail</a>
+                                            @endif
+                                            <div class="inline-flex rounded-md shadow-sm">
+                                                <!-- Button to trigger the modal -->
+                                                <button data-modal-target="entry-modal"
+                                                    data-modal-toggle="entry-modal"
+                                                    onclick="setMaterialentryDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->harga }}')"
+                                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">Tambah</button>
+                                                <button data-modal-target="exit-modal"
+                                                    data-modal-toggle="exit-modal"
+                                                    onclick="setMaterialDetails('{{ $barang->id }}', '{{ $barang->nama_barang }}', '{{ $barang->no_barcode }}', '{{ $barang->jumlah }}', '{{ $barang->kode_log }}', '{{ $barang->satuan }}', '{{ $barang->kd_akun }}', '{{ $barang->harga }}')"
+                                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-200 dark:border-gray-200 dark:text-dark dark:hover:text-dark dark:hover:bg-gray-200 dark:focus:ring-blue-500 dark:focus:text-white">
+                                                    Ambil
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
                                 @endif
-                                <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">No Item</th>
-                                <th scope="col" class="px-6 py-3">Nama Barang</th>
-                                <th scope="col" class="px-6 py-3">Kode Akun</th>
-                                <th scope="col" class="px-6 py-3">Kode Log</th>
-                                <th scope="col" class="px-6 py-3">Jumlah</th>
-                                <th scope="col" class="px-6 py-3">Satuan</th>
-                                <th scope="col" class="px-6 py-3">Harga</th>
-                                <th scope="col" class="px-6 py-3">Total</th>
-                                <th scope="col" class="px-6 py-3">Rak</th>
-                                <th scope="col" class="px-6 py-3">Tanggal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
-                                <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
-                                <th scope="col" class="px-6 py-3">No Katalog</th>
-                                <th scope="col" class="px-6 py-3">Merk</th>
-                                <th scope="col" class="px-6 py-3">No Akun</th>
-                                <th scope="col" class="px-6 py-3">No Refferensi</th>
-                                <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
-                                <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
+                                <td class="font-extrabold px-6 py-4 {{ $statusColor }}">{{ $status }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->no_item }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->nama_barang }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->kd_akun }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->kode_log }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->satuan }}</td>
+                                <td class="whitespace-nowrap harga-value">
+                                    {{ 'Rp. ' . number_format($barang->harga, 0, ',', '.') }}</td>
+                                <td class="whitespace-nowrap total-value">
+                                    {{ 'Rp. ' . number_format($barang->total, 0, ',', '.') }}</td>
+                                <td class="px-6 py-4">{{ $barang->rak }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->tanggal }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_minimal }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $barang->jumlah_maksimal }}</td>
+                                <td class="px-6 py-4">{{ $barang->no_katalog }}</td>
+                                <td class="px-6 py-4">{{ $barang->merk }}</td>
+                                <td class="px-6 py-4">{{ $barang->no_akun }}</td>
+                                <td class="px-6 py-4">{{ $barang->no_reff }}</td>
+                                <td style="display: none;" class="px-6 py-4">{{ $barang->no_barcode }}</td>
+                                <td style="display: none;" class="px-6 py-4">{{ $barang->id }}</td>
                             </tr>
-                        </tfoot>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">NO</th>
+                            <th scope="col" class="px-6 py-3">QR Code</th>
+                            @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'user')
+                                <th scope="col" class="px-6 py-3">Activity</th>
+                            @endif
+                            <th scope="col" class="px-6 py-3">Status</th>
+                            <th scope="col" class="px-6 py-3">No Item</th>
+                            <th scope="col" class="px-6 py-3">Nama Barang</th>
+                            <th scope="col" class="px-6 py-3">Kode Akun</th>
+                            <th scope="col" class="px-6 py-3">Kode Log</th>
+                            <th scope="col" class="px-6 py-3">Jumlah</th>
+                            <th scope="col" class="px-6 py-3">Satuan</th>
+                            <th scope="col" class="px-6 py-3 text-right font-bold">Harga: <span id="total-harga"></span></th>
+                            <th scope="col" class="px-6 py-3 text-right font-bold">Total: <span id="total-sum"></span></th>
+                            <th scope="col" class="px-6 py-3">Rak</th>
+                            <th scope="col" class="px-6 py-3">Tanggal</th>
+                            <th scope="col" class="px-6 py-3">Jumlah Minimal</th>
+                            <th scope="col" class="px-6 py-3">Jumlah Maksimal</th>
+                            <th scope="col" class="px-6 py-3">No Katalog</th>
+                            <th scope="col" class="px-6 py-3">Merk</th>
+                            <th scope="col" class="px-6 py-3">No Akun</th>
+                            <th scope="col" class="px-6 py-3">No Refferensi</th>
+                            <th style="display: none;" scope="col" class="px-6 py-3">QR(manual)</th>
+                            <th style="display: none;" scope="col" class="px-6 py-3">ID</th>
+                        </tr>
+                    </tfoot>
                     </table>
                 </div>
                 <div class="flex items-center mb-4 border-b pb-4 mt-4">
@@ -590,7 +595,33 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotals();
+        });
+        
+        function calculateTotals() {
+            let totalHarga = 0;
+            let totalSum = 0;
+            
+            // Get all harga values
+            document.querySelectorAll('.harga-value').forEach(function(element) {
+                const value = element.textContent.replace('Rp. ', '').replace(/\./g, '').replace(',', '.');
+                totalHarga += parseFloat(value) || 0;
+            });
+            
+            // Get all total values
+            document.querySelectorAll('.total-value').forEach(function(element) {
+                const value = element.textContent.replace('Rp. ', '').replace(/\./g, '').replace(',', '.');
+                totalSum += parseFloat(value) || 0;
+            });
+            
+            // Format the totals with Indonesian rupiah format
+            document.getElementById('total-harga').textContent = 'Rp. ' + totalHarga.toLocaleString('id-ID');
+            document.getElementById('total-sum').textContent = 'Rp. ' + totalSum.toLocaleString('id-ID');
+        }
+        </script>
+        
     {{-- Populate Entry Modal --}}
     <script>
         function setMaterialentryDetails(id, nama_barang, no_barcode, jumlah, kode_log, harga) {

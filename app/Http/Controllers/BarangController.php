@@ -608,6 +608,7 @@ class BarangController extends Controller
                     'jenis' => $validatedData['jenis'],
                     'kd_log' => $kd_log,
                     'no_barang' => $no_barang,
+                    'harga' => $barang->harga,
                     'created_at' => now(),
                 ]
             ]);
@@ -623,6 +624,7 @@ class BarangController extends Controller
                 'kd_log' => $kd_log,
                 'no_barang' => $no_barang,
                 'nama_barang' => $validatedData['nama_barang'],
+                'harga' => $barang->harga,
                 'created_at' => now(),
             ]);
 
